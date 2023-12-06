@@ -1,6 +1,6 @@
 namespace ACL.UI
 {
-        public class ScreenManager
+    public class ScreenManager
     {
         
     }

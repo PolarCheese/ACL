@@ -1,4 +1,5 @@
 using ACL.UI;
+using ACL.Save;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -12,8 +13,8 @@ public class GameInstance : Game
     //private readonly ScreenManager _screenManager;
     //internal readonly ComponentManager componentManager;
     //internal static PhysicsEngine physicsEngine;
+    public static SaveManager? SaveManager;
     internal static SpriteBatch? spriteBatch;
-    //public static SettingsClass Settings;
 
     // Properties
     public static int WindowWidth { get; private set; }
@@ -153,76 +154,5 @@ public class GameInstance : Game
 
         PlayerCursor.X = (int)transformedCursorPosition.X; PlayerCursor.Y = (int)transformedCursorPosition.Y;
     } */
-    #endregion
-    #region Settings
-    /*
-    public void LoadSettings()
-    {
-        TargetElapsedTime = TimeSpan.FromSeconds(1f / Settings.FPSCap);
-        IsFixedTimeStep = Settings.IsFixedTimeStep;
-        _graphics.SynchronizeWithVerticalRetrace = Settings.IsVSync;
-        _graphics.IsFullScreen = Settings.IsFullscreen;
-        _graphics.HardwareModeSwitch = Settings.IsBorderless;
-        if (Settings.Width < 600)
-        {
-            _graphics.PreferredBackBufferWidth = 600;
-        }
-        else
-        {
-            _graphics.PreferredBackBufferWidth = Settings.Width;
-        }
-        if (Settings.Height < 600)
-        {
-            _graphics.PreferredBackBufferHeight = 600;
-        }
-        else
-        {
-            _graphics.PreferredBackBufferHeight = Settings.Height;
-        }
-        if (!Settings.IsFullscreen)
-        {
-            _graphics.PreferredBackBufferWidth = Settings.Width;
-            _graphics.PreferredBackBufferHeight = Settings.Height;
-            WindowWidth = Settings.Width;
-            WindowHeight = Settings.Height;
-        }
-        else
-        {
-            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            WindowWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            WindowHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-        }
-        GraphicsDevice.Viewport = new Viewport(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
-        PlayerCamera.SetViewport(GraphicsDevice.Viewport);
-        _graphics.ApplyChanges(); 
-        WindowRatio = WindowWidth / WindowHeight;
-        LargestDim = Math.Max(WindowWidth, WindowHeight);
-    }
-    public static void ToggleFullscreen()
-    {
-        Settings.IsFullscreen = !Settings.IsFullscreen;
-    }
-    public static void ToggleBorderless()
-    {
-        // Make window borderless
-
-        Settings.IsBorderless = !Settings.IsBorderless;
-        if (!Settings.IsFullscreen && Settings.IsBorderless)
-        {
-            Settings.IsFullscreen = true;
-        }
-    }
-    public static void ToggleVSync()
-    {
-        Settings.IsVSync = !Settings.IsVSync;
-    }
-    public static void SetViewportSettingsSize(int width, int height)
-    {
-        Settings.Width = width;
-        Settings.Height = height;
-    } */
-
-    // add settings saving ig.
     #endregion
 }
