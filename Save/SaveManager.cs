@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 using System.Text.Json;
 
 namespace ACL.Save
@@ -6,7 +7,7 @@ namespace ACL.Save
     {   
         public static string GetGamePath(string name) => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, name);
 
-        private static JsonSerializerOptions serializationOptions = new JsonSerializerOptions
+        private static JsonSerializerOptions defaultSerializerOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented = true,
@@ -21,28 +22,70 @@ namespace ACL.Save
             // Read text from file.
             File.ReadAllText(GetGamePath(path));
         }
-        public static void SaveJSON<T>(string name, T json)
+        #region JSON
+        public static void SaveJSON<T>(string name, T json, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             // Create/Save a json file.
             string jsonPath = GetGamePath(name);
-            string jsonString = JsonSerializer.Serialize(json , serializationOptions);
-            File.WriteAllText(jsonPath, jsonString);
+            if (jsonSerializerOptions == null)
+            {
+                string jsonString = JsonSerializer.Serialize(json , defaultSerializerOptions);
+                File.WriteAllText(jsonPath, jsonString);
+            }
+            else
+            {
+                string jsonString = JsonSerializer.Serialize(json, jsonSerializerOptions);
+                File.WriteAllText(jsonPath, jsonString);
+            }
         }
-        public static T LoadJson<T>(string name) where T : new()
+        public static T? LoadJson<T>(string name, JsonSerializerOptions jsonSerializerOptions) where T : new()
         {
             T? json;
             string jsonPath = GetGamePath(name);
 
             if (File.Exists(jsonPath))
             {
-                json = JsonSerializer.Deserialize<T>(File.ReadAllText(jsonPath), serializationOptions);
+                if (jsonSerializerOptions == null)
+                {
+                    json = JsonSerializer.Deserialize<T>(File.ReadAllText(jsonPath), defaultSerializerOptions);
+                }
+                else
+                {
+                    json = JsonSerializer.Deserialize<T>(File.ReadAllText(jsonPath), jsonSerializerOptions);
+                }
             }
             else
             {
                 json = new T();
             }
             return json;
-    }
-    
+        }
+
+        public static T? EnsureJson<T>(string name, JsonSerializerOptions jsonSerializerOptions) where T : new()
+        {
+            T? json;
+            string jsonPath = GetGamePath(name);
+
+            if (File.Exists(jsonPath))
+            {
+                if (jsonSerializerOptions == null)
+                {
+                    json = JsonSerializer.Deserialize<T>(File.ReadAllText(jsonPath), defaultSerializerOptions);
+                }
+                else
+                {
+                    json = JsonSerializer.Deserialize<T>(File.ReadAllText(jsonPath), jsonSerializerOptions);
+                }
+            }
+            else
+            {
+                json = new T();
+                string jsonString = JsonSerializer.Serialize(json, jsonSerializerOptions);
+                File.WriteAllText(jsonPath, jsonString);
+            }
+
+            return json;
+        }
+        #endregion
     }
 }
