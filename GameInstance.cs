@@ -89,8 +89,6 @@ public class GameInstance : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.Blue);
-
         base.Draw(gameTime);
     }
     #endregion
