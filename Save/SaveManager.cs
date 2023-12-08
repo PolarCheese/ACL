@@ -1,4 +1,3 @@
-using System.Runtime.Serialization;
 using System.Text.Json;
 
 namespace ACL.Save
@@ -38,7 +37,7 @@ namespace ACL.Save
                 File.WriteAllText(jsonPath, jsonString);
             }
         }
-        public static T? LoadJson<T>(string name, JsonSerializerOptions jsonSerializerOptions) where T : new()
+        public static T? LoadJson<T>(string name, JsonSerializerOptions? jsonSerializerOptions = null) where T : new()
         {
             T? json;
             string jsonPath = GetGamePath(name);
@@ -61,7 +60,7 @@ namespace ACL.Save
             return json;
         }
 
-        public static T? EnsureJson<T>(string name, JsonSerializerOptions jsonSerializerOptions) where T : new()
+        public static T? EnsureJson<T>(string name, JsonSerializerOptions? jsonSerializerOptions = null) where T : new()
         {
             T? json;
             string jsonPath = GetGamePath(name);
