@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using ACL.Values;
 
 namespace ACL.Values
 {
@@ -8,12 +7,13 @@ namespace ACL.Values
         public PositionVector StartPosition {get; set;} = new PositionVector(0,0,0,0);
         public PositionVector CurrentPosition {get; set;} = new PositionVector(0,0,0,0);
         public PositionVector EndPosition {get; set;} = new PositionVector(0,0,0,0);
-        /*
+        
         public float GetLength()
         {
-            float length;
-            length = ().length;
-            return length;
-        } */
+            Vector2 StartVector = new Vector2(StartPosition.ConvertToScreenPosition()[0], StartPosition.ConvertToScreenPosition()[1]);
+            Vector2 EndVector = new Vector2(EndPosition.ConvertToScreenPosition()[0], StartPosition.ConvertToScreenPosition()[1]);
+
+            return (EndVector - StartVector).Length();
+        }
     }
 }

@@ -14,5 +14,17 @@ namespace ACL.Values
             RelativeX = relativeX; RelativeY = relativeY;
             AbsoluteX = absoluteX; AbsoluteY = absoluteY;
         }
+
+        public List<float> ConvertToScreenPosition()
+        {
+            List<float> ConvertedFloats = new List<float>();
+
+            float x; float y;
+            x = (float)(GameInstance.WindowWidth * RelativeX) + AbsoluteX;
+            y = (float)(GameInstance.WindowWidth * RelativeY) + AbsoluteY;
+
+            ConvertedFloats[0] = x; ConvertedFloats[1] = y;
+            return ConvertedFloats;
+        }
     }
 }
