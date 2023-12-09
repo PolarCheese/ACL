@@ -11,9 +11,9 @@ public class GameInstance : Game
     // Managers
     private readonly GraphicsDeviceManager _graphics;
     internal static SpriteBatch spriteBatch = null!;
-    public SaveManager SaveManager {get; private set;} = null!;
-    //private readonly ScreenManager _screenManager;
-    //internal readonly ComponentManager componentManager;
+    protected internal SaveManager saveManager {get; private set;} = null!;
+    protected internal ScreenManager screenManager {get; private set;} = null!;
+    protected internal ComponentManager componentManager {get; private set;} = null!;
     //internal static PhysicsEngine physicsEngine;
     
     // Properties
@@ -38,10 +38,10 @@ public class GameInstance : Game
         CurrentGameInstance ??= this;
 
         _graphics = new GraphicsDeviceManager(CurrentGameInstance);
-        SaveManager ??= new SaveManager();
+        saveManager ??= new SaveManager();
         //physicsEngine = new PhysicsEngine();
-        //ComponentManager = new ComponentManager();
-        //_screenManager = Components.Add<ScreenManager>();
+        screenManager ??= new ScreenManager();
+        componentManager ??= new ComponentManager();
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         //TargetElapsedTime = TimeSpan.FromSeconds(1f / Settings.FPSCap);

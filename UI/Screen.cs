@@ -5,15 +5,21 @@ using ACL.Save;
 
 namespace ACL.UI
 {
-    public abstract class Screen
+    public class Screen
     {
-        public GameInstance Game = GameInstance.CurrentGameInstance;
-        internal SpriteBatch? _spriteBatch;
+        public GameInstance Game;
+        internal SpriteBatch _spriteBatch = null!;
         public ContentManager Content => Game.Content;
         public GraphicsDevice GraphicsDevice => Game.GraphicsDevice;
         public GameServiceContainer Services => Game.Services;
-        public SaveManager ScreenSaveManager => Game.SaveManager;
+        public SaveManager SaveManager => Game.saveManager;
+        public ComponentManager ComponentManager => Game.componentManager;
 
-        //public ComponentManager ComponentManager => GameInstance.ComponentManager;
+        public Screen(GameInstance CurrentGame)
+        {
+            Game = CurrentGame;
+        }
+        public void OnLoad(){}
+        public void OnUnload(){}
     }
 }
