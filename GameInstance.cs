@@ -10,7 +10,7 @@ public class GameInstance : Game
 {
     // Managers
     private readonly GraphicsDeviceManager _graphics;
-    internal static SpriteBatch spriteBatch = null!;
+    protected internal SpriteBatch spriteBatch {get; private set;} = null!;
     protected internal SaveManager saveManager {get; private set;} = null!;
     protected internal ScreenManager screenManager {get; private set;} = null!;
     protected internal ComponentManager componentManager {get; private set;} = null!;
@@ -40,7 +40,7 @@ public class GameInstance : Game
         saveManager ??= new SaveManager();
         //physicsEngine = new PhysicsEngine();
         screenManager ??= new ScreenManager(CurrentGameInstance);
-        componentManager ??= new ComponentManager();
+        componentManager ??= new ComponentManager(CurrentGameInstance);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         //TargetElapsedTime = TimeSpan.FromSeconds(1f / Settings.FPSCap);
@@ -78,6 +78,7 @@ public class GameInstance : Game
             FixedUpdateEvent.Invoke(this, EventArgs.Empty);
             SinceLastFixedUpdate -= FixedDeltaTime;
         }
+        componentManager.Update(gameTime);
         base.Update(gameTime);
     }
 
@@ -89,6 +90,7 @@ public class GameInstance : Game
     protected override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
+        componentManager.Draw(gameTime);
     }
     #endregion
 }

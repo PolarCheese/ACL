@@ -1,12 +1,21 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 namespace ACL.UI
 {
     public class ComponentManager
     {
+        public GameInstance Game;
+        internal SpriteBatch _spriteBatch => Game.spriteBatch;
+        public ComponentManager(GameInstance CurrentGame)
+        {
+            Game = CurrentGame;
+        }
         private List<Component> _componentsList = new List<Component>();
 
         #region List Methods
 
-        // Methods for adding/removing a component from the list.
+        // Methods for adding/removing from the list.
         public void AddComponents(params Component[] Paramcomponents)
         {
             foreach (var component in Paramcomponents)
@@ -60,7 +69,34 @@ namespace ACL.UI
                 modificationAction(component);
             }
         }
+        #endregion
 
+        #region Logic Methods
+        public void Update(GameTime gameTime)
+        {
+            foreach (var component in _componentsList)
+            {
+                if (component.ToUpdate == true)
+                {
+                    component.Update(gameTime);
+                }
+            }
+        }
+
+        public void FixedUpdate(GameTime gameTime)
+        {
+            
+        }
+        public void Draw(GameTime gameTime)
+        {
+            foreach (var component in _componentsList)
+            {
+                if (component.ToDraw == true)
+                {
+                    component.Draw(gameTime, _spriteBatch);
+                }
+            }
+        }
         #endregion
     }
 }
