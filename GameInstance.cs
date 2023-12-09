@@ -31,7 +31,6 @@ public class GameInstance : Game
 
     // Current Instances
     public static GameInstance CurrentGameInstance {get; private set;} = null!;
-    internal static Screen? CurrentScreen {get; private set;}
 
     public GameInstance()
     {
@@ -40,7 +39,7 @@ public class GameInstance : Game
         _graphics = new GraphicsDeviceManager(CurrentGameInstance);
         saveManager ??= new SaveManager();
         //physicsEngine = new PhysicsEngine();
-        screenManager ??= new ScreenManager();
+        screenManager ??= new ScreenManager(CurrentGameInstance);
         componentManager ??= new ComponentManager();
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
@@ -90,13 +89,6 @@ public class GameInstance : Game
     protected override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-    }
-
-    protected internal void LoadScreen<TScreen>(TScreen screen)
-        where TScreen : Screen
-    {
-        //ScreenManager.LoadScreen(screen);
-        CurrentScreen = screen;
     }
     #endregion
 }

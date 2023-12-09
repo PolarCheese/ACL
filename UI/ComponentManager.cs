@@ -2,7 +2,7 @@ namespace ACL.UI
 {
     public class ComponentManager
     {
-        public List<Component> ComponentsList = new List<Component>();
+        private List<Component> _componentsList = new List<Component>();
 
         #region List Methods
 
@@ -11,18 +11,27 @@ namespace ACL.UI
         {
             foreach (var component in Paramcomponents)
             {
-                ComponentsList.Add(component);
+                _componentsList.Add(component);
             }
+        }
+
+        public void AddComponentsRange(List<Component> Components)
+        {
+            _componentsList.AddRange(Components);
         }
 
         public void RemoveComponents(params Component[] Paramcomponents)
         {
             foreach (var component in Paramcomponents)
             {
-                ComponentsList.Remove(component);
+                _componentsList.Remove(component);
             }
         }
 
+        public void Clear()
+        {
+            _componentsList.Clear();
+        }
         #endregion
 
         #region Manage Methods
