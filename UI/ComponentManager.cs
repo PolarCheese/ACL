@@ -11,7 +11,7 @@ namespace ACL.UI
         {
             Game = CurrentGame;
         }
-        private List<Component> _componentsList = new List<Component>();
+        internal List<Component> componentsList {get; private set;} = new List<Component>();
 
         #region List Methods
 
@@ -20,26 +20,26 @@ namespace ACL.UI
         {
             foreach (var component in Paramcomponents)
             {
-                _componentsList.Add(component);
+                componentsList.Add(component);
             }
         }
 
         public void AddComponentsRange(List<Component> Components)
         {
-            _componentsList.AddRange(Components);
+            componentsList.AddRange(Components);
         }
 
         public void RemoveComponents(params Component[] Paramcomponents)
         {
             foreach (var component in Paramcomponents)
             {
-                _componentsList.Remove(component);
+                componentsList.Remove(component);
             }
         }
 
         public void Clear()
         {
-            _componentsList.Clear();
+            componentsList.Clear();
         }
         #endregion
 
@@ -74,7 +74,7 @@ namespace ACL.UI
         #region Logic Methods
         public void Update(GameTime gameTime)
         {
-            foreach (var component in _componentsList)
+            foreach (var component in componentsList)
             {
                 if (component.ToUpdate == true)
                 {
@@ -83,13 +83,9 @@ namespace ACL.UI
             }
         }
 
-        public void FixedUpdate(GameTime gameTime)
-        {
-            
-        }
         public void Draw(GameTime gameTime)
         {
-            foreach (var component in _componentsList)
+            foreach (var component in componentsList)
             {
                 if (component.ToDraw == true)
                 {

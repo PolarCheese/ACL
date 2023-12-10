@@ -1,5 +1,6 @@
 using ACL.UI;
 using ACL.Save;
+using ACL.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -14,7 +15,7 @@ public class GameInstance : Game
     protected internal SaveManager saveManager {get; private set;} = null!;
     protected internal ScreenManager screenManager {get; private set;} = null!;
     protected internal ComponentManager componentManager {get; private set;} = null!;
-    //internal static PhysicsEngine physicsEngine;
+    internal static PhysicsEngine physicsEngine {get; private set;} = null!;
     
     // Properties
     public static int WindowWidth { get; private set; }
@@ -38,11 +39,13 @@ public class GameInstance : Game
 
         _graphics = new GraphicsDeviceManager(CurrentGameInstance);
         saveManager ??= new SaveManager();
-        //physicsEngine = new PhysicsEngine();
         screenManager ??= new ScreenManager(CurrentGameInstance);
         componentManager ??= new ComponentManager(CurrentGameInstance);
+        physicsEngine = new PhysicsEngine(CurrentGameInstance);
+
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+        TargetElapsedTime = TimeSpan.FromSeconds(1f / 90);
         //TargetElapsedTime = TimeSpan.FromSeconds(1f / Settings.FPSCap);
 
         
