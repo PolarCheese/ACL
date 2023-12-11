@@ -15,6 +15,8 @@ namespace ACL.UI
         public SaveManager SaveManager => Game.saveManager;
         public ComponentManager ComponentManager => Game.componentManager;
 
+        public List<Component> ScreenComponents {get; private set;} = new List<Component>();
+
         public Screen(GameInstance CurrentGame)
         {
             Game = CurrentGame;

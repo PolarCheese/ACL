@@ -6,7 +6,6 @@ namespace ACL.UI
     {
         GameInstance Game;
         ComponentManager ComponentManager => Game.componentManager;
-        List<Component> ScreenComponents = new List<Component>();
         Screen? CurrentScreen;
         public ScreenManager(GameInstance CurrentGame)
         {
@@ -17,13 +16,24 @@ namespace ACL.UI
         {
             // Set the screen as the current.
             CurrentScreen = screen;
+            
 
             // Get the components from the screen.
             UnloadScreen();
-            ComponentManager.AddComponentsRange(ScreenComponents);
+            ComponentManager.AddComponentsRange(CurrentScreen.ScreenComponents);
+
+            // Trigger screen OnLoad() method.
+            CurrentScreen.OnLoad();
         }
         public void UnloadScreen()
         {
+            // Trigger screen OnUnload() method.
+            if (CurrentScreen != null)
+            {
+                CurrentScreen.OnUnload();
+            }
+
+            // Unload the screen.
             CurrentScreen = null;
             ComponentManager.Clear();
         }
