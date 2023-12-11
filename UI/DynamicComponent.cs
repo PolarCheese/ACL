@@ -12,7 +12,7 @@ namespace ACL.UI
         internal bool AllowCollisions { get; set; } = true; // Determines if this Object registers collisions.
         internal string ObjmapLink { get; set; } = string.Empty; // Objmap linked to this Dynamic Component.
 
-        public abstract void FixedUpdate(object sender, EventArgs e);
+        public abstract void FixedUpdate(object? sender, EventArgs e);
 
         protected DynamicComponent()
         {
