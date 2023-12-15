@@ -6,36 +6,64 @@ namespace ACL.UI
     {
         GameInstance Game;
         ComponentManager ComponentManager => Game.componentManager;
+        List<Screen> LoadedScreens = new List<Screen>();
         Screen? CurrentScreen;
         public ScreenManager(GameInstance CurrentGame)
         {
             Game = CurrentGame;
         }
 
-        public void LoadScreen(Screen screen)
+        public void LoadScreen(Screen screen, bool autoactivation = true)
         {
-            // Set the screen as the current.
-            CurrentScreen = screen;
-            
-
-            // Get the components from the screen.
-            UnloadScreen();
-            ComponentManager.AddComponentsRange(CurrentScreen.ScreenComponents);
-
-            // Trigger screen OnLoad() method.
-            CurrentScreen.OnLoad();
-        }
-        public void UnloadScreen()
-        {
-            // Trigger screen OnUnload() method.
-            if (CurrentScreen != null)
+            // Set screen as loaded.
+            if (LoadedScreens.Contains(screen) == false)
             {
-                CurrentScreen.OnUnload();
+                LoadedScreens.Add(screen);
             }
 
-            // Unload the screen.
-            CurrentScreen = null;
-            ComponentManager.Clear();
+            // Trigger screen OnLoad() method.
+            screen.OnLoad();
+
+            // Check if the screen is set to automatically activate.
+            if (autoactivation == true)
+            {
+                SetCurrentScreen(screen);
+            }
+        }
+        public void UnloadScreen(Screen screen)
+        {
+            // Check if the screen is loaded.
+            if (LoadedScreens.Contains(screen))
+            {
+                // Check if screen is currently active.
+                if (CurrentScreen == screen)
+                {
+                    CurrentScreen.OnUnactivation();
+                    ComponentManager.RemoveComponentsRange(CurrentScreen.ScreenComponents);
+                    CurrentScreen = null;
+                }
+
+                // Unload the screen.
+                screen.OnUnload();
+                LoadedScreens.Remove(screen);
+            }
+        }
+        public void SetCurrentScreen(Screen screen)
+        {
+            // Check if the screen is loaded.
+            if (screen != null && LoadedScreens.Contains(screen))
+            {
+                // Trigger Unactivation method on already existing current screen.
+                if (CurrentScreen != null)
+                {
+                    CurrentScreen.OnUnactivation();
+                }
+
+                // Set the screen as the current.
+                CurrentScreen = screen;
+                ComponentManager.AddComponentsRange(CurrentScreen.ScreenComponents);
+                CurrentScreen.OnActivation();
+            }
         }
     }
 }

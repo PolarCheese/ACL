@@ -11,35 +11,41 @@ namespace ACL.UI
         {
             Game = CurrentGame;
         }
-        internal List<Component> componentsList {get; private set;} = new List<Component>();
+        internal List<Component> activeComponentsList {get; private set;} = new List<Component>();
 
         #region List Methods
-
-        // Methods for adding/removing from the list.
+        // Methods for adding/removing from the list. 
         public void AddComponents(params Component[] Paramcomponents)
         {
             foreach (var component in Paramcomponents)
             {
-                componentsList.Add(component);
+                activeComponentsList.Add(component);
             }
         }
 
-        public void AddComponentsRange(List<Component> Components)
+        public void AddComponentsRange(IEnumerable<Component> Components)
         {
-            componentsList.AddRange(Components);
+            activeComponentsList.AddRange(Components);
         }
 
         public void RemoveComponents(params Component[] Paramcomponents)
         {
             foreach (var component in Paramcomponents)
             {
-                componentsList.Remove(component);
+                activeComponentsList.Remove(component);
+            }
+        }
+        public void RemoveComponentsRange(IEnumerable<Component> Components)
+        {
+            foreach (var component in Components)
+            {
+                activeComponentsList.Remove(component);
             }
         }
 
         public void Clear()
         {
-            componentsList.Clear();
+            activeComponentsList.Clear();
         }
         #endregion
 
@@ -74,7 +80,7 @@ namespace ACL.UI
         #region Logic Methods
         public void Update(GameTime gameTime)
         {
-            foreach (var component in componentsList)
+            foreach (var component in activeComponentsList)
             {
                 if (component.ToUpdate == true)
                 {
@@ -85,7 +91,7 @@ namespace ACL.UI
 
         public void Draw(GameTime gameTime)
         {
-            foreach (var component in componentsList)
+            foreach (var component in activeComponentsList)
             {
                 if (component.ToDraw == true)
                 {

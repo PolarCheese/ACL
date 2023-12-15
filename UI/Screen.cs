@@ -23,5 +23,7 @@ namespace ACL.UI
         }
         public void OnLoad(){}
         public void OnUnload(){}
+        public void OnActivation(){}
+        public void OnUnactivation(){}
     }
 }
