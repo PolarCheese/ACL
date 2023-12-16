@@ -65,5 +65,13 @@ namespace ACL.UI
                 CurrentScreen.OnActivation();
             }
         }
+
+        public void Update(GameTime gameTime)
+        {
+            if (CurrentScreen != null)
+            {
+                CurrentScreen.Update();
+            }
+        }
     }
 }

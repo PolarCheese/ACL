@@ -25,5 +25,7 @@ namespace ACL.UI
         public virtual void OnUnload(){}
         public virtual void OnActivation(){}
         public virtual void OnUnactivation(){}
+
+        public virtual void Update(){}
     }
 }

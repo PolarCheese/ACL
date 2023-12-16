@@ -81,6 +81,7 @@ public class GameInstance : Game
             FixedUpdateEvent.Invoke(this, EventArgs.Empty);
             SinceLastFixedUpdate -= FixedDeltaTime;
         }
+        screenManager.Update(gameTime);
         componentManager.Update(gameTime);
         base.Update(gameTime);
     }
