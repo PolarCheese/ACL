@@ -21,9 +21,9 @@ namespace ACL.UI
         {
             Game = CurrentGame;
         }
-        public void OnLoad(){}
-        public void OnUnload(){}
-        public void OnActivation(){}
-        public void OnUnactivation(){}
+        public virtual void OnLoad(){}
+        public virtual void OnUnload(){}
+        public virtual void OnActivation(){}
+        public virtual void OnUnactivation(){}
     }
 }
