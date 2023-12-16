@@ -6,7 +6,7 @@ namespace ACL.UI
     {
         GameInstance Game;
         ComponentManager ComponentManager => Game.componentManager;
-        List<Screen> LoadedScreens = new List<Screen>();
+        public List<Screen> LoadedScreens {get; private set;} = new List<Screen>();
         Screen? CurrentScreen;
         public ScreenManager(GameInstance CurrentGame)
         {
