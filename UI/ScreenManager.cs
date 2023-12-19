@@ -70,7 +70,14 @@ namespace ACL.UI
         {
             if (CurrentScreen != null)
             {
-                CurrentScreen.Update();
+                CurrentScreen.Update(gameTime);
+            }
+        }
+        public void Draw(GameTime gameTime)
+        {
+            if (CurrentScreen != null)
+            {
+                CurrentScreen.Draw(gameTime);
             }
         }
     }

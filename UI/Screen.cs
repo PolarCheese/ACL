@@ -26,6 +26,7 @@ namespace ACL.UI
         public virtual void OnActivation(){}
         public virtual void OnUnactivation(){}
 
-        public virtual void Update(){}
+        public virtual void Update(GameTime gameTime){}
+        public virtual void Draw(GameTime gameTime){}
     }
 }

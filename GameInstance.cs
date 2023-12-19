@@ -94,6 +94,7 @@ public class GameInstance : Game
     protected override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
+        screenManager.Draw(gameTime);
         componentManager.Draw(gameTime);
     }
     #endregion
