@@ -18,6 +18,7 @@ public class GameInstance : Game
     internal static PhysicsEngine physicsEngine {get; private set;} = null!;
     
     // Properties
+    public static Texture2D? PlainTexture { get; private set; } // 1x1 white pixel texture
     public static int WindowWidth { get; private set; }
     public static int WindowHeight { get; private set; }
     public static int WindowRatio { get; private set; }
@@ -66,6 +67,8 @@ public class GameInstance : Game
         GraphicsDevice.Viewport = new Viewport(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
         spriteBatch ??= new SpriteBatch(GraphicsDevice);
+        PlainTexture = new Texture2D(GraphicsDevice, 1, 1);
+        PlainTexture.SetData(new[] { Color.White });
     }
     protected override void UnloadContent() // Unload method
     {
@@ -94,8 +97,10 @@ public class GameInstance : Game
     protected override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
+        spriteBatch.Begin();
         screenManager.Draw(gameTime);
         componentManager.Draw(gameTime);
+        spriteBatch.End();
     }
     #endregion
 }

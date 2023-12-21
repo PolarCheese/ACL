@@ -6,10 +6,7 @@ namespace ACL.UI
 {
     public abstract class Component
     {
-        public Component()
-        {
-            // Add to the main Component Manager...
-        }
+        public Component(){}
 
         #region properties
         public Component? Parent { get; private set;}
@@ -56,13 +53,13 @@ namespace ACL.UI
             }
         }
 
-        public virtual void Draw(GameTime gametime, SpriteBatch spriteBatch)
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach (Component Child in Children)
             {
                 if (Child.ToDraw)
                 {
-                    Child.Draw(gametime, spriteBatch);
+                    Child.Draw(gameTime, spriteBatch);
                 }
             }
 
