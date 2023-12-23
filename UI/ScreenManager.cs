@@ -18,6 +18,7 @@ namespace ACL.UI
             // Set screen as loaded.
             if (LoadedScreens.Contains(screen) == false)
             {
+                screen.Game = Game;
                 LoadedScreens.Add(screen);
             }
 

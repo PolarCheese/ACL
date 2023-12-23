@@ -6,7 +6,12 @@ namespace ACL.UI
 {
     public abstract class Component
     {
-        public Component(){}
+        public GameInstance Game;
+
+        public Component(GameInstance game)
+        {
+            Game = game;
+        }
 
         #region properties
         public Component? Parent { get; private set;}
@@ -18,8 +23,8 @@ namespace ACL.UI
         public bool ToUpdate {get; set;} = true;
         public bool ToDraw {get; set;} = true;
 
-        public PositionVector? Position {get; set;}
-        public PositionVector? Size {get; set;}
+        public PositionVector Position {get; set;} = PositionVector.Zero;
+        public PositionVector Size {get; set;} = PositionVector.Zero;
         public float Rotation {get; set;} = 0f;
         #endregion
 

@@ -15,14 +15,10 @@ public class GameInstance : Game
     protected internal SaveManager saveManager {get; private set;} = null!;
     protected internal ScreenManager screenManager {get; private set;} = null!;
     protected internal ComponentManager componentManager {get; private set;} = null!;
-    internal static PhysicsEngine physicsEngine {get; private set;} = null!;
+    protected internal PhysicsEngine physicsEngine {get; private set;} = null!;
     
     // Properties
     public static Texture2D? PlainTexture { get; private set; } // 1x1 white pixel texture
-    public static int WindowWidth { get; private set; }
-    public static int WindowHeight { get; private set; }
-    public static int WindowRatio { get; private set; }
-    public static int LargestDim { get; private set;}
 
     // Fixed update system
     private const float TargetFixedFrameRate = 90f;
@@ -32,7 +28,7 @@ public class GameInstance : Game
     internal static Rectangle PlayerCursor;
 
     // Current Instances
-    public static GameInstance CurrentGameInstance {get; private set;} = null!;
+    public GameInstance CurrentGameInstance {get; private set;} = null!;
 
     public GameInstance()
     {
@@ -101,6 +97,23 @@ public class GameInstance : Game
         screenManager.Draw(gameTime);
         componentManager.Draw(gameTime);
         spriteBatch.End();
+    }
+
+    public void SetWindowResolution(int Width, int Height)
+    {
+        if (Width > 0 && Height > 0)
+        {
+            _graphics.PreferredBackBufferWidth = Width;
+            _graphics.PreferredBackBufferHeight = Height;
+            _graphics.ApplyChanges();
+        }
+    }
+
+    public int[] GetWindowResolution()
+    {
+        int [] resolution = new int[2];
+        resolution[0] = GraphicsDevice.Viewport.Width; resolution[1] = GraphicsDevice.Viewport.Height;
+        return resolution;
     }
     #endregion
 }

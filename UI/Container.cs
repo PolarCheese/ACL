@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -21,13 +22,13 @@ namespace ACL.UI
 
         #endregion
 
-        public Rectangle Outline { get; set; }
         public Rectangle Body { get; set; }
+        public Rectangle Outline { get; set; }
 
-        public Container()
+        public Container(GameInstance game) : base(game)
         {
-            Outline = new Rectangle();
             Body = new Rectangle();
+            Outline = new Rectangle();
         }
 
         #region Update/Draw
@@ -39,6 +40,8 @@ namespace ACL.UI
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            Body = new Rectangle((int)Position.ConvertToScreenPosition(Game)[0], (int)Position.ConvertToScreenPosition(Game)[1], (int)Size.ConvertToScreenPosition(Game)[0], (int)Size.ConvertToScreenPosition(Game)[1]);
+            Debug.WriteLine("{0} {1}", Body.Location, Body.Size);
             if (Body.Width != 0 && Body.Height != 0)
             {
                 // Draw outline

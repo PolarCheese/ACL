@@ -14,9 +14,9 @@ namespace ACL.UI
 
         public abstract void FixedUpdate(object? sender, EventArgs e);
 
-        protected DynamicComponent()
+        protected DynamicComponent(GameInstance game) : base(game)
         {
-            GameInstance.CurrentGameInstance.FixedUpdateEvent += FixedUpdate;
+            Game.FixedUpdateEvent += FixedUpdate;
         }
 
         public Rectangle GetBounds() // Get component hitbox.
