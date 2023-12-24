@@ -45,7 +45,7 @@ namespace ACL.UI
             if (Body.Width != 0 && Body.Height != 0)
             {
                 // Draw outline
-                Outline = new Rectangle(Body.X - OutlineSize/2, Body.Y - OutlineSize/2, Body.Width + 2*OutlineSize, Body.Height + 2*OutlineSize);
+                Outline = new Rectangle(Body.X - OutlineSize/2, Body.Y - OutlineSize/2, Body.Width + OutlineSize, Body.Height + OutlineSize);
                 spriteBatch.Draw(GameInstance.PlainTexture, Outline, OutlineColor);
 
                 // Draw body
