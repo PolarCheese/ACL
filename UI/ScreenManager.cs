@@ -20,15 +20,15 @@ namespace ACL.UI
             {
                 screen.Game = Game;
                 LoadedScreens.Add(screen);
-            }
 
-            // Trigger screen OnLoad() method.
-            screen.OnLoad();
+                // Trigger screen OnLoad() method.
+                screen.OnLoad();
 
-            // Check if the screen is set to automatically activate.
-            if (autoactivation == true)
-            {
-                SetCurrentScreen(screen);
+                // Check if the screen is set to automatically activate.
+                if (autoactivation == true)
+                {
+                    SetCurrentScreen(screen);
+                }
             }
         }
         public void UnloadScreen(Screen screen)
@@ -51,8 +51,8 @@ namespace ACL.UI
         }
         public void SetCurrentScreen(Screen screen)
         {
-            // Check if the screen is loaded.
-            if (screen != null && LoadedScreens.Contains(screen))
+            // Check if the screen is loaded and isn't already active.
+            if (screen != null && LoadedScreens.Contains(screen) && CurrentScreen != screen)
             {
                 // Trigger Unactivation method on already existing current screen.
                 if (CurrentScreen != null)
@@ -62,8 +62,8 @@ namespace ACL.UI
 
                 // Set the screen as the current.
                 CurrentScreen = screen;
-                ComponentManager.AddComponentsRange(CurrentScreen.ScreenComponents);
-                CurrentScreen.OnActivation();
+                ComponentManager.AddComponentsRange(screen.ScreenComponents);
+                screen.OnActivation();
             }
         }
 

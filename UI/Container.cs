@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -41,7 +40,6 @@ namespace ACL.UI
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Body = new Rectangle((int)Position.ConvertToScreenPosition(Game)[0], (int)Position.ConvertToScreenPosition(Game)[1], (int)Size.ConvertToScreenPosition(Game)[0], (int)Size.ConvertToScreenPosition(Game)[1]);
-            Debug.WriteLine("{0} {1}", Body.Location, Body.Size);
             if (Body.Width != 0 && Body.Height != 0)
             {
                 // Draw outline
