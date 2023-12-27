@@ -42,10 +42,12 @@ namespace ACL.UI
             Body = new Rectangle((int)Position.ConvertToScreenPosition(Game)[0], (int)Position.ConvertToScreenPosition(Game)[1], (int)Size.ConvertToScreenPosition(Game)[0], (int)Size.ConvertToScreenPosition(Game)[1]);
             if (Body.Width != 0 && Body.Height != 0)
             {
-                // Draw outline
-                Outline = new Rectangle(Body.X - OutlineSize/2, Body.Y - OutlineSize/2, Body.Width + OutlineSize, Body.Height + OutlineSize);
-                spriteBatch.Draw(GameInstance.PlainTexture, Outline, OutlineColor);
-
+                if (OutlineSize > 0)
+                {
+                    // Draw outline
+                    Outline = new Rectangle(Body.X - OutlineSize/2, Body.Y - OutlineSize/2, Body.Width + OutlineSize, Body.Height + OutlineSize);
+                    spriteBatch.Draw(GameInstance.PlainTexture, Outline, OutlineColor);
+                }
                 // Draw body
                 if (BackgroundTexture == null)
                 {

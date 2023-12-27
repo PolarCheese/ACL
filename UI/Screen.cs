@@ -12,6 +12,7 @@ namespace ACL.UI
         public ContentManager Content => Game.Content;
         public GraphicsDevice GraphicsDevice => Game.GraphicsDevice;
         public GameServiceContainer Services => Game.Services;
+        public ScreenManager ScreenManager => Game.screenManager;
         public SaveManager SaveManager => Game.saveManager;
         public ComponentManager ComponentManager => Game.componentManager;
 

@@ -25,7 +25,7 @@ public class GameInstance : Game
     private float FixedDeltaTime = 1f / TargetFixedFrameRate;
     private float SinceLastFixedUpdate = 0f;
     public event EventHandler FixedUpdateEvent = null!;
-    internal static Rectangle PlayerCursor;
+    public Rectangle PlayerCursor;
 
     // Current Instances
     public GameInstance CurrentGameInstance {get; private set;} = null!;
@@ -72,6 +72,7 @@ public class GameInstance : Game
     }
     protected override void Update(GameTime gameTime) // Update method
     {
+        GetPlayerCursor(Mouse.GetState());
         SinceLastFixedUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
         if (SinceLastFixedUpdate >= FixedDeltaTime)
         {
@@ -114,6 +115,11 @@ public class GameInstance : Game
         int [] resolution = new int[2];
         resolution[0] = GraphicsDevice.Viewport.Width; resolution[1] = GraphicsDevice.Viewport.Height;
         return resolution;
+    }
+
+    public void GetPlayerCursor(MouseState mouseState)
+    {
+        PlayerCursor.X = mouseState.X; PlayerCursor.Y = mouseState.Y;
     }
     #endregion
 }

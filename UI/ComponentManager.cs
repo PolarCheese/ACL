@@ -11,7 +11,9 @@ namespace ACL.UI
         {
             Game = CurrentGame;
         }
-        internal List<Component> activeComponentsList {get; private set;} = new List<Component>();
+        internal List<Component> activeComponents {get; private set;} = new List<Component>();
+        internal List<Component> pendingAdditions {get; set;} = new List<Component>();
+        internal List<Component> pendingRemovals {get; set;} = new List<Component>();
 
         #region List Methods
         // Methods for adding/removing from the list. 
@@ -19,33 +21,33 @@ namespace ACL.UI
         {
             foreach (var component in Paramcomponents)
             {
-                activeComponentsList.Add(component);
+                pendingAdditions.Add(component);
             }
         }
 
         public void AddComponentsRange(IEnumerable<Component> Components)
         {
-            activeComponentsList.AddRange(Components);
+            pendingAdditions.AddRange(Components);
         }
 
         public void RemoveComponents(params Component[] Paramcomponents)
         {
             foreach (var component in Paramcomponents)
             {
-                activeComponentsList.Remove(component);
+                pendingRemovals.Add(component);
             }
         }
         public void RemoveComponentsRange(IEnumerable<Component> Components)
         {
             foreach (var component in Components)
             {
-                activeComponentsList.Remove(component);
+                pendingRemovals.Add(component);
             }
         }
 
         public void Clear()
         {
-            activeComponentsList.Clear();
+            activeComponents.Clear();
         }
         #endregion
 
@@ -80,18 +82,33 @@ namespace ACL.UI
         #region Logic Methods
         public void Update(GameTime gameTime)
         {
-            foreach (var component in activeComponentsList)
+            // Add pending components.
+            foreach (var component in pendingAdditions)
+            {
+                activeComponents.Add(component);
+            }
+            pendingAdditions.Clear();
+            
+            // Update active components.
+            foreach (var component in activeComponents)
             {
                 if (component.ToUpdate == true)
                 {
                     component.Update(gameTime);
                 }
             }
+
+            // Remove unwanted components.
+            foreach (var component in pendingRemovals)
+            {
+                activeComponents.Remove(component);
+            }
+            pendingRemovals.Clear();
         }
 
         public void Draw(GameTime gameTime)
         {
-            foreach (var component in activeComponentsList)
+            foreach (var component in activeComponents)
             {
                 if (component.ToDraw == true)
                 {
