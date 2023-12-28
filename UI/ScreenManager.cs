@@ -58,6 +58,7 @@ namespace ACL.UI
                 if (ActiveScreen != null)
                 {
                     ActiveScreen.OnUnactivation();
+                    ComponentManager.RemoveComponentsRange(ActiveScreen.ScreenComponents);
                 }
 
                 // Set the screen as the current.
