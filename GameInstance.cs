@@ -95,7 +95,7 @@ public class GameInstance : Game
     protected override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+        spriteBatch.Begin(samplerState: SpritebatchSamplerState);
         screenManager.Draw(gameTime);
         componentManager.Draw(gameTime);
         spriteBatch.End();
