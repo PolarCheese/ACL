@@ -10,21 +10,21 @@ namespace ACL;
 public class GameInstance : Game
 {
     // Managers
-    private readonly GraphicsDeviceManager _graphics;
-    protected internal SpriteBatch spriteBatch {get; private set;} = null!;
-    protected internal SaveManager saveManager {get; private set;} = null!;
-    protected internal ScreenManager screenManager {get; private set;} = null!;
-    protected internal ComponentManager componentManager {get; private set;} = null!;
-    protected internal PhysicsEngine physicsEngine {get; private set;} = null!;
+    protected readonly GraphicsDeviceManager _graphics;
+    protected internal SpriteBatch spriteBatch {get; protected set;} = null!;
+    protected internal SaveManager saveManager {get; protected set;} = null!;
+    protected internal ScreenManager screenManager {get; protected set;} = null!;
+    protected internal ComponentManager componentManager {get; protected set;} = null!;
+    protected internal PhysicsEngine physicsEngine {get; protected set;} = null!;
     
     // Properties
-    public static Texture2D? PlainTexture { get; private set; } // 1x1 white pixel texture
-    public SamplerState SpritebatchSamplerState {get; private set; } = SamplerState.PointClamp; // Determines if the spritebatch uses the PointClamp SamplerState
+    public static Texture2D? PlainTexture { get; protected set; } // 1x1 white pixel texture
+    public SamplerState SpritebatchSamplerState {get; protected set; } = SamplerState.PointClamp; // Determines if the spritebatch uses the PointClamp SamplerState
 
     // Fixed update system
-    private const float TargetFixedFrameRate = 90f;
-    private float FixedDeltaTime = 1f / TargetFixedFrameRate;
-    private float SinceLastFixedUpdate = 0f;
+    protected const float TargetFixedFrameRate = 90f;
+    protected float FixedDeltaTime = 1f / TargetFixedFrameRate;
+    protected float SinceLastFixedUpdate = 0f;
     public event EventHandler FixedUpdateEvent = null!;
     public Rectangle PlayerCursor;
 
@@ -95,7 +95,7 @@ public class GameInstance : Game
     protected override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        spriteBatch.Begin(samplerState: SpritebatchSamplerState);
+        spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         screenManager.Draw(gameTime);
         componentManager.Draw(gameTime);
         spriteBatch.End();
