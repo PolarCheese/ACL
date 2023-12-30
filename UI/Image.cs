@@ -10,6 +10,7 @@ namespace ACL.UI
 
         // Image
         public Color ImageColor { get; set; } = Color.White;
+        public Color ImageBackgroundColor { get; set; } // If the image is transparent, this will be the color shown behind.
         public Texture2D? ImageTexture {get; set;} = null;
 
         // Outline/Inline
@@ -21,12 +22,13 @@ namespace ACL.UI
 
         #endregion
 
-        public Rectangle Body { get; set; }
+        public Rectangle ImageBounds { get; set; }
         public Rectangle Outline { get; set; }
 
         public Image(GameInstance game) : base(game)
         {
-            Body = new Rectangle();
+            ImageBounds = new Rectangle();
+            Outline = new Rectangle();
         }
 
         #region Update/Draw
@@ -38,21 +40,26 @@ namespace ACL.UI
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Body = new Rectangle((int)Position.ConvertToScreenPosition(Game)[0], (int)Position.ConvertToScreenPosition(Game)[1], (int)Size.ConvertToScreenPosition(Game)[0], (int)Size.ConvertToScreenPosition(Game)[1]);
-            if (Body.Width != 0 && Body.Height != 0)
+            ImageBounds = new Rectangle((int)Position.ConvertToScreenPosition(Game)[0], (int)Position.ConvertToScreenPosition(Game)[1], (int)Size.ConvertToScreenPosition(Game)[0], (int)Size.ConvertToScreenPosition(Game)[1]);
+            if (ImageBounds.Width != 0 && ImageBounds.Height != 0)
             {
                 if (OutlineSize > 0)
                 {
                     // Draw outline
-                    Outline = new Rectangle(Body.X - OutlineSize/2, Body.Y - OutlineSize/2, Body.Width + OutlineSize, Body.Height + OutlineSize);
+                    Outline = new Rectangle(ImageBounds.X - OutlineSize/2, ImageBounds.Y - OutlineSize/2, ImageBounds.Width + OutlineSize, ImageBounds.Height + OutlineSize);
                     spriteBatch.Draw(GameInstance.PlainTexture, Outline, OutlineColor);
                 }
-                // Draw body
+                if (ImageBackgroundColor.A > 0)
+                {
+                    // Draw Background
+                    spriteBatch.Draw(GameInstance.PlainTexture, ImageBounds, ImageBackgroundColor);
+                }
+                // Draw Image
                 if (ImageTexture == null)
                 {
-                    spriteBatch.Draw(GameInstance.PlainTexture, Body, ImageColor);
+                    spriteBatch.Draw(GameInstance.PlainTexture, ImageBounds, ImageColor);
                 }
-                else { spriteBatch.Draw(ImageTexture, Body, ImageColor); }
+                else { spriteBatch.Draw(ImageTexture, ImageBounds, ImageColor); }
             }
             base.Draw(gameTime, spriteBatch);
         }

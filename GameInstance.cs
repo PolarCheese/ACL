@@ -19,6 +19,7 @@ public class GameInstance : Game
     
     // Properties
     public static Texture2D? PlainTexture { get; private set; } // 1x1 white pixel texture
+    public bool PointClampSamplerState {get; private set; } = true; // Determines if the spritebatch uses the PointClamp SamplerState
 
     // Fixed update system
     private const float TargetFixedFrameRate = 90f;
@@ -94,7 +95,13 @@ public class GameInstance : Game
     protected override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        spriteBatch.Begin();
+        if (PointClampSamplerState == true) {
+            spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+        }
+        else
+        {
+            spriteBatch.Begin();
+        }
         screenManager.Draw(gameTime);
         componentManager.Draw(gameTime);
         spriteBatch.End();
