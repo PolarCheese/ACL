@@ -1,3 +1,4 @@
+using ACL.Values;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,7 +11,7 @@ namespace ACL.UI
 
         // Background
         public Color BackgroundColor { get; set; } = new Color(0, 0, 0, 255);
-        public Texture2D? BackgroundTexture {get; set;} = null;
+        public Texture2D BackgroundTexture {get; set;} = GameInstance.PlainTexture;
 
         // Outline/Inline
         public Color OutlineColor { get; set; } = Color.White;
@@ -18,6 +19,11 @@ namespace ACL.UI
 
         public int OutlineSize { get; set; } = 0;
         public int InlineSize { get; set; } = 0;
+
+        // Texturing
+        public Rectangle TextureSourceRectangle { get; set; }
+        public PositionVector TextureSourcePosition { get; set; } = new PositionVector(0, 0, 0, 0);
+        public PositionVector TextureSourceSize { get; set; } = new PositionVector(1, 1, 0, 0);
 
         #endregion
 
@@ -30,10 +36,11 @@ namespace ACL.UI
             Outline = new Rectangle();
         }
 
-        #region Update/Draw
+        #region Methods
 
         public override void Update(GameTime gameTime)
         {
+            UpdateSourceRectangles();
             base.Update(gameTime);
         }
 
@@ -49,15 +56,17 @@ namespace ACL.UI
                     spriteBatch.Draw(GameInstance.PlainTexture, Outline, OutlineColor);
                 }
                 // Draw body
-                if (BackgroundTexture == null)
-                {
-                    spriteBatch.Draw(GameInstance.PlainTexture, Body, BackgroundColor);
-                }
-                else { spriteBatch.Draw(BackgroundTexture, Body, BackgroundColor); }
+                spriteBatch.Draw(BackgroundTexture, Body, TextureSourceRectangle, BackgroundColor);
             }
             base.Draw(gameTime, spriteBatch);
         }
         
+        public void UpdateSourceRectangles()
+        {
+            Rectangle TextureBounds = new Rectangle(0, 0, BackgroundTexture.Width, BackgroundTexture.Height);
+            TextureSourceRectangle = new Rectangle((int)TextureSourcePosition.ConvertToBound(TextureBounds)[0], (int)TextureSourcePosition.ConvertToBound(TextureBounds)[1], (int)TextureSourceSize.ConvertToBound(TextureBounds)[0], (int)TextureSourceSize.ConvertToBound(TextureBounds)[1]); 
+        }
+
         #endregion
     }
 }

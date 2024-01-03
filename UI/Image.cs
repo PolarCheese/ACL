@@ -1,4 +1,5 @@
 using ACL;
+using ACL.Values;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,7 +12,7 @@ namespace ACL.UI
         // Image
         public Color ImageColor { get; set; } = Color.White;
         public Color ImageBackgroundColor { get; set; } // If the image is transparent, this will be the color shown behind.
-        public Texture2D? ImageTexture {get; set;} = null;
+        public Texture2D ImageTexture {get; set;} = GameInstance.PlainTexture;
 
         // Outline/Inline
         public Color OutlineColor { get; set; } = Color.White;
@@ -19,6 +20,11 @@ namespace ACL.UI
 
         public int OutlineSize { get; set; } = 0;
         public int InlineSize { get; set; } = 0;
+
+        // Texturing
+        public Rectangle TextureSourceRectangle { get; set; }
+        public PositionVector TextureSourcePosition { get; set; } = new PositionVector(0, 0, 0, 0);
+        public PositionVector TextureSourceSize { get; set; } = new PositionVector(1, 1, 0, 0);
 
         #endregion
 
@@ -29,12 +35,14 @@ namespace ACL.UI
         {
             ImageBounds = new Rectangle();
             Outline = new Rectangle();
+            TextureSourceRectangle = new Rectangle();
         }
 
-        #region Update/Draw
+        #region Methods
 
         public override void Update(GameTime gameTime)
         {
+            UpdateSourceRectangles();
             base.Update(gameTime);
         }
 
@@ -55,15 +63,16 @@ namespace ACL.UI
                     spriteBatch.Draw(GameInstance.PlainTexture, ImageBounds, ImageBackgroundColor);
                 }
                 // Draw Image
-                if (ImageTexture == null)
-                {
-                    spriteBatch.Draw(GameInstance.PlainTexture, ImageBounds, ImageColor);
-                }
-                else { spriteBatch.Draw(ImageTexture, ImageBounds, ImageColor); }
+                spriteBatch.Draw(ImageTexture, ImageBounds, TextureSourceRectangle, ImageColor);
             }
             base.Draw(gameTime, spriteBatch);
         }
         
+        public void UpdateSourceRectangles()
+        {
+            Rectangle TextureBounds = new Rectangle(0, 0, ImageTexture.Width, ImageTexture.Height);
+            TextureSourceRectangle = new Rectangle((int)TextureSourcePosition.ConvertToBound(TextureBounds)[0], (int)TextureSourcePosition.ConvertToBound(TextureBounds)[1], (int)TextureSourceSize.ConvertToBound(TextureBounds)[0], (int)TextureSourceSize.ConvertToBound(TextureBounds)[1]); 
+        }
         #endregion
     }
 }

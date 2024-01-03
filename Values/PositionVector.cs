@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+
 namespace ACL.Values
 {
     public class PositionVector
@@ -15,6 +17,16 @@ namespace ACL.Values
             AbsoluteX = absoluteX; AbsoluteY = absoluteY;
         }
 
+        public List<float> ConvertToBound(Rectangle Bounds)
+        {
+            List<float> ConvertedFloats = new List<float>();
+
+            float x; float y;
+            x = Bounds.X + (float)(Bounds.Width * RelativeX) + AbsoluteX;
+            y = Bounds.Y + (float)(Bounds.Height * RelativeY) + AbsoluteY;
+
+            ConvertedFloats.Add(x); ConvertedFloats.Add(y); return ConvertedFloats;
+        }
         public List<float> ConvertToScreenPosition(GameInstance Game)
         {
             List<float> ConvertedFloats = new List<float>();
@@ -25,7 +37,7 @@ namespace ACL.Values
 
             ConvertedFloats.Add(x); ConvertedFloats.Add(y); return ConvertedFloats;
         }
-        public List<float> ConvertToScreenPosition(int BoundsWidth, int BoundsHeight)
+        public List<float> ConvertToBound(int BoundsWidth, int BoundsHeight)
         {
             List<float> ConvertedFloats = new List<float>();
 
@@ -36,7 +48,7 @@ namespace ACL.Values
             ConvertedFloats.Add(x); ConvertedFloats.Add(y); return ConvertedFloats;
         }
 
-        public List<float> ConvertToScreenPosition(int OffsetX, int OffsetY, int BoundsWidth, int BoundsHeight)
+        public List<float> ConvertToBound(int OffsetX, int OffsetY, int BoundsWidth, int BoundsHeight)
         {
             List<float> ConvertedFloats = new List<float>();
 

@@ -18,7 +18,7 @@ public class GameInstance : Game
     protected internal PhysicsEngine physicsEngine {get; protected set;} = null!;
     
     // Properties
-    public static Texture2D? PlainTexture { get; protected set; } // 1x1 white pixel texture
+    public static Texture2D PlainTexture { get; protected set; } = null!; // 1x1 white pixel texture
     public SamplerState SpritebatchSamplerState {get; protected set; } = SamplerState.PointClamp; // Determines if the spritebatch uses the PointClamp SamplerState
 
     // Fixed update system
