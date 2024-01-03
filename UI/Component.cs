@@ -14,7 +14,7 @@ namespace ACL.UI
         }
 
         #region properties
-        public Component? Parent { get; private set;}
+        public Component? Parent { get; set;}
         public List<Component> Children { get;} = new List<Component>();
         public bool PositionChildrenToParent {get; set;} = true;
         public bool SizeChildrenToParent {get; set;} = true;
