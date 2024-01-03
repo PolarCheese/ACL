@@ -34,6 +34,7 @@ namespace ACL.UI
             foreach (var Child in Components)
             {
                 Children.Add(Child);
+                Child.Parent = this;
             }
         }
 
@@ -42,6 +43,7 @@ namespace ACL.UI
             foreach (var Child in Components)
             {
                 Children.Add(Child);
+                Child.Parent = null;
             }
         }
         #endregion
