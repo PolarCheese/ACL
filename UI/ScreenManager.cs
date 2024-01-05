@@ -26,7 +26,7 @@ namespace ACL.UI
             }
 
             // Check if the screen is set to automatically activate.
-            if (autoactivation == true)
+            if (autoactivation)
             {
                 SetCurrentScreen(screen);
             }
