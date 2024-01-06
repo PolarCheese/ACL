@@ -1,12 +1,6 @@
 bin/
 obj/
-bin/Debug/net6.0/ACL.dll
-bin/Debug/net6.0/ACL.pdb
-obj/Debug/net6.0/ACL.AssemblyInfoInputs.cache
-obj/Debug/net6.0/ACL.csproj.CoreCompileInputs.cache
-obj/Debug/net6.0/ACL.csproj.FileListAbsolute.txt
-obj/Debug/net6.0/ref/ACL.dll
-obj/Debug/net6.0/refint/ACL.dll
+ACL.sln
 
 *.user
 *.vscode
