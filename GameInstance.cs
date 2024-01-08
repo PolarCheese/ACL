@@ -12,7 +12,7 @@ public class GameInstance : Game
     // Managers
     protected readonly GraphicsDeviceManager _graphics;
     protected internal SpriteBatch spriteBatch {get; protected set;} = null!;
-    public SaveManager saveManager {get; protected set;} = null!;
+    protected internal SaveManager saveManager {get; protected set;} = null!;
     protected internal ScreenManager screenManager {get; protected set;} = null!;
     protected internal ComponentManager componentManager {get; protected set;} = null!;
     protected internal PhysicsEngine physicsEngine {get; protected set;} = null!;
