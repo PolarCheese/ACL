@@ -19,14 +19,10 @@ namespace ACL.UI
         public Color TextColor { get; set; } = Color.White;
         public float TextScale { get; set; } = 1f;
         public SpriteFont? TextFont { get; set; }
-        public Rectangle TextBounds { get; set; }
 
         #endregion
 
-        public Text(GameInstance game) : base(game)
-        {
-            TextBounds = new Rectangle();
-        }
+        public Text(GameInstance game) : base(game) {}
 
         #region Methods
 
@@ -35,8 +31,7 @@ namespace ACL.UI
             // Check for any changes.
             if (TextFont != null && (Position != PreviousPosition || TextScale != PreviousScale))
             {
-                // Update text bounds
-                TextBounds = new Rectangle((int)Position.ConvertToScreenPosition(Game)[0], (int)Position.ConvertToScreenPosition(Game)[1], (int)(TextFont.MeasureString(Content).X * TextScale), (int)(TextFont.MeasureString(Content).Y * TextScale));
+                // Update text bounds (removed for now)
             }
 
             PreviousPosition = Position; PreviousScale = TextScale;
@@ -47,7 +42,19 @@ namespace ACL.UI
         {
             if (TextFont != null)
             {
-                Vector2 ConvertedPosition = new Vector2(Position.ConvertToScreenPosition(Game)[0], Position.ConvertToScreenPosition(Game)[1]);
+                // Convert position, size and rotation.
+                Vector2 ConvertedPosition = new Vector2(); Vector2 TextBoundsSize = new Vector2();
+                TextBoundsSize = TextFont.MeasureString(Content) * TextScale;
+
+                if (Parent != null)
+                {
+                    if (Parent.PositionChildrenToParent) {ConvertedPosition = Position.ConvertToBound(Parent.GetBounds());}
+                    if (Parent.RotateChildrenToParent) {Rotation = Rotation + Parent.Rotation;};
+                }
+                // Use game as bounds. 
+                else {ConvertedPosition = Position.ConvertToScreenPosition(Game);}
+
+                ConvertedPosition = new Vector2(ConvertedPosition.X - TextBoundsSize.X * Origin.X, ConvertedPosition.Y - TextBoundsSize.Y * Origin.Y);
                 spriteBatch.DrawString(TextFont, Content, ConvertedPosition, TextColor, Rotation, Vector2.Zero, TextScale, SpriteEffects.None, 0);
             }
 

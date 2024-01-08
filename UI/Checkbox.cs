@@ -84,7 +84,19 @@ namespace ACL.UI
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            CheckboxRectangle = new Rectangle((int)Position.ConvertToScreenPosition(Game)[0], (int)Position.ConvertToScreenPosition(Game)[1], (int)Size.ConvertToScreenPosition(Game)[0], (int)Size.ConvertToScreenPosition(Game)[1]);
+            // Convert position, size and rotation.
+            Vector2 ConvertedPosition = new Vector2(); Vector2 ConvertedSize = new Vector2();
+
+            if (Parent != null)
+            {
+                if (Parent.PositionChildrenToParent) {ConvertedPosition = Position.ConvertToBound(Parent.GetBounds());}
+                if (Parent.SizeChildrenToParent)  {ConvertedSize = Size.ConvertToBound(Parent.GetBounds());}
+                if (Parent.RotateChildrenToParent) {Rotation = Rotation + Parent.Rotation;};
+            }
+            // Use game as bounds. 
+            else {ConvertedPosition = Position.ConvertToScreenPosition(Game); ConvertedSize = Size.ConvertToScreenPosition(Game);}
+
+            CheckboxRectangle = new Rectangle((int)(ConvertedPosition.X - ConvertedPosition.X * Origin.X), (int)(ConvertedPosition.Y - ConvertedPosition.Y * Origin.Y), (int)ConvertedSize.X, (int)ConvertedSize.Y);
             if (CheckboxRectangle.Width != 0 && CheckboxRectangle.Height != 0)
             {
                 // Draw Checkbox
@@ -113,8 +125,10 @@ namespace ACL.UI
         public void UpdateSourceRectangles()
         {
             Rectangle TextureBounds = new Rectangle(0, 0, CheckboxTexture.Width, CheckboxTexture.Height);
-            if (!Value) { TextureSourceRectangle = new Rectangle((int)TextureOffSourcePosition.ConvertToBound(TextureBounds)[0], (int)TextureOffSourcePosition.ConvertToBound(TextureBounds)[1], (int)TextureOffSourceSize.ConvertToBound(TextureBounds)[0], (int)TextureOffSourceSize.ConvertToBound(TextureBounds)[1]); } 
-            else {TextureSourceRectangle = new Rectangle((int)TextureOnSourcePosition.ConvertToBound(TextureBounds)[0], (int)TextureOnSourcePosition.ConvertToBound(TextureBounds)[1], (int)TextureOnSourceSize.ConvertToBound(TextureBounds)[0], (int)TextureOnSourceSize.ConvertToBound(TextureBounds)[1]); }
+            Vector2 OffPosition = TextureOffSourcePosition.ConvertToBound(TextureBounds); Vector2 OnPosition = TextureOnSourcePosition.ConvertToBound(TextureBounds);
+            Vector2 OffSize = TextureOffSourceSize.ConvertToBound(TextureBounds); Vector2 OnSize = TextureOnSourceSize.ConvertToBound(TextureBounds);
+            if (!Value) { TextureSourceRectangle = new Rectangle((int)OffPosition.X, (int)OffPosition.Y, (int)OffSize.X, (int)OffSize.Y); } 
+            else {TextureSourceRectangle = new Rectangle((int)OnPosition.X, (int)OnPosition.Y, (int)OnSize.X, (int)OnSize.Y); } 
         }
         #endregion
     }

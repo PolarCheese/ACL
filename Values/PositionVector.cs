@@ -17,46 +17,34 @@ namespace ACL.Values
             AbsoluteX = absoluteX; AbsoluteY = absoluteY;
         }
 
-        public List<float> ConvertToBound(Rectangle Bounds)
+        public Vector2 ConvertToBound(Rectangle Bounds)
         {
-            List<float> ConvertedFloats = new List<float>();
+            float x = Bounds.X + (float)(Bounds.Width * RelativeX) + AbsoluteX;
+            float y = Bounds.Y + (float)(Bounds.Height * RelativeY) + AbsoluteY;
 
-            float x; float y;
-            x = Bounds.X + (float)(Bounds.Width * RelativeX) + AbsoluteX;
-            y = Bounds.Y + (float)(Bounds.Height * RelativeY) + AbsoluteY;
-
-            ConvertedFloats.Add(x); ConvertedFloats.Add(y); return ConvertedFloats;
+            return new Vector2(x, y);
         }
-        public List<float> ConvertToScreenPosition(GameInstance Game)
+        public Vector2 ConvertToScreenPosition(GameInstance Game)
         {
-            List<float> ConvertedFloats = new List<float>();
+            float x = (float)(Game.GetWindowResolution()[0] * RelativeX) + AbsoluteX;
+            float y = (float)(Game.GetWindowResolution()[1] * RelativeY) + AbsoluteY;
 
-            float x; float y;
-            x = (float)(Game.GetWindowResolution()[0] * RelativeX) + AbsoluteX;
-            y = (float)(Game.GetWindowResolution()[1] * RelativeY) + AbsoluteY;
-
-            ConvertedFloats.Add(x); ConvertedFloats.Add(y); return ConvertedFloats;
+            return new Vector2(x, y);
         }
-        public List<float> ConvertToBound(int BoundsWidth, int BoundsHeight)
+        public Vector2 ConvertToBound(int BoundsWidth, int BoundsHeight)
         {
-            List<float> ConvertedFloats = new List<float>();
+            float x = (float)(BoundsWidth * RelativeX) + AbsoluteX;
+            float y = (float)(BoundsHeight * RelativeY) + AbsoluteY;
 
-            float x; float y;
-            x = (float)(BoundsWidth * RelativeX) + AbsoluteX;
-            y = (float)(BoundsHeight * RelativeY) + AbsoluteY;
-
-            ConvertedFloats.Add(x); ConvertedFloats.Add(y); return ConvertedFloats;
+            return new Vector2(x, y);
         }
 
-        public List<float> ConvertToBound(int OffsetX, int OffsetY, int BoundsWidth, int BoundsHeight)
+        public Vector2 ConvertToBound(int OffsetX, int OffsetY, int BoundsWidth, int BoundsHeight)
         {
-            List<float> ConvertedFloats = new List<float>();
+            float x = OffsetX + (float)(BoundsWidth * RelativeX) + AbsoluteX;
+            float y = OffsetY + (float)(BoundsHeight * RelativeY) + AbsoluteY;
 
-            float x; float y;
-            x = OffsetX + (float)(BoundsWidth * RelativeX) + AbsoluteX;
-            y = OffsetY + (float)(BoundsHeight * RelativeY) + AbsoluteY;
-
-            ConvertedFloats.Add(x); ConvertedFloats.Add(y); return ConvertedFloats;
+            return new Vector2(x, y);
         }
     }
 }

@@ -14,8 +14,8 @@ namespace ACL.UI
         }
 
         #region properties
-        public Component? Parent { get; set;}
-        public List<Component> Children { get;} = new List<Component>();
+        public Component? Parent {get; set;}
+        public List<Component> Children {get;} = new List<Component>();
         public bool PositionChildrenToParent {get; set;} = true;
         public bool SizeChildrenToParent {get; set;} = true;
         public bool RotateChildrenToParent {get; set;} = true;
@@ -23,9 +23,11 @@ namespace ACL.UI
         public bool ToUpdate {get; set;} = true;
         public bool ToDraw {get; set;} = true;
 
+        public Vector2 Origin {get; set;} = Vector2.Zero;
         public PositionVector Position {get; set;} = PositionVector.Zero;
         public PositionVector Size {get; set;} = PositionVector.Zero;
         public float Rotation {get; set;} = 0f;
+        
         #endregion
 
         #region nodes
@@ -45,6 +47,15 @@ namespace ACL.UI
                 Children.Add(Child);
                 Child.Parent = null;
             }
+        }
+
+        public Rectangle GetBounds()
+        {
+            Rectangle Bounds; Vector2 ConvertedPosition; Vector2 ConvertedSize;
+            if (Parent != null) {ConvertedPosition = Position.ConvertToBound(Parent.GetBounds()); ConvertedSize = Size.ConvertToBound(Parent.GetBounds());}
+            else {ConvertedPosition = Position.ConvertToScreenPosition(Game); ConvertedSize = Size.ConvertToScreenPosition(Game);}
+            Bounds = new Rectangle((int)(ConvertedPosition.X - ConvertedPosition.X * Origin.X), (int)(ConvertedPosition.Y - ConvertedPosition.Y * Origin.Y), (int)ConvertedSize.X, (int)ConvertedSize.Y);
+            return Bounds;
         }
         #endregion
 

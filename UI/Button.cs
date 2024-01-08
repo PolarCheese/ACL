@@ -80,13 +80,25 @@ namespace ACL.UI
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            ButtonRectangle = new Rectangle((int)Position.ConvertToScreenPosition(Game)[0], (int)Position.ConvertToScreenPosition(Game)[1], (int)Size.ConvertToScreenPosition(Game)[0], (int)Size.ConvertToScreenPosition(Game)[1]);
+            // Convert position, size and rotation.
+            Vector2 ConvertedPosition = new Vector2(); Vector2 ConvertedSize = new Vector2();
+
+            if (Parent != null)
+            {
+                if (Parent.PositionChildrenToParent) {ConvertedPosition = Position.ConvertToBound(Parent.GetBounds());}
+                if (Parent.SizeChildrenToParent)  {ConvertedSize = Size.ConvertToBound(Parent.GetBounds());}
+                if (Parent.RotateChildrenToParent) {Rotation = Rotation + Parent.Rotation;};
+            }
+            // Use game as bounds. 
+            else {ConvertedPosition = Position.ConvertToScreenPosition(Game); ConvertedSize = Size.ConvertToScreenPosition(Game);}
+
+            ButtonRectangle = new Rectangle((int)(ConvertedPosition.X - ConvertedSize.X * Origin.X), (int)(ConvertedPosition.Y - ConvertedSize.Y * Origin.Y), (int)ConvertedSize.X, (int)ConvertedSize.Y);
             if (ButtonRectangle.Width != 0 && ButtonRectangle.Height != 0)
             {
                 // Draw Button
                 Color DrawColor;
                 if (Locked) { DrawColor = ButtonLockedColor; } else { DrawColor = _isHovering ? ButtonHoverColor : ButtonColor; }
-                spriteBatch.Draw(ButtonTexture, ButtonRectangle, TextureSourceRectangle, DrawColor);
+                spriteBatch.Draw(ButtonTexture, ButtonRectangle, TextureSourceRectangle, DrawColor, MathHelper.ToRadians(Rotation), new Vector2(0,0), SpriteEffects.None, 0.1f);
 
                 // Draw Text
                 if (!string.IsNullOrEmpty(Text) && TextFont != null)
@@ -94,7 +106,7 @@ namespace ACL.UI
                     var x = ButtonRectangle.X + ButtonRectangle.Width / 2 - TextFont.MeasureString(Text).X / 2 * TextScale;
                     var y = ButtonRectangle.Y + ButtonRectangle.Height / 2 - TextFont.MeasureString(Text).Y / 2 * TextScale;
                     var textColor = _isHovering ? TextHoverColor : TextColor;
-                    spriteBatch.DrawString(TextFont, Text, new Vector2(x, y), textColor, 0f, Vector2.Zero, TextScale, SpriteEffects.None, 0.1f);
+                    spriteBatch.DrawString(TextFont, Text, new Vector2(x, y), textColor, 0f, Vector2.Zero, TextScale, SpriteEffects.None, 0.25f);
                 }
             }
             
@@ -104,7 +116,8 @@ namespace ACL.UI
         public void UpdateSourceRectangles()
         {
             Rectangle TextureBounds = new Rectangle(0, 0, ButtonTexture.Width, ButtonTexture.Height);
-            TextureSourceRectangle = new Rectangle((int)TextureSourcePosition.ConvertToBound(TextureBounds)[0], (int)TextureSourcePosition.ConvertToBound(TextureBounds)[1], (int)TextureSourceSize.ConvertToBound(TextureBounds)[0], (int)TextureSourceSize.ConvertToBound(TextureBounds)[1]); 
+            Vector2 Position = TextureSourcePosition.ConvertToBound(TextureBounds); Vector2 Size = TextureSourceSize.ConvertToBound(TextureBounds);
+            TextureSourceRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
         }
         #endregion
     }

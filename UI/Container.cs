@@ -46,7 +46,19 @@ namespace ACL.UI
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Body = new Rectangle((int)Position.ConvertToScreenPosition(Game)[0], (int)Position.ConvertToScreenPosition(Game)[1], (int)Size.ConvertToScreenPosition(Game)[0], (int)Size.ConvertToScreenPosition(Game)[1]);
+            // Convert position, size and rotation.
+            Vector2 ConvertedPosition = new Vector2(); Vector2 ConvertedSize = new Vector2();
+
+            if (Parent != null)
+            {
+                if (Parent.PositionChildrenToParent) {ConvertedPosition = Position.ConvertToBound(Parent.GetBounds());}
+                if (Parent.SizeChildrenToParent)  {ConvertedSize = Size.ConvertToBound(Parent.GetBounds());}
+                if (Parent.RotateChildrenToParent) {Rotation = Rotation + Parent.Rotation;};
+            }
+            // Use game as bounds. 
+            else {ConvertedPosition = Position.ConvertToScreenPosition(Game); ConvertedSize = Size.ConvertToScreenPosition(Game);}
+
+            Body = new Rectangle((int)(ConvertedPosition.X - ConvertedSize.X * Origin.X), (int)(ConvertedPosition.Y - ConvertedSize.Y * Origin.Y), (int)ConvertedSize.X, (int)ConvertedSize.Y);
             if (Body.Width != 0 && Body.Height != 0)
             {
                 if (OutlineSize > 0)
@@ -64,7 +76,8 @@ namespace ACL.UI
         public void UpdateSourceRectangles()
         {
             Rectangle TextureBounds = new Rectangle(0, 0, BackgroundTexture.Width, BackgroundTexture.Height);
-            TextureSourceRectangle = new Rectangle((int)TextureSourcePosition.ConvertToBound(TextureBounds)[0], (int)TextureSourcePosition.ConvertToBound(TextureBounds)[1], (int)TextureSourceSize.ConvertToBound(TextureBounds)[0], (int)TextureSourceSize.ConvertToBound(TextureBounds)[1]); 
+            Vector2 Position = TextureSourcePosition.ConvertToBound(TextureBounds); Vector2 Size = TextureSourceSize.ConvertToBound(TextureBounds);
+            TextureSourceRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
         }
 
         #endregion
