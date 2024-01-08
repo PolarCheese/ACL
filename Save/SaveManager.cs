@@ -16,10 +16,10 @@ namespace ACL.Save
             // Save text as file.
             File.WriteAllText(GetGamePath(name), content);
         }
-        public static void LoadFile(string path)
+        public static string LoadFile(string path)
         {
             // Read text from file.
-            File.ReadAllText(GetGamePath(path));
+            return File.ReadAllText(GetGamePath(path));
         }
         public static bool CheckFile(string path)
         {
