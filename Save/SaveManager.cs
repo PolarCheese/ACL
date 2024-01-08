@@ -21,6 +21,13 @@ namespace ACL.Save
             // Read text from file.
             File.ReadAllText(GetGamePath(path));
         }
+        public static bool CheckFile(string path)
+        {
+            bool Result = false;
+            // Checks for the file.
+            if (File.Exists(GetGamePath(path))) { Result = true; }
+            return Result;
+        }
         #region JSON
         public static void SaveJSON<T>(string name, T json, JsonSerializerOptions? jsonSerializerOptions = null)
         {
