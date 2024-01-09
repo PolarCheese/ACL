@@ -89,12 +89,12 @@ namespace ACL.UI
 
             if (Parent != null)
             {
-                if (Parent.PositionChildrenToParent) {ConvertedPosition = Position.ConvertToBound(Parent.GetBounds());}
-                if (Parent.SizeChildrenToParent)  {ConvertedSize = Size.ConvertToBound(Parent.GetBounds());}
+                if (Parent.PositionChildrenToParent) {ConvertedPosition = Position.ToVector2(Parent.GetBounds());}
+                if (Parent.SizeChildrenToParent)  {ConvertedSize = Size.ToVector2(Parent.GetBounds());}
                 if (Parent.RotateChildrenToParent) {Rotation = Rotation + Parent.Rotation;};
             }
             // Use game as bounds. 
-            else {ConvertedPosition = Position.ConvertToScreenPosition(Game); ConvertedSize = Size.ConvertToScreenPosition(Game);}
+            else {ConvertedPosition = Position.ToVector2(Game); ConvertedSize = Size.ToVector2(Game);}
 
             CheckboxRectangle = new Rectangle((int)(ConvertedPosition.X - ConvertedPosition.X * Origin.X), (int)(ConvertedPosition.Y - ConvertedPosition.Y * Origin.Y), (int)ConvertedSize.X, (int)ConvertedSize.Y);
             if (CheckboxRectangle.Width != 0 && CheckboxRectangle.Height != 0)
@@ -125,8 +125,8 @@ namespace ACL.UI
         public void UpdateSourceRectangles()
         {
             Rectangle TextureBounds = new Rectangle(0, 0, CheckboxTexture.Width, CheckboxTexture.Height);
-            Vector2 OffPosition = TextureOffSourcePosition.ConvertToBound(TextureBounds); Vector2 OnPosition = TextureOnSourcePosition.ConvertToBound(TextureBounds);
-            Vector2 OffSize = TextureOffSourceSize.ConvertToBound(TextureBounds); Vector2 OnSize = TextureOnSourceSize.ConvertToBound(TextureBounds);
+            Vector2 OffPosition = TextureOffSourcePosition.ToVector2(TextureBounds); Vector2 OnPosition = TextureOnSourcePosition.ToVector2(TextureBounds);
+            Vector2 OffSize = TextureOffSourceSize.ToVector2(TextureBounds); Vector2 OnSize = TextureOnSourceSize.ToVector2(TextureBounds);
             if (!Value) { TextureSourceRectangle = new Rectangle((int)OffPosition.X, (int)OffPosition.Y, (int)OffSize.X, (int)OffSize.Y); } 
             else {TextureSourceRectangle = new Rectangle((int)OnPosition.X, (int)OnPosition.Y, (int)OnSize.X, (int)OnSize.Y); } 
         }

@@ -52,8 +52,8 @@ namespace ACL.UI
         public Rectangle GetBounds()
         {
             Rectangle Bounds; Vector2 ConvertedPosition; Vector2 ConvertedSize;
-            if (Parent != null) {ConvertedPosition = Position.ConvertToBound(Parent.GetBounds()); ConvertedSize = Size.ConvertToBound(Parent.GetBounds());}
-            else {ConvertedPosition = Position.ConvertToScreenPosition(Game); ConvertedSize = Size.ConvertToScreenPosition(Game);}
+            if (Parent != null) {ConvertedPosition = Position.ToVector2(Parent.GetBounds()); ConvertedSize = Size.ToVector2(Parent.GetBounds());}
+            else {ConvertedPosition = Position.ToVector2(Game); ConvertedSize = Size.ToVector2(Game);}
             Bounds = new Rectangle((int)(ConvertedPosition.X - ConvertedPosition.X * Origin.X), (int)(ConvertedPosition.Y - ConvertedPosition.Y * Origin.Y), (int)ConvertedSize.X, (int)ConvertedSize.Y);
             return Bounds;
         }

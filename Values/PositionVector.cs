@@ -17,21 +17,7 @@ namespace ACL.Values
             AbsoluteX = absoluteX; AbsoluteY = absoluteY;
         }
 
-        public Vector2 ConvertToBound(Rectangle Bounds)
-        {
-            float x = Bounds.X + (float)(Bounds.Width * RelativeX) + AbsoluteX;
-            float y = Bounds.Y + (float)(Bounds.Height * RelativeY) + AbsoluteY;
-
-            return new Vector2(x, y);
-        }
-        public Vector2 ConvertToScreenPosition(GameInstance Game)
-        {
-            float x = (float)(Game.GetWindowResolution()[0] * RelativeX) + AbsoluteX;
-            float y = (float)(Game.GetWindowResolution()[1] * RelativeY) + AbsoluteY;
-
-            return new Vector2(x, y);
-        }
-        public Vector2 ConvertToBound(int BoundsWidth, int BoundsHeight)
+        public Vector2 ToVector2(int BoundsWidth, int BoundsHeight)
         {
             float x = (float)(BoundsWidth * RelativeX) + AbsoluteX;
             float y = (float)(BoundsHeight * RelativeY) + AbsoluteY;
@@ -39,10 +25,27 @@ namespace ACL.Values
             return new Vector2(x, y);
         }
 
-        public Vector2 ConvertToBound(int OffsetX, int OffsetY, int BoundsWidth, int BoundsHeight)
+        public Vector2 ToVector2(int BoundsWidth, int BoundsHeight, int OffsetX, int OffsetY)
         {
             float x = OffsetX + (float)(BoundsWidth * RelativeX) + AbsoluteX;
             float y = OffsetY + (float)(BoundsHeight * RelativeY) + AbsoluteY;
+
+            return new Vector2(x, y);
+        }
+
+        public Vector2 ToVector2(GameInstance Game)
+        {
+            int[] GameBounds = Game.GetWindowResolution();
+            float x = (float)(GameBounds[0] * RelativeX) + AbsoluteX;
+            float y = (float)(GameBounds[1] * RelativeY) + AbsoluteY;
+
+            return new Vector2(x, y);
+        }
+
+        public Vector2 ToVector2(Rectangle Bounds)
+        {
+            float x = (float)(Bounds.Width * RelativeX) + AbsoluteX;
+            float y = (float)(Bounds.Height * RelativeY) + AbsoluteY;
 
             return new Vector2(x, y);
         }

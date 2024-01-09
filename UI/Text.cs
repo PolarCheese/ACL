@@ -15,10 +15,11 @@ namespace ACL.UI
 
         #region Properties
         
-        public string? Content { get; set; }
-        public Color TextColor { get; set; } = Color.White;
-        public float TextScale { get; set; } = 1f;
-        public SpriteFont? TextFont { get; set; }
+        public string? Content {get; set;}
+        public Color TextColor {get; set;} = Color.White;
+        public float TextScale {get; set;} = 1f;
+        public SpriteFont? TextFont {get; set;}
+        public Vector2 TextBoundsSize {get; private set;}
 
         #endregion
 
@@ -43,16 +44,16 @@ namespace ACL.UI
             if (TextFont != null)
             {
                 // Convert position, size and rotation.
-                Vector2 ConvertedPosition = new Vector2(); Vector2 TextBoundsSize = new Vector2();
+                Vector2 ConvertedPosition = new Vector2(); 
                 TextBoundsSize = TextFont.MeasureString(Content) * TextScale;
 
                 if (Parent != null)
                 {
-                    if (Parent.PositionChildrenToParent) {ConvertedPosition = Position.ConvertToBound(Parent.GetBounds());}
+                    if (Parent.PositionChildrenToParent) {ConvertedPosition = Position.ToVector2(Parent.GetBounds());}
                     if (Parent.RotateChildrenToParent) {Rotation = Rotation + Parent.Rotation;};
                 }
                 // Use game as bounds. 
-                else {ConvertedPosition = Position.ConvertToScreenPosition(Game);}
+                else {ConvertedPosition = Position.ToVector2(Game);}
 
                 ConvertedPosition = new Vector2(ConvertedPosition.X - TextBoundsSize.X * Origin.X, ConvertedPosition.Y - TextBoundsSize.Y * Origin.Y);
                 spriteBatch.DrawString(TextFont, Content, ConvertedPosition, TextColor, Rotation, Vector2.Zero, TextScale, SpriteEffects.None, 0);

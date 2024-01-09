@@ -51,12 +51,12 @@ namespace ACL.UI
 
             if (Parent != null)
             {
-                if (Parent.PositionChildrenToParent) {ConvertedPosition = Position.ConvertToBound(Parent.GetBounds());}
-                if (Parent.SizeChildrenToParent)  {ConvertedSize = Size.ConvertToBound(Parent.GetBounds());}
+                if (Parent.PositionChildrenToParent) {ConvertedPosition = Position.ToVector2(Parent.GetBounds());}
+                if (Parent.SizeChildrenToParent)  {ConvertedSize = Size.ToVector2(Parent.GetBounds());}
                 if (Parent.RotateChildrenToParent) {Rotation = Rotation + Parent.Rotation;};
             }
             // Use game as bounds. 
-            else {ConvertedPosition = Position.ConvertToScreenPosition(Game); ConvertedSize = Size.ConvertToScreenPosition(Game);}
+            else {ConvertedPosition = Position.ToVector2(Game); ConvertedSize = Size.ToVector2(Game);}
 
             Body = new Rectangle((int)(ConvertedPosition.X - ConvertedSize.X * Origin.X), (int)(ConvertedPosition.Y - ConvertedSize.Y * Origin.Y), (int)ConvertedSize.X, (int)ConvertedSize.Y);
             if (Body.Width != 0 && Body.Height != 0)
@@ -76,7 +76,7 @@ namespace ACL.UI
         public void UpdateSourceRectangles()
         {
             Rectangle TextureBounds = new Rectangle(0, 0, BackgroundTexture.Width, BackgroundTexture.Height);
-            Vector2 Position = TextureSourcePosition.ConvertToBound(TextureBounds); Vector2 Size = TextureSourceSize.ConvertToBound(TextureBounds);
+            Vector2 Position = TextureSourcePosition.ToVector2(TextureBounds); Vector2 Size = TextureSourceSize.ToVector2(TextureBounds);
             TextureSourceRectangle = new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
         }
 
