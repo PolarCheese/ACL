@@ -49,5 +49,13 @@ namespace ACL.Values
 
             return new Vector2(x, y);
         }
+        
+        public Vector2 ToVector2(Vector2 Vector2)
+        {
+            float x = (float)(Vector2.X * RelativeX) + AbsoluteX;
+            float y = (float)(Vector2.Y * RelativeY) + AbsoluteY;
+
+            return new Vector2(x, y);
+        }
     }
 }
