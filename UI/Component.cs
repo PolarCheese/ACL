@@ -20,12 +20,19 @@ namespace ACL.UI
         public bool SizeChildrenToParent {get; set;} = true;
         public bool RotateChildrenToParent {get; set;} = true;
 
+        // Logic Toggles
         public bool ToUpdate {get; set;} = true;
         public bool ToDraw {get; set;} = true;
 
+        // Positioning, Size and Rotation
         public Vector2 Origin {get; set;} = Vector2.Zero;
         public PositionVector Position {get; set;} = PositionVector.Zero;
         public PositionVector Size {get; set;} = PositionVector.Zero;
+        protected PositionVector _previousPosition = PositionVector.Zero;
+        protected PositionVector _previousSize = PositionVector.Zero;
+        public Vector2 ActualPosition {get; set;} = Vector2.Zero;
+        public Vector2 ActualSize {get; protected set;} = Vector2.Zero;
+        
         public float Rotation {get; set;} = 0f;
         
         #endregion
@@ -48,20 +55,12 @@ namespace ACL.UI
                 Child.Parent = null;
             }
         }
-
-        public Rectangle GetBounds()
-        {
-            Rectangle Bounds; Vector2 ConvertedPosition; Vector2 ConvertedSize;
-            if (Parent != null) {ConvertedPosition = Position.ToVector2(Parent.GetBounds()); ConvertedSize = Size.ToVector2(Parent.GetBounds());}
-            else {ConvertedPosition = Position.ToVector2(Game); ConvertedSize = Size.ToVector2(Game);}
-            Bounds = new Rectangle((int)(ConvertedPosition.X - ConvertedPosition.X * Origin.X), (int)(ConvertedPosition.Y - ConvertedPosition.Y * Origin.Y), (int)ConvertedSize.X, (int)ConvertedSize.Y);
-            return Bounds;
-        }
         #endregion
 
         #region Update/Draw
         public virtual void Update(GameTime gameTime)
         {
+            UpdateProperties();
             foreach (Component Child in Children)
             {
                 if (Child.ToUpdate)
@@ -81,6 +80,24 @@ namespace ACL.UI
                 }
             }
 
+        }
+
+        public virtual void UpdateProperties()
+        {
+            // Update actual size/position etc.
+            bool HasParent = Parent != null;
+            if (_previousPosition != Position) {
+                // Position has changed. Recalculate actual position.
+                if (HasParent && Parent.PositionChildrenToParent) {ActualPosition = Parent.ActualPosition +  Position.ToVector2(Parent.ActualPosition);}
+                else {ActualPosition = Position.ToVector2(Game) - Size.ToVector2(Game) * Origin;}
+            }
+            if (_previousSize != Size) {
+                // Size has changed. Recalculate actual size.
+                if (HasParent && Parent.SizeChildrenToParent) {ActualSize = Size.ToVector2(Parent.ActualSize);}
+                else {ActualSize = Size.ToVector2(Game);}
+            }
+
+            _previousPosition = Position; _previousSize = Size;
         }
         #endregion
     }

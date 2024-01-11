@@ -32,7 +32,7 @@ namespace ACL.UI
             // Check for any changes.
             if (TextFont != null && (Position != PreviousPosition || TextScale != PreviousScale))
             {
-                // Update text bounds (removed for now)
+                TextBoundsSize = TextFont.MeasureString(Content) * TextScale;
             }
 
             PreviousPosition = Position; PreviousScale = TextScale;
@@ -43,23 +43,31 @@ namespace ACL.UI
         {
             if (TextFont != null)
             {
-                // Convert position, size and rotation.
-                Vector2 ConvertedPosition = new Vector2(); 
-                TextBoundsSize = TextFont.MeasureString(Content) * TextScale;
+                // Center text to origin
+                
 
-                if (Parent != null)
-                {
-                    if (Parent.PositionChildrenToParent) {ConvertedPosition = Position.ToVector2(Parent.GetBounds());}
-                    if (Parent.RotateChildrenToParent) {Rotation = Rotation + Parent.Rotation;};
-                }
-                // Use game as bounds. 
-                else {ConvertedPosition = Position.ToVector2(Game);}
-
-                ConvertedPosition = new Vector2(ConvertedPosition.X - TextBoundsSize.X * Origin.X, ConvertedPosition.Y - TextBoundsSize.Y * Origin.Y);
-                spriteBatch.DrawString(TextFont, Content, ConvertedPosition, TextColor, Rotation, Vector2.Zero, TextScale, SpriteEffects.None, 0);
+                spriteBatch.DrawString(TextFont, Content, ActualPosition, TextColor, Rotation, Vector2.Zero, TextScale, SpriteEffects.None, 0);
             }
 
             base.Draw(gameTime, spriteBatch);
+        }
+
+        public override void UpdateProperties()
+        {
+            // Update actual size/position etc.
+            bool HasParent = Parent != null;
+            if (_previousPosition != Position) {
+                // Position has changed. Recalculate actual position.
+                if (HasParent && Parent.PositionChildrenToParent) {ActualPosition = Parent.ActualPosition + Position.ToVector2(Parent.ActualPosition) - new Vector2(TextBoundsSize.X * Origin.X, TextBoundsSize.Y * Origin.Y);}
+                else {ActualPosition = Position.ToVector2(Game) - new Vector2(TextBoundsSize.X * Origin.X, TextBoundsSize.Y * Origin.Y);}
+            }
+            if (_previousSize != Size) {
+                // Size has changed. Recalculate actual position.
+                if (HasParent && Parent.SizeChildrenToParent) {ActualSize = Size.ToVector2(Parent.ActualSize);}
+                else {ActualSize = Size.ToVector2(Game);}
+            } 
+
+            _previousPosition = Position; _previousSize = Size;
         }
         #endregion
     }

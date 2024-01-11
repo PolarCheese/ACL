@@ -48,19 +48,7 @@ namespace ACL.UI
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            // Convert position, size and rotation.
-            Vector2 ConvertedPosition = new Vector2(); Vector2 ConvertedSize = new Vector2();
-
-            if (Parent != null)
-            {
-                if (Parent.PositionChildrenToParent) {ConvertedPosition = Position.ToVector2(Parent.GetBounds());}
-                if (Parent.SizeChildrenToParent)  {ConvertedSize = Size.ToVector2(Parent.GetBounds());}
-                if (Parent.RotateChildrenToParent) {Rotation = Rotation + Parent.Rotation;};
-            }
-            // Use game as bounds. 
-            else {ConvertedPosition = Position.ToVector2(Game); ConvertedSize = Size.ToVector2(Game);}
-
-            ImageBounds = new Rectangle((int)(ConvertedPosition.X - ConvertedSize.X * Origin.X), (int)(ConvertedPosition.Y - ConvertedSize.Y * Origin.Y), (int)ConvertedSize.X, (int)ConvertedSize.Y);
+            ImageBounds = new Rectangle((int)ActualPosition.X, (int)ActualPosition.Y, (int)ActualSize.X, (int)ActualSize.Y);
             if (ImageBounds.Width != 0 && ImageBounds.Height != 0)
             {
                 if (OutlineSize > 0)
