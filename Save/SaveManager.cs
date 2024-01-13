@@ -11,6 +11,7 @@ namespace ACL.Save
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented = true,
         };
+        #region Files
         public static void SaveFile(string name, string content)
         {
             // Save text as file.
@@ -23,11 +24,29 @@ namespace ACL.Save
         }
         public static bool CheckFile(string path)
         {
-            bool Result = false;
-            // Checks for the file.
-            if (File.Exists(GetGamePath(path))) { Result = true; }
-            return Result;
+            // Check for a file.
+            if (File.Exists(GetGamePath(path))) { return true; }
+            return false;
         }
+        #endregion
+        #region Directories
+        public static void CreateDirectory(string path)
+        {
+            // Create a directory.
+            Directory.CreateDirectory(GetGamePath(path));
+        }
+        public static void RemoveDirectory(string path)
+        {
+            // Delete a directory. Only works on empty directories.
+            if (CheckDirectory(path)) { Directory.Delete(path); }
+        }
+        public static bool CheckDirectory(string path)
+        {
+            // Check for a directory.
+            if (Directory.Exists(GetGamePath(path))) { return true; }
+            return false;
+        }
+        #endregion
         #region JSON
         public static void SaveJSON<T>(string name, T json, JsonSerializerOptions? jsonSerializerOptions = null)
         {

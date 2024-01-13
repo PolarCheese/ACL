@@ -44,8 +44,6 @@ namespace ACL.UI
             if (TextFont != null)
             {
                 // Center text to origin
-                
-
                 spriteBatch.DrawString(TextFont, Content, ActualPosition, TextColor, Rotation, Vector2.Zero, TextScale, SpriteEffects.None, 0);
             }
 
