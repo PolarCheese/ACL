@@ -12,10 +12,15 @@ namespace ACL.Save
             WriteIndented = true,
         };
         #region Files
-        public static void SaveFile(string name, string content)
+        public static void SaveFile(string path, string content)
         {
             // Save text as file.
-            File.WriteAllText(GetGamePath(name), content);
+            File.WriteAllText(GetGamePath(path), content);
+        }
+        public static void RemoveFile(string path)
+        {
+            // Remove a file.
+            File.Delete(path);
         }
         public static string LoadFile(string path)
         {
@@ -48,10 +53,10 @@ namespace ACL.Save
         }
         #endregion
         #region JSON
-        public static void SaveJSON<T>(string name, T json, JsonSerializerOptions? jsonSerializerOptions = null)
+        public static void SaveJSON<T>(string path, T json, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             // Create/Save a json file.
-            string jsonPath = GetGamePath(name);
+            string jsonPath = GetGamePath(path);
             if (jsonSerializerOptions == null)
             {
                 string jsonString = JsonSerializer.Serialize(json , defaultSerializerOptions);
