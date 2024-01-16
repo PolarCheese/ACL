@@ -17,6 +17,10 @@ namespace ACL.UI
         public ComponentManager ComponentManager => Game.componentManager;
 
         public List<Component> ScreenComponents {get; private set;} = new List<Component>();
+        public void AddScreenComponents(params Component[] components)
+        {
+            ScreenComponents.AddRange(components);
+        }
 
         public Screen(GameInstance CurrentGame)
         {
