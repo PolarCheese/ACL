@@ -61,7 +61,7 @@ namespace ACL.UI
             base.Draw(gameTime, spriteBatch);
         }
         
-        public void UpdateSourceRectangles()
+        public virtual void UpdateSourceRectangles()
         {
             Rectangle TextureBounds = new Rectangle(0, 0, BackgroundTexture.Width, BackgroundTexture.Height);
             Vector2 Position = TextureSourcePosition.ToVector2(TextureBounds); Vector2 Size = TextureSourceSize.ToVector2(TextureBounds);

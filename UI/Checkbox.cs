@@ -105,12 +105,12 @@ namespace ACL.UI
             base.Draw(gameTime, spriteBatch);
         }
         
-        public void Toggle(bool? NewValue = null)
+        public virtual void Toggle(bool? NewValue = null)
         {
             if (NewValue.HasValue) {Value = NewValue.Value;} else {Value = !Value;}
         }
 
-        public void UpdateSourceRectangles()
+        public virtual void UpdateSourceRectangles()
         {
             Rectangle TextureBounds = new(0, 0, CheckboxTexture.Width, CheckboxTexture.Height);
             Vector2 OffPosition = TextureOffSourcePosition.ToVector2(TextureBounds); Vector2 OnPosition = TextureOnSourcePosition.ToVector2(TextureBounds);
