@@ -11,7 +11,7 @@ namespace ACL.UI
 
         // Background
         public Color BackgroundColor { get; set; } = new Color(0, 0, 0, 255);
-        public Texture2D BackgroundTexture {get; set;} = GameInstance.PlainTexture;
+        public Texture2D BackgroundTexture { get; set; } = GameInstance.PlainTexture;
 
         // Outline/Inline
         public Color OutlineColor { get; set; } = Color.White;

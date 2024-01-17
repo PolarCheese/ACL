@@ -8,7 +8,7 @@ namespace ACL.UI
     public class Screen
     {
         public GameInstance Game;
-        internal SpriteBatch _spriteBatch => Game.spriteBatch;
+        protected SpriteBatch _spriteBatch => Game.spriteBatch;
         public ContentManager Content => Game.Content;
         public GraphicsDevice GraphicsDevice => Game.GraphicsDevice;
         public GameServiceContainer Services => Game.Services;

@@ -30,7 +30,7 @@ namespace ACL.UI
         public PositionVector Size {get; set;} = PositionVector.Zero;
         protected PositionVector _previousPosition = PositionVector.Zero;
         protected PositionVector _previousSize = PositionVector.Zero;
-        public Vector2 ActualPosition {get; set;} = Vector2.Zero;
+        public Vector2 ActualPosition {get; protected set;} = Vector2.Zero;
         public Vector2 ActualSize {get; protected set;} = Vector2.Zero;
         
         public float Rotation {get; set;} = 0f;

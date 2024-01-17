@@ -9,13 +9,13 @@ namespace ACL.UI
     {
         #region Fields
 
-        private MouseState _currentMouseState;
-        private MouseState _previousMouseState;
+        protected MouseState _currentMouseState;
+        protected MouseState _previousMouseState;
 
-        private Rectangle _currentMouse;
-        private Rectangle _previousMouse;
+        protected Rectangle _currentMouse;
+        protected Rectangle _previousMouse;
 
-        private bool _isHovering;
+        public bool _isHovering { get; protected set; }
 
         #endregion
 
@@ -27,7 +27,7 @@ namespace ACL.UI
 
         // Appearence
 
-        public Texture2D CheckboxTexture {get; set;} = GameInstance.PlainTexture;
+        public Texture2D CheckboxTexture { get; set; } = GameInstance.PlainTexture;
         public Color CheckboxColor { get; set; } = Color.White;
         public Color CheckboxHoverColor { get; set; } = new Color(200, 200, 200, 255);
         public Color CheckboxLockedColor { get; set; } = new Color(127, 127, 127, 255);
