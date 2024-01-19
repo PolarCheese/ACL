@@ -29,21 +29,23 @@ namespace ACL.UI
 
         public Texture2D CheckboxTexture { get; set; } = GameInstance.PlainTexture;
         public Color CheckboxColor { get; set; } = Color.White;
-        public Color CheckboxHoverColor { get; set; } = new Color(200, 200, 200, 255);
-        public Color CheckboxLockedColor { get; set; } = new Color(127, 127, 127, 255);
+        public Color CheckboxHoverColor { get; set; } = new(200, 200, 200, 255);
+        public Color CheckboxLockedColor { get; set; } = new(127, 127, 127, 255);
         public Color TextColor { get; set; } = Color.White;
-        public Color TextHoverColor { get; set; } = new Color(200, 200, 200, 255);
+        public Color TextHoverColor { get; set; } = new(200, 200, 200, 255);
 
         public string? Text { get; set; }
+        public PositionVector TextPosition { get; set; } = new(1.25f, 0, 0, 0);
+        public bool CenterTextY{ get; set; } = true;
         public float TextScale { get; set; } = 1f;
         public SpriteFont? TextFont { get; set; }
 
         // Texturing
         public Rectangle TextureSourceRectangle { get; set; }
-        public PositionVector TextureOffSourcePosition { get; set; } = new PositionVector(0, 0, 0, 0);
-        public PositionVector TextureOffSourceSize { get; set; } = new PositionVector(.5f, .5f, 0, 0);
-        public PositionVector TextureOnSourcePosition { get; set; } = new PositionVector(.5f, 0, 0, 0);
-        public PositionVector TextureOnSourceSize { get; set; } = new PositionVector(.5f, .5f, 0, 0);
+        public PositionVector TextureOffSourcePosition { get; set; } = new(0, 0, 0, 0);
+        public PositionVector TextureOffSourceSize { get; set; } = new(.5f, .5f, 0, 0);
+        public PositionVector TextureOnSourcePosition { get; set; } = new(.5f, 0, 0, 0);
+        public PositionVector TextureOnSourceSize { get; set; } = new(.5f, .5f, 0, 0);
 
         #endregion
 
@@ -51,8 +53,8 @@ namespace ACL.UI
         
         public Checkbox(GameInstance game) : base(game)
         {
-            CheckboxRectangle = new Rectangle();
-            TextureSourceRectangle = new Rectangle();
+            CheckboxRectangle = new();
+            TextureSourceRectangle = new();
         }
 
         #region Methods
@@ -84,7 +86,7 @@ namespace ACL.UI
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            CheckboxRectangle = new Rectangle((int)ActualPosition.X, (int)ActualPosition.Y, (int)ActualSize.X, (int)ActualSize.Y);
+            CheckboxRectangle = new((int)ActualPosition.X, (int)ActualPosition.Y, (int)ActualSize.X, (int)ActualSize.Y);
             if (CheckboxRectangle.Width != 0 && CheckboxRectangle.Height != 0)
             {
                 // Draw Checkbox
@@ -95,10 +97,12 @@ namespace ACL.UI
                 // Draw Text
                 if (!string.IsNullOrEmpty(Text) && TextFont != null)
                 {
-                    var x = CheckboxRectangle.X + CheckboxRectangle.Width * 1.5f;
-                    var y = CheckboxRectangle.Y + (CheckboxRectangle.Height / 2 - TextFont.MeasureString(Text).Y);
+                    var xOffset = CheckboxRectangle.Width * TextPosition.RelativeX + TextPosition.AbsoluteX;
+                    var yOffset = CenterTextY ? (CheckboxRectangle.Height / 2) - (TextFont.MeasureString(Text).Y / 2f * TextScale) : CheckboxRectangle.Height * TextPosition.RelativeY + TextPosition.AbsoluteY;
+                    var x = CheckboxRectangle.X + xOffset;
+                    var y = CheckboxRectangle.Y + yOffset;
                     var textColor = _isHovering ? TextHoverColor : TextColor;
-                    spriteBatch.DrawString(TextFont, Text, new Vector2(x, y), textColor, 0f, Vector2.Zero, TextScale, SpriteEffects.None, 0.1f);
+                    spriteBatch.DrawString(TextFont, Text, new(x, y), textColor, 0f, Vector2.Zero, TextScale, SpriteEffects.None, 0.1f);
                 }
             }
             
@@ -115,8 +119,8 @@ namespace ACL.UI
             Rectangle TextureBounds = new(0, 0, CheckboxTexture.Width, CheckboxTexture.Height);
             Vector2 OffPosition = TextureOffSourcePosition.ToVector2(TextureBounds); Vector2 OnPosition = TextureOnSourcePosition.ToVector2(TextureBounds);
             Vector2 OffSize = TextureOffSourceSize.ToVector2(TextureBounds); Vector2 OnSize = TextureOnSourceSize.ToVector2(TextureBounds);
-            if (!Value) { TextureSourceRectangle = new Rectangle((int)OffPosition.X, (int)OffPosition.Y, (int)OffSize.X, (int)OffSize.Y); } 
-            else {TextureSourceRectangle = new Rectangle((int)OnPosition.X, (int)OnPosition.Y, (int)OnSize.X, (int)OnSize.Y); } 
+            if (!Value) { TextureSourceRectangle = new((int)OffPosition.X, (int)OffPosition.Y, (int)OffSize.X, (int)OffSize.Y); } 
+            else {TextureSourceRectangle = new((int)OnPosition.X, (int)OnPosition.Y, (int)OnSize.X, (int)OnSize.Y); } 
         }
         #endregion
     }
