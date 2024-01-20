@@ -93,7 +93,7 @@ namespace ACL.UI
             }
             if (_previousPosition != Position) {
                 // Position has changed. Recalculate actual position.
-                if (HasParent && Parent.PositionChildrenToParent) {ActualPosition = Parent.ActualPosition + (Position.ToVector2(Parent.ActualPosition) - ActualSize * Origin);}
+                if (HasParent && Parent.PositionChildrenToParent) {ActualPosition = Parent.ActualPosition + Position.ToVector2(Parent.ActualSize) - ActualSize * Origin;}
                 else {ActualPosition = Position.ToVector2(Game) - Size.ToVector2(Game) * Origin;}
             }
 
