@@ -53,7 +53,7 @@ namespace ACL.Save
         }
         #endregion
         #region JSON
-        public static void SaveJSON<T>(string path, T json, JsonSerializerOptions? jsonSerializerOptions = null)
+        public static void SaveJson<T>(string path, T json, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             // Create/Save a json file.
             string jsonPath = GetGamePath(path);
@@ -68,10 +68,10 @@ namespace ACL.Save
                 File.WriteAllText(jsonPath, jsonString);
             }
         }
-        public static T? LoadJson<T>(string name, JsonSerializerOptions? jsonSerializerOptions = null) where T : new()
+        public static T? LoadJson<T>(string path, JsonSerializerOptions? jsonSerializerOptions = null) where T : new()
         {
             T? json;
-            string jsonPath = GetGamePath(name);
+            string jsonPath = GetGamePath(path);
 
             if (File.Exists(jsonPath))
             {
@@ -91,10 +91,10 @@ namespace ACL.Save
             return json;
         }
 
-        public static T? EnsureJson<T>(string name, JsonSerializerOptions? jsonSerializerOptions = null) where T : new()
+        public static T? EnsureJson<T>(string path, JsonSerializerOptions? jsonSerializerOptions = null) where T : new()
         {
             T? json;
-            string jsonPath = GetGamePath(name);
+            string jsonPath = GetGamePath(path);
 
             if (File.Exists(jsonPath))
             {
