@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 namespace ACL.Save
 {
@@ -6,11 +7,6 @@ namespace ACL.Save
     {   
         public static string GetGamePath(string name) => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, name);
 
-        private static JsonSerializerOptions defaultSerializerOptions = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = true,
-        };
         #region Files
         public static void SaveFile(string path, string content)
         {
@@ -53,68 +49,36 @@ namespace ACL.Save
         }
         #endregion
         #region JSON
-        public static void SaveJson<T>(string path, T json, JsonSerializerOptions? jsonSerializerOptions = null)
+        // JSON Serializer
+        public static JsonSerializerOptions options = new JsonSerializerOptions
         {
-            // Create/Save a json file.
-            string jsonPath = GetGamePath(path);
-            if (jsonSerializerOptions == null)
-            {
-                string jsonString = JsonSerializer.Serialize(json , defaultSerializerOptions);
-                File.WriteAllText(jsonPath, jsonString);
-            }
-            else
-            {
-                string jsonString = JsonSerializer.Serialize(json, jsonSerializerOptions);
-                File.WriteAllText(jsonPath, jsonString);
-            }
-        }
-        public static T? LoadJson<T>(string path, JsonSerializerOptions? jsonSerializerOptions = null) where T : new()
-        {
-            T? json;
-            string jsonPath = GetGamePath(path);
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true,
+        };
 
-            if (File.Exists(jsonPath))
-            {
-                if (jsonSerializerOptions == null)
-                {
-                    json = JsonSerializer.Deserialize<T>(File.ReadAllText(jsonPath), defaultSerializerOptions);
-                }
-                else
-                {
-                    json = JsonSerializer.Deserialize<T>(File.ReadAllText(jsonPath), jsonSerializerOptions);
-                }
-            }
-            else
-            {
-                json = new T();
-            }
-            return json;
+        public static void SaveJSON<T>(string path, T JSON)
+        {
+            string JSONPath = GetGamePath(path);
+            string JSONData = JsonSerializer.Serialize(JSON, options);
+            File.WriteAllText(JSONPath, JSONData);
         }
 
-        public static T? EnsureJson<T>(string path, JsonSerializerOptions? jsonSerializerOptions = null) where T : new()
+        public static T LoadJSON<T>(string path) where T : new()
         {
-            T? json;
-            string jsonPath = GetGamePath(path);
-
-            if (File.Exists(jsonPath))
+            T JSON;
+            string JSONPath = GetGamePath(path);
+            if (File.Exists(JSONPath))
             {
-                if (jsonSerializerOptions == null)
-                {
-                    json = JsonSerializer.Deserialize<T>(File.ReadAllText(jsonPath), defaultSerializerOptions);
-                }
-                else
-                {
-                    json = JsonSerializer.Deserialize<T>(File.ReadAllText(jsonPath), jsonSerializerOptions);
-                }
+                JSON = JsonSerializer.Deserialize<T>(File.ReadAllText(JSONPath), options);
             }
             else
             {
-                json = new T();
-                string jsonString = JsonSerializer.Serialize(json, jsonSerializerOptions);
-                File.WriteAllText(jsonPath, jsonString);
+                JSON = new T();
+                string jsonString = JsonSerializer.Serialize(JSON, options);
+                File.WriteAllText(JSONPath, jsonString);
             }
 
-            return json;
+            return JSON;
         }
         #endregion
     }
