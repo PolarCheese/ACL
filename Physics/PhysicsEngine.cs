@@ -8,9 +8,9 @@ namespace ACL.Physics
     public class PhysicsEngine
     {
         GameInstance Game;
-        ComponentManager componentManager => Game.componentManager;
-        SaveManager saveManager => Game.saveManager;
-        SpriteBatch spritebatch => Game.spriteBatch;
+        ComponentManager componentManager => Game.ComponentManager;
+        SaveManager saveManager => Game.SaveManager;
+        SpriteBatch spritebatch => Game.SpriteBatch;
         private HashSet<int> CheckedPairs = new HashSet<int>();
         public PhysicsEngine(GameInstance CurrentGame)
         {

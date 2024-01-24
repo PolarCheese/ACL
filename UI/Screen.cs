@@ -8,13 +8,13 @@ namespace ACL.UI
     public class Screen
     {
         public GameInstance Game;
-        protected SpriteBatch _spriteBatch => Game.spriteBatch;
+        protected SpriteBatch _spriteBatch => Game.SpriteBatch;
         public ContentManager Content => Game.Content;
         public GraphicsDevice GraphicsDevice => Game.GraphicsDevice;
         public GameServiceContainer Services => Game.Services;
-        public ScreenManager ScreenManager => Game.screenManager;
-        public SaveManager SaveManager => Game.saveManager;
-        public ComponentManager ComponentManager => Game.componentManager;
+        public ScreenManager ScreenManager => Game.ScreenManager;
+        public SaveManager SaveManager => Game.SaveManager;
+        public ComponentManager ComponentManager => Game.ComponentManager;
 
         public List<Component> ScreenComponents {get; private set;} = new List<Component>();
         public void AddScreenComponents(params Component[] components)

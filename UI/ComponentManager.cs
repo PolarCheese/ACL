@@ -6,7 +6,7 @@ namespace ACL.UI
     public class ComponentManager
     {
         public GameInstance Game;
-        internal SpriteBatch _spriteBatch => Game.spriteBatch;
+        internal SpriteBatch _spriteBatch => Game.SpriteBatch;
         public ComponentManager(GameInstance CurrentGame)
         {
             Game = CurrentGame;

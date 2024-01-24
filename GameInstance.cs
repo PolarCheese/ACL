@@ -11,11 +11,11 @@ public class GameInstance : Game
 {
     // Managers
     protected readonly GraphicsDeviceManager _graphics;
-    protected internal SpriteBatch spriteBatch {get; protected set;} = null!;
-    protected internal SaveManager saveManager {get; protected set;} = null!;
-    protected internal ScreenManager screenManager {get; protected set;} = null!;
-    protected internal ComponentManager componentManager {get; protected set;} = null!;
-    protected internal PhysicsEngine physicsEngine {get; protected set;} = null!;
+    protected internal SpriteBatch SpriteBatch {get; protected set;} = null!;
+    public SaveManager SaveManager {get; protected set;} = null!;
+    public ScreenManager ScreenManager {get; protected set;} = null!;
+    public ComponentManager ComponentManager {get; protected set;} = null!;
+    public PhysicsEngine PhysicsEngine {get; protected set;} = null!;
     
     // Properties
     public static Texture2D PlainTexture { get; protected set; } = null!; // 1x1 white pixel texture
@@ -36,10 +36,10 @@ public class GameInstance : Game
         CurrentGameInstance ??= this;
 
         _graphics = new GraphicsDeviceManager(CurrentGameInstance);
-        saveManager ??= new SaveManager();
-        screenManager ??= new ScreenManager(CurrentGameInstance);
-        componentManager ??= new ComponentManager(CurrentGameInstance);
-        physicsEngine = new PhysicsEngine(CurrentGameInstance);
+        SaveManager ??= new SaveManager();
+        ScreenManager ??= new ScreenManager(CurrentGameInstance);
+        ComponentManager ??= new ComponentManager(CurrentGameInstance);
+        PhysicsEngine = new PhysicsEngine(CurrentGameInstance);
 
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
@@ -63,7 +63,7 @@ public class GameInstance : Game
         base.LoadContent();
         GraphicsDevice.Viewport = new Viewport(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
-        spriteBatch ??= new SpriteBatch(GraphicsDevice);
+        SpriteBatch ??= new SpriteBatch(GraphicsDevice);
         PlainTexture = new Texture2D(GraphicsDevice, 1, 1);
         PlainTexture.SetData(new[] { Color.White });
     }
@@ -82,8 +82,8 @@ public class GameInstance : Game
             FixedUpdateEvent.Invoke(this, EventArgs.Empty);
             SinceLastFixedUpdate -= FixedDeltaTime;
         }
-        screenManager.Update(gameTime);
-        componentManager.Update(gameTime);
+        ScreenManager.Update(gameTime);
+        ComponentManager.Update(gameTime);
         base.Update(gameTime);
     }
 
@@ -95,10 +95,10 @@ public class GameInstance : Game
     protected override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        spriteBatch.Begin(samplerState: SpritebatchSamplerState);
-        screenManager.Draw(gameTime);
-        componentManager.Draw(gameTime);
-        spriteBatch.End();
+        SpriteBatch.Begin(samplerState: SpritebatchSamplerState);
+        ScreenManager.Draw(gameTime);
+        ComponentManager.Draw(gameTime);
+        SpriteBatch.End();
     }
 
     public void SetWindowResolution(int Width, int Height)
