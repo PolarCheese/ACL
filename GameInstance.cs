@@ -101,6 +101,11 @@ public class GameInstance : Game
         SpriteBatch.End();
     }
 
+    protected override void OnExiting(object sender, EventArgs args) // Exiting method
+    {
+        base.OnExiting(sender, args);
+    }
+
     public void SetWindowResolution(int Width, int Height)
     {
         if (Width > 0 && Height > 0)
