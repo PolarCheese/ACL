@@ -33,19 +33,17 @@ public class GameInstance : Game
 
     public GameInstance()
     {
-        CurrentGameInstance ??= this;
+        CurrentGameInstance = this;
 
         _graphics = new GraphicsDeviceManager(CurrentGameInstance);
-        SaveManager ??= new SaveManager();
-        ScreenManager ??= new ScreenManager(CurrentGameInstance);
-        ComponentManager ??= new ComponentManager(CurrentGameInstance);
+        SaveManager = new SaveManager();
+        ScreenManager = new ScreenManager(CurrentGameInstance);
+        ComponentManager = new ComponentManager(CurrentGameInstance);
         PhysicsEngine = new PhysicsEngine(CurrentGameInstance);
 
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         TargetElapsedTime = TimeSpan.FromSeconds(1f / 90);
-        //TargetElapsedTime = TimeSpan.FromSeconds(1f / Settings.FPSCap);
-
         
     }
     #region Methods
@@ -63,7 +61,7 @@ public class GameInstance : Game
         base.LoadContent();
         GraphicsDevice.Viewport = new Viewport(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
-        SpriteBatch ??= new SpriteBatch(GraphicsDevice);
+        SpriteBatch = new SpriteBatch(GraphicsDevice);
         PlainTexture = new Texture2D(GraphicsDevice, 1, 1);
         PlainTexture.SetData(new[] { Color.White });
     }
@@ -89,10 +87,10 @@ public class GameInstance : Game
 
     protected virtual void FixedUpdate(GameTime gameTime) // Fixed update method
     {
-        // ..
+        // This method will be used for calling the physics engine at a rate independent from the Update/Draw framerate.
     }
 
-    protected override void Draw(GameTime gameTime)
+    protected override void Draw(GameTime gameTime) // Draw method
     {
         base.Draw(gameTime);
         SpriteBatch.Begin(samplerState: SpritebatchSamplerState);
