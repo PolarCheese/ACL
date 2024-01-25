@@ -65,7 +65,7 @@ namespace ACL.Save
 
         public T LoadJSON<T>(string path) where T : new()
         {
-            T JSON;
+            T? JSON;
             string JSONPath = GetGamePath(path);
             if (File.Exists(JSONPath))
             {
@@ -78,7 +78,7 @@ namespace ACL.Save
                 File.WriteAllText(JSONPath, jsonString);
             }
 
-            return JSON;
+            return JSON ?? new T();
         }
         #endregion
     }
