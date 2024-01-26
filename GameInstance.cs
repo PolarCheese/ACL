@@ -72,6 +72,8 @@ public class GameInstance : Game
     protected override void Update(GameTime gameTime) // Update method
     {
         GetPlayerCursor(Mouse.GetState());
+        ScreenManager.Update(gameTime);
+        ComponentManager.Update(gameTime);
         SinceLastFixedUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
         if (SinceLastFixedUpdate >= FixedDeltaTime)
         {
@@ -80,8 +82,6 @@ public class GameInstance : Game
             FixedUpdateEvent.Invoke(this, EventArgs.Empty);
             SinceLastFixedUpdate -= FixedDeltaTime;
         }
-        ScreenManager.Update(gameTime);
-        ComponentManager.Update(gameTime);
         base.Update(gameTime);
     }
 

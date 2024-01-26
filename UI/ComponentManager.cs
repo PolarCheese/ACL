@@ -1,3 +1,4 @@
+using ACL.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -6,14 +7,15 @@ namespace ACL.UI
     public class ComponentManager
     {
         public GameInstance Game;
-        internal SpriteBatch _spriteBatch => Game.SpriteBatch;
+        internal SpriteBatch SpriteBatch => Game.SpriteBatch;
+        internal PhysicsEngine PhysicsEngine => Game.PhysicsEngine;
         public ComponentManager(GameInstance CurrentGame)
         {
             Game = CurrentGame;
         }
-        internal List<Component> activeComponents {get; private set;} = new List<Component>();
-        internal List<Component> pendingAdditions {get; set;} = new List<Component>();
-        internal List<Component> pendingRemovals {get; set;} = new List<Component>();
+        internal List<Component> ActiveComponents {get; private set;} = new List<Component>();
+        internal List<Component> PendingAdditions {get; set;} = new List<Component>();
+        internal List<Component> PendingRemovals {get; set;} = new List<Component>();
 
         #region List Methods
         // Methods for adding/removing from the list. 
@@ -21,33 +23,33 @@ namespace ACL.UI
         {
             foreach (var component in Paramcomponents)
             {
-                pendingAdditions.Add(component);
+                PendingAdditions.Add(component);
             }
         }
 
         public void AddComponentsRange(IEnumerable<Component> Components)
         {
-            pendingAdditions.AddRange(Components);
+            PendingAdditions.AddRange(Components);
         }
 
         public void RemoveComponents(params Component[] Paramcomponents)
         {
             foreach (var component in Paramcomponents)
             {
-                pendingRemovals.Add(component);
+                PendingRemovals.Add(component);
             }
         }
         public void RemoveComponentsRange(IEnumerable<Component> Components)
         {
             foreach (var component in Components)
             {
-                pendingRemovals.Add(component);
+                PendingRemovals.Add(component);
             }
         }
 
         public void Clear()
         {
-            activeComponents.Clear();
+            ActiveComponents.Clear();
         }
         #endregion
 
@@ -83,14 +85,18 @@ namespace ACL.UI
         public void Update(GameTime gameTime)
         {
             // Add pending components.
-            foreach (var component in pendingAdditions)
+            foreach (var component in PendingAdditions)
             {
-                activeComponents.Add(component);
+                ActiveComponents.Add(component);
+                if (component is DynamicComponent PhysicsObject)
+                {
+                    PhysicsEngine.AddComponent(PhysicsObject);
+                }
             }
-            pendingAdditions.Clear();
+            PendingAdditions.Clear();
             
             // Update active components.
-            foreach (var component in activeComponents)
+            foreach (var component in ActiveComponents)
             {
                 if (component.ToUpdate == true)
                 {
@@ -99,20 +105,24 @@ namespace ACL.UI
             }
 
             // Remove unwanted components.
-            foreach (var component in pendingRemovals)
+            foreach (var component in PendingRemovals)
             {
-                activeComponents.Remove(component);
+                ActiveComponents.Remove(component);
+                if (component is DynamicComponent PhysicsObject)
+                {
+                    PhysicsEngine.RemoveComponent(PhysicsObject);
+                }
             }
-            pendingRemovals.Clear();
+            PendingRemovals.Clear();
         }
 
         public void Draw(GameTime gameTime)
         {
-            foreach (var component in activeComponents)
+            foreach (var component in ActiveComponents)
             {
                 if (component.ToDraw == true)
                 {
-                    component.Draw(gameTime, _spriteBatch);
+                    component.Draw(gameTime, SpriteBatch);
                 }
             }
         }
