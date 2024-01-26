@@ -50,6 +50,7 @@ namespace ACL.UI
         public void Clear() // Completely clear ComponentManager of any components.
         {
             ActiveComponents.Clear();
+            PhysicsEngine.PhysicsObjects.Clear(); // Remove remaining components in the physics engine.
         }
         #endregion
 
