@@ -7,11 +7,12 @@ namespace ACL.Physics
 {
     public class PhysicsEngine
     {
-        GameInstance Game;
-        ComponentManager componentManager => Game.ComponentManager;
-        SaveManager saveManager => Game.SaveManager;
-        SpriteBatch spritebatch => Game.SpriteBatch;
-        private HashSet<int> CheckedPairs = new HashSet<int>();
+        readonly GameInstance Game;
+        ComponentManager ComponentManager => Game.ComponentManager;
+        SaveManager SaveManager => Game.SaveManager;
+        SpriteBatch Spritebatch => Game.SpriteBatch;
+        public List<DynamicComponent> PhysicsObjects = new();
+        private HashSet<int> CheckedPairs = new();
         public PhysicsEngine(GameInstance CurrentGame)
         {
             Game = CurrentGame;
