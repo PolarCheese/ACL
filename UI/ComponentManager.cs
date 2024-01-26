@@ -18,23 +18,23 @@ namespace ACL.UI
         internal List<Component> PendingRemovals {get; set;} = new List<Component>();
 
         #region List Methods
-        // Methods for adding/removing from the list. 
-        public void AddComponents(params Component[] Paramcomponents)
+        // Methods for adding components to the manager. 
+        public void AddComponents(params Component[] Components)
         {
-            foreach (var component in Paramcomponents)
+            foreach (var component in Components)
             {
                 PendingAdditions.Add(component);
             }
         }
-
         public void AddComponentsRange(IEnumerable<Component> Components)
         {
             PendingAdditions.AddRange(Components);
         }
 
-        public void RemoveComponents(params Component[] Paramcomponents)
+        // Methods for removing components from the manager. 
+        public void RemoveComponents(params Component[] Components)
         {
-            foreach (var component in Paramcomponents)
+            foreach (var component in Components)
             {
                 PendingRemovals.Add(component);
             }
@@ -47,7 +47,7 @@ namespace ACL.UI
             }
         }
 
-        public void Clear()
+        public void Clear() // Completely clear ComponentManager of any components.
         {
             ActiveComponents.Clear();
         }
@@ -55,17 +55,17 @@ namespace ACL.UI
 
         #region Manage Methods
 
-        public void DisableComponents(params Component[] Paramcomponents)
+        public void DisableComponents(params Component[] Components) // Disable Update+Draw for the given components.
         {
-            foreach (var component in Paramcomponents)
+            foreach (var component in Components)
             {
                 component.ToDraw = false; component.ToUpdate = false;
             }
         }
 
-        public void EnableComponents(params Component[] Paramcomponents)
+        public void EnableComponents(params Component[] Components) // Enable Update+Draw for the given components.
         {
-            foreach (var component in Paramcomponents)
+            foreach (var component in Components)
             {
                 component.ToDraw = true; component.ToUpdate = true;
             }
@@ -73,7 +73,7 @@ namespace ACL.UI
 
         public void ModifyComponents(IEnumerable<Component> Components, Action<Component> modificationAction)
         {
-            // Go through every Paracomponent and change a property given as a parameter to a value also given as a parameter.
+            // Go through every component and change a property given as a parameter to a value also given as a parameter.
             foreach(var component in Components) 
             {
                 modificationAction(component);
@@ -82,7 +82,7 @@ namespace ACL.UI
         #endregion
 
         #region Logic Methods
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime) // Update components.
         {
             // Add pending components.
             foreach (var component in PendingAdditions)
@@ -116,7 +116,7 @@ namespace ACL.UI
             PendingRemovals.Clear();
         }
 
-        public void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime) // Draw components.
         {
             foreach (var component in ActiveComponents)
             {
