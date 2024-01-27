@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using ACL.Save;
+using ACL.IO;
 
 namespace ACL.UI
 {
@@ -13,7 +13,7 @@ namespace ACL.UI
         public GraphicsDevice GraphicsDevice => Game.GraphicsDevice;
         public GameServiceContainer Services => Game.Services;
         public ScreenManager ScreenManager => Game.ScreenManager;
-        public SaveManager SaveManager => Game.SaveManager;
+        public FileManager FileManager => Game.FileManager;
         public ComponentManager ComponentManager => Game.ComponentManager;
 
         public List<Component> ScreenComponents {get; private set;} = new List<Component>();

@@ -1,9 +1,8 @@
 using System.Text.Json;
-using System.Text.Json.Serialization.Metadata;
 
-namespace ACL.Save
+namespace ACL.IO
 {
-    public class SaveManager
+    public class FileManager
     {   
         public string GetGamePath(string name) => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, name);
 
@@ -50,7 +49,7 @@ namespace ACL.Save
         #endregion
         #region JSON
         // JSON Serializer
-        public static JsonSerializerOptions options = new JsonSerializerOptions
+        public JsonSerializerOptions options = new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented = true,

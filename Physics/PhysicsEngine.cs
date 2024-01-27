@@ -1,5 +1,5 @@
 using Microsoft.Xna.Framework.Graphics;
-using ACL.Save;
+using ACL.IO;
 using ACL.UI;
 
 
@@ -9,7 +9,7 @@ namespace ACL.Physics
     {
         readonly GameInstance Game;
         ComponentManager ComponentManager => Game.ComponentManager;
-        SaveManager SaveManager => Game.SaveManager;
+        FileManager FileManager => Game.FileManager;
         SpriteBatch Spritebatch => Game.SpriteBatch;
         public List<DynamicComponent> PhysicsObjects = new();
         public List<DynamicComponent> PendingObjects = new(); // Objects that will be added next Fixed Update call.

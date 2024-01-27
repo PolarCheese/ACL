@@ -1,5 +1,5 @@
 using ACL.UI;
-using ACL.Save;
+using ACL.IO;
 using ACL.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,7 +12,7 @@ public class GameInstance : Game
     // Managers
     protected readonly GraphicsDeviceManager _graphics;
     protected internal SpriteBatch SpriteBatch {get; protected set;} = null!;
-    public SaveManager SaveManager {get; protected set;} = null!;
+    public FileManager FileManager {get; protected set;} = null!;
     public ScreenManager ScreenManager {get; protected set;} = null!;
     public ComponentManager ComponentManager {get; protected set;} = null!;
     public PhysicsEngine PhysicsEngine {get; protected set;} = null!;
@@ -36,7 +36,7 @@ public class GameInstance : Game
         CurrentGameInstance = this;
 
         _graphics = new GraphicsDeviceManager(CurrentGameInstance);
-        SaveManager = new SaveManager();
+        FileManager = new FileManager();
         ScreenManager = new ScreenManager(CurrentGameInstance);
         ComponentManager = new ComponentManager(CurrentGameInstance);
         PhysicsEngine = new PhysicsEngine(CurrentGameInstance);
