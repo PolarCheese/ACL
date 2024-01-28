@@ -22,8 +22,8 @@ namespace ACL.UI
 
         // Texturing
         public Rectangle TextureSourceRectangle { get; set; }
-        public PositionVector TextureSourcePosition { get; set; } = new(0, 0, 0, 0);
-        public PositionVector TextureSourceSize { get; set; } = new(1, 1, 0, 0);
+        public QuadVector TextureSourcePosition { get; set; } = new(0, 0, 0, 0);
+        public QuadVector TextureSourceSize { get; set; } = new(1, 1, 0, 0);
 
         #endregion
 

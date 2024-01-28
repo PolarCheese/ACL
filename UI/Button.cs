@@ -33,14 +33,14 @@ namespace ACL.UI
         public Color TextHoverColor { get; set; } = new(200, 200, 200, 255);
 
         public string? Text { get; set; }
-        public PositionVector TextPosition { get; set; } = new(.5f, .5f, 0, 0);
+        public QuadVector TextPosition { get; set; } = new(.5f, .5f, 0, 0);
         public float TextScale { get; set; } = 1f;
         public SpriteFont? TextFont { get; set; }
 
         // Texturing
         public Rectangle TextureSourceRectangle { get; set; }
-        public PositionVector TextureSourcePosition { get; set; } = new(0, 0, 0, 0);
-        public PositionVector TextureSourceSize { get; set; } = new(1, 1, 0, 0);
+        public QuadVector TextureSourcePosition { get; set; } = new(0, 0, 0, 0);
+        public QuadVector TextureSourceSize { get; set; } = new(1, 1, 0, 0);
 
         #endregion
 

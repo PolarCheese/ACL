@@ -26,10 +26,10 @@ namespace ACL.UI
 
         // Positioning, Size and Rotation
         public Vector2 Origin {get; set;} = Vector2.Zero;
-        public PositionVector Position {get; set;} = PositionVector.Zero;
-        public PositionVector Size {get; set;} = PositionVector.Zero;
-        protected PositionVector _previousPosition = PositionVector.Zero;
-        protected PositionVector _previousSize = PositionVector.Zero;
+        public QuadVector Position {get; set;} = QuadVector.Zero;
+        public QuadVector Size {get; set;} = QuadVector.Zero;
+        protected QuadVector _previousPosition = QuadVector.Zero;
+        protected QuadVector _previousSize = QuadVector.Zero;
         public Vector2 ActualPosition {get; protected set;} = Vector2.Zero;
         public Vector2 ActualSize {get; protected set;} = Vector2.Zero;
         

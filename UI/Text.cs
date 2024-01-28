@@ -8,7 +8,7 @@ namespace ACL.UI
     {
         #region Fields
 
-        protected PositionVector PreviousPosition { get; set; } = PositionVector.Zero;
+        protected QuadVector PreviousPosition { get; set; } = QuadVector.Zero;
         protected float PreviousScale { get; set; } = 1f;
 
         #endregion

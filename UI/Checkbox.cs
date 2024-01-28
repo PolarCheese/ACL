@@ -35,17 +35,17 @@ namespace ACL.UI
         public Color TextHoverColor { get; set; } = new(200, 200, 200, 255);
 
         public string? Text { get; set; }
-        public PositionVector TextPosition { get; set; } = new(1.25f, 0, 0, 0);
+        public QuadVector TextPosition { get; set; } = new(1.25f, 0, 0, 0);
         public bool CenterTextY{ get; set; } = true;
         public float TextScale { get; set; } = 1f;
         public SpriteFont? TextFont { get; set; }
 
         // Texturing
         public Rectangle TextureSourceRectangle { get; set; }
-        public PositionVector TextureOffSourcePosition { get; set; } = new(0, 0, 0, 0);
-        public PositionVector TextureOffSourceSize { get; set; } = new(.5f, .5f, 0, 0);
-        public PositionVector TextureOnSourcePosition { get; set; } = new(.5f, 0, 0, 0);
-        public PositionVector TextureOnSourceSize { get; set; } = new(.5f, .5f, 0, 0);
+        public QuadVector TextureOffSourcePosition { get; set; } = new(0, 0, 0, 0);
+        public QuadVector TextureOffSourceSize { get; set; } = new(.5f, .5f, 0, 0);
+        public QuadVector TextureOnSourcePosition { get; set; } = new(.5f, 0, 0, 0);
+        public QuadVector TextureOnSourceSize { get; set; } = new(.5f, .5f, 0, 0);
 
         #endregion
 
