@@ -56,12 +56,12 @@ namespace ACL.UI.BuiltIn
             bool HasParent = Parent != null;
             if (_previousPosition != Position) {
                 // Position has changed. Recalculate actual position.
-                if (HasParent && Parent.PositionChildrenToParent) {ActualPosition = Parent.ActualPosition + Position.ToVector2(Parent.ActualPosition) - new Vector2(TextBoundsSize.X * Origin.X, TextBoundsSize.Y * Origin.Y);}
+                if (HasParent && Parent!.PositionChildrenToParent) {ActualPosition = Parent.ActualPosition + Position.ToVector2(Parent.ActualPosition) - new Vector2(TextBoundsSize.X * Origin.X, TextBoundsSize.Y * Origin.Y);}
                 else {ActualPosition = Position.ToVector2(Game) - new Vector2(TextBoundsSize.X * Origin.X, TextBoundsSize.Y * Origin.Y);}
             }
             if (_previousSize != Size) {
                 // Size has changed. Recalculate actual position.
-                if (HasParent && Parent.SizeChildrenToParent) {ActualSize = Size.ToVector2(Parent.ActualSize);}
+                if (HasParent && Parent!.SizeChildrenToParent) {ActualSize = Size.ToVector2(Parent.ActualSize);}
                 else {ActualSize = Size.ToVector2(Game);}
             } 
 
