@@ -2,7 +2,7 @@ using ACL.Values;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ACL.UI
+namespace ACL.UI.BuiltIn
 {
     public class Text : Component
     {
