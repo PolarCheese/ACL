@@ -25,7 +25,6 @@ public class GameInstance : Game
     protected const float TargetFixedFrameRate = 90f;
     protected float FixedDeltaTime = 1f / TargetFixedFrameRate;
     protected float SinceLastFixedUpdate = 0f;
-    public event EventHandler FixedUpdateEvent = null!;
     public Rectangle PlayerCursor;
 
     // Current Instances
@@ -79,15 +78,14 @@ public class GameInstance : Game
         {
             // Trigger fixed update
             FixedUpdate(gameTime);
-            FixedUpdateEvent.Invoke(this, EventArgs.Empty);
-            SinceLastFixedUpdate -= FixedDeltaTime;
         }
         base.Update(gameTime);
     }
 
     protected virtual void FixedUpdate(GameTime gameTime) // Fixed update method
     {
-        // This method will be used for calling the physics engine at a rate independent from the Update/Draw framerate.
+        // This method is for calling the physics engine at a rate independent from the Update/Draw framerate.
+        PhysicsEngine.FixedUpdate();
     }
 
     protected override void Draw(GameTime gameTime) // Draw method

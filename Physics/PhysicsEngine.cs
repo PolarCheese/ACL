@@ -17,7 +17,6 @@ namespace ACL.Physics
         public PhysicsEngine(GameInstance CurrentGame)
         {
             Game = CurrentGame;
-            Game.FixedUpdateEvent += FixedUpdate;
         }
 
         #region Processing Methods
@@ -48,7 +47,7 @@ namespace ACL.Physics
 
         #region Physics Methods
         // Methods used for calculating physics, resolving collisions etc.
-        public void FixedUpdate(object? sender, EventArgs e)
+        public void FixedUpdate()
         {
             // Add pending physics objects.
             foreach (var Object in PendingObjects)

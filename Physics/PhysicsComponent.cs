@@ -13,6 +13,7 @@ namespace ACL.Physics
         public float Friction { get; set; }
         public bool PhysicsEnabled {get; set;} = true; // Tells the Physics Engine if object should have physics.
 
+        public abstract void FixedUpdate();
         protected PhysicsComponent(GameInstance game) : base(game)
         {
             
