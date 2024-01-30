@@ -21,10 +21,12 @@ public class GameInstance : Game
     public static Texture2D PlainTexture { get; protected set; } = null!; // 1x1 white pixel texture
     public SamplerState SpritebatchSamplerState {get; protected set; } = SamplerState.PointClamp; // Determines if the spritebatch uses the PointClamp SamplerState
 
-    // Fixed update system
+    // Fixed updates (aka Physics)
     protected const float TargetFixedFrameRate = 90f;
     protected float FixedDeltaTime = 1f / TargetFixedFrameRate;
     protected float SinceLastFixedUpdate = 0f;
+
+    // Cursor
     public Rectangle PlayerCursor;
 
     // Current Instances
@@ -43,7 +45,6 @@ public class GameInstance : Game
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         TargetElapsedTime = TimeSpan.FromSeconds(1f / 90);
-        
     }
     #region Methods
     protected override void Initialize() // Startup
@@ -102,6 +103,7 @@ public class GameInstance : Game
         base.OnExiting(sender, args);
     }
 
+    // Resolution
     public void SetWindowResolution(int Width, int Height)
     {
         if (Width > 0 && Height > 0)
@@ -119,9 +121,16 @@ public class GameInstance : Game
         return resolution;
     }
 
+    // Cursor
     public void GetPlayerCursor(MouseState mouseState)
     {
         PlayerCursor.X = mouseState.X; PlayerCursor.Y = mouseState.Y;
+    }
+
+    // Framerate
+    public void SetFramerate(int framerate)
+    {
+        TargetElapsedTime = TimeSpan.FromSeconds(1f / framerate);
     }
     #endregion
 }
