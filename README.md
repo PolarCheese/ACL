@@ -25,7 +25,7 @@ ACL (Almond's Class Library) is a Monogame class library made with the purpose o
   - File Manager [✓]
   - JSON Serialization/Deserialization [✓]
 - 2D Physics Engine [~]
-  - Dynamic Component [✓]
+  - Physics Component [~]
   - Collision Checking [~]
   - Collision Resolving [X]
 - Animations/Tweening [X]

@@ -1,9 +1,7 @@
-using ACL;
-using ACL.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AlmondGame.Engine.Core.Physics
+namespace ACL.Physics
 {
     public class QuadTree
     {
@@ -13,25 +11,25 @@ namespace AlmondGame.Engine.Core.Physics
 
         public int Depth;
         public Rectangle Bounds;
-        public List<DynamicComponent> Objects;
+        public List<PhysicsComponent> Objects;
         public QuadTree[] Nodes;
 
         public QuadTree(int depth, Rectangle bounds)
         {
             Depth = depth;
             Bounds = bounds;
-            Objects = new List<DynamicComponent>();
+            Objects = new List<PhysicsComponent>();
             Nodes = new QuadTree[4]; // Parent quadtree nodes.
         }
         #endregion
 
         #region Methods
 
-        public void Insert(DynamicComponent dynamicComponent) // Adds a dynamic component to the quadtree.
+        public void Insert(PhysicsComponent dynamicComponent) // Adds a dynamic component to the quadtree.
         {
             if (Nodes[0] != null) // Check for nodes.
             {
-                var hitbox = dynamicComponent.GetBounds();
+                var hitbox = new Rectangle(0, 0, 1, 1); // requires replacement
                 int index = GetIndex(hitbox); // Find where the hitbox fits.
                 if (index != -1)
                 {
@@ -60,9 +58,9 @@ namespace AlmondGame.Engine.Core.Physics
             Nodes[2] = new QuadTree(Depth + 1, new Rectangle(x, y + subHeight, subWidth, subHeight)); //bottom-left
             Nodes[3] = new QuadTree(Depth + 1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight)); //bottom-right
 
-            foreach (DynamicComponent dynamicComponent in Objects.ToList()) // Send the parent quadtree components to the nodes.
+            foreach (PhysicsComponent dynamicComponent in Objects.ToList()) // Send the parent quadtree components to the nodes.
             {
-                var hitbox = dynamicComponent.GetBounds();
+                var hitbox = new Rectangle(0, 0, 1, 1); // requires replacement
                 int index = GetIndex(hitbox);
                 if (index != -1)
                 {
@@ -72,9 +70,9 @@ namespace AlmondGame.Engine.Core.Physics
             }
         }
 
-        public List<DynamicComponent> Retrieve(Rectangle bounds) // Get all the objects inside of a quadtree space, even if its part of a smaller quadtree.
+        public List<PhysicsComponent> Retrieve(Rectangle bounds) // Get all the objects inside of a quadtree space, even if its part of a smaller quadtree.
         {
-            List<DynamicComponent> result = new List<DynamicComponent>();
+            List<PhysicsComponent> result = new List<PhysicsComponent>();
             int index = GetIndex(bounds);
 
             if (index != -1 && Nodes[0] != null)

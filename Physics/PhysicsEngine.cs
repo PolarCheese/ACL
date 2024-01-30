@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework.Graphics;
 using ACL.IO;
 using ACL.UI;
 
-
 namespace ACL.Physics
 {
     public class PhysicsEngine
@@ -11,9 +10,9 @@ namespace ACL.Physics
         ComponentManager ComponentManager => Game.ComponentManager;
         FileManager FileManager => Game.FileManager;
         SpriteBatch Spritebatch => Game.SpriteBatch;
-        public List<DynamicComponent> PhysicsObjects = new();
-        public List<DynamicComponent> PendingObjects = new(); // Objects that will be added next Fixed Update call.
-        public List<DynamicComponent> RemovableObjects = new(); // Objects that will be removed next Fixed Update call.
+        public List<PhysicsComponent> PhysicsObjects = new();
+        public List<PhysicsComponent> PendingObjects = new(); // Objects that will be added next Fixed Update call.
+        public List<PhysicsComponent> RemovableObjects = new(); // Objects that will be removed next Fixed Update call.
         private HashSet<int> CheckedPairs = new();
         public PhysicsEngine(GameInstance CurrentGame)
         {
@@ -23,7 +22,7 @@ namespace ACL.Physics
 
         #region Processing Methods
         // Methods used for processing (Checking hash sets, grouping objects etc.)
-        public void AddComponent(params DynamicComponent[] Objects) // Add from list
+        public void AddComponent(params PhysicsComponent[] Objects) // Add from list
         {
             foreach (var Object in Objects)
             {
@@ -31,7 +30,7 @@ namespace ACL.Physics
             }
         }
 
-        public void RemoveComponent(params DynamicComponent[] Objects) // Remove from list
+        public void RemoveComponent(params PhysicsComponent[] Objects) // Remove from list
         {
             foreach (var Object in Objects)
             {
@@ -39,7 +38,7 @@ namespace ACL.Physics
             }
         }
 
-        private int GetPairHash(DynamicComponent objectA, DynamicComponent objectB) // Get a hash value from a pair of Dynamic Components.
+        private int GetPairHash(PhysicsComponent objectA, PhysicsComponent objectB) // Get a hash value from a pair of Dynamic Components.
         {
             // Generate a unique hash value for the object pair
             int hash = objectA.GetHashCode() ^ objectB.GetHashCode();

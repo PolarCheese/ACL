@@ -89,7 +89,7 @@ namespace ACL.UI
             foreach (var component in PendingAdditions)
             {
                 ActiveComponents.Add(component);
-                if (component is DynamicComponent PhysicsObject)
+                if (component is PhysicsComponent PhysicsObject)
                 {
                     PhysicsEngine.AddComponent(PhysicsObject);
                 }
@@ -109,7 +109,7 @@ namespace ACL.UI
             foreach (var component in PendingRemovals)
             {
                 ActiveComponents.Remove(component);
-                if (component is DynamicComponent PhysicsObject)
+                if (component is PhysicsComponent PhysicsObject)
                 {
                     PhysicsEngine.RemoveComponent(PhysicsObject);
                 }
