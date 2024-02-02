@@ -10,10 +10,15 @@ namespace ACL.Physics
         ComponentManager ComponentManager => Game.ComponentManager;
         FileManager FileManager => Game.FileManager;
         SpriteBatch Spritebatch => Game.SpriteBatch;
+
+        // Objects
         public List<PhysicsComponent> PhysicsObjects = new();
         public List<PhysicsComponent> PendingObjects = new(); // Objects that will be added next Fixed Update call.
         public List<PhysicsComponent> RemovableObjects = new(); // Objects that will be removed next Fixed Update call.
         private HashSet<int> CheckedPairs = new();
+
+        // Properties
+        public float Gravity = 10;
         public PhysicsEngine(GameInstance CurrentGame)
         {
             Game = CurrentGame;
@@ -37,7 +42,7 @@ namespace ACL.Physics
             }
         }
 
-        private int GetPairHash(PhysicsComponent objectA, PhysicsComponent objectB) // Get a hash value from a pair of Dynamic Components.
+        int GetPairHash(PhysicsComponent objectA, PhysicsComponent objectB) // Get a hash value from a pair of Dynamic Components.
         {
             // Generate a unique hash value for the object pair
             int hash = objectA.GetHashCode() ^ objectB.GetHashCode();
@@ -56,7 +61,13 @@ namespace ACL.Physics
             }
             PendingObjects.Clear();
 
-            // Calculate Physics ..
+            // Update all object positions
+            foreach (var Object in PhysicsObjects)
+            {
+                if (Object.PhysicsEnabled) {
+                    Object.FixedUpdate();
+                }
+            }
 
             // Remove unwanted physics objects.
             foreach (var Object in RemovableObjects)
