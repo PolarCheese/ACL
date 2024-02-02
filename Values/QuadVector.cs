@@ -16,6 +16,11 @@ namespace ACL.Values
             RelativeX = relativeX; RelativeY = relativeY;
             AbsoluteX = absoluteX; AbsoluteY = absoluteY;
         }
+        public QuadVector(QuadVector quadVector)
+        {
+            RelativeX = quadVector.RelativeX; RelativeY = quadVector.RelativeY;
+            AbsoluteX = quadVector.AbsoluteX; AbsoluteY = quadVector.AbsoluteY;
+        }
 
         public Vector2 ToVector2(int BoundsWidth, int BoundsHeight)
         {
@@ -56,6 +61,12 @@ namespace ACL.Values
             float y = (float)(Vector2.Y * RelativeY) + AbsoluteY;
 
             return new Vector2(x, y);
+        }
+
+        public bool IsEqual(QuadVector quadvector)
+        {
+            if ((RelativeX == quadvector.RelativeX) && (RelativeY == quadvector.RelativeY) && (AbsoluteX == quadvector.AbsoluteX) && (AbsoluteY == quadvector.AbsoluteY)) 
+            {return true;} return false;
         }
     }
 }
