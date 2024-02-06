@@ -28,20 +28,17 @@ public class GameInstance : Game
 
     // Cursor & Camera
     public Rectangle PlayerCursor;
-    public Camera Camera;
+    public Camera Camera { get; set; } = null!;
 
-    // Current Instances
-    public GameInstance CurrentGameInstance {get; private set;} = null!;
 
     public GameInstance()
     {
-        CurrentGameInstance = this;
-
-        _graphics = new GraphicsDeviceManager(CurrentGameInstance);
+        _graphics = new GraphicsDeviceManager(this);
         FileManager = new FileManager();
-        ScreenManager = new ScreenManager(CurrentGameInstance);
-        ComponentManager = new ComponentManager(CurrentGameInstance);
-        PhysicsEngine = new PhysicsEngine(CurrentGameInstance);
+        ScreenManager = new ScreenManager(this);
+        ComponentManager = new ComponentManager(this);
+        PhysicsEngine = new PhysicsEngine(this);
+        Camera = new Camera(this);
 
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
@@ -60,9 +57,9 @@ public class GameInstance : Game
     protected override void LoadContent() // Load method
     {
         base.LoadContent();
+        
         // Set Game viewport
         GraphicsDevice.Viewport = new Viewport(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
-        Camera = new Camera(CurrentGameInstance);
 
         SpriteBatch = new SpriteBatch(GraphicsDevice);
         PlainTexture = new Texture2D(GraphicsDevice, 1, 1);
