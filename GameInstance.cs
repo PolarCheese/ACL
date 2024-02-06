@@ -26,8 +26,9 @@ public class GameInstance : Game
     protected float FixedDeltaTime = 1f / TargetFixedFrameRate;
     protected float SinceLastFixedUpdate = 0f;
 
-    // Cursor
+    // Cursor & Camera
     public Rectangle PlayerCursor;
+    public Camera Camera;
 
     // Current Instances
     public GameInstance CurrentGameInstance {get; private set;} = null!;
@@ -59,7 +60,9 @@ public class GameInstance : Game
     protected override void LoadContent() // Load method
     {
         base.LoadContent();
+        // Set Game viewport
         GraphicsDevice.Viewport = new Viewport(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+        Camera = new Camera(CurrentGameInstance);
 
         SpriteBatch = new SpriteBatch(GraphicsDevice);
         PlainTexture = new Texture2D(GraphicsDevice, 1, 1);
@@ -80,6 +83,7 @@ public class GameInstance : Game
             // Trigger fixed update
             FixedUpdate(gameTime);
         }
+        Camera.Update();
         base.Update(gameTime);
     }
 
@@ -92,7 +96,7 @@ public class GameInstance : Game
     protected override void Draw(GameTime gameTime) // Draw method
     {
         base.Draw(gameTime);
-        SpriteBatch.Begin(samplerState: SpritebatchSamplerState);
+        SpriteBatch.Begin(samplerState: SpritebatchSamplerState, transformMatrix: Camera.Transform);
         ScreenManager.Draw(gameTime);
         ComponentManager.Draw(gameTime);
         SpriteBatch.End();
