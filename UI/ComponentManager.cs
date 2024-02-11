@@ -9,13 +9,14 @@ namespace ACL.UI
         public GameInstance Game;
         internal SpriteBatch SpriteBatch => Game.SpriteBatch;
         internal PhysicsEngine PhysicsEngine => Game.PhysicsEngine;
-        public ComponentManager(GameInstance CurrentGame)
+        public ComponentManager(GameInstance GameInstance)
         {
-            Game = CurrentGame;
+            Game = GameInstance;
         }
-        internal List<Component> ActiveComponents {get; private set;} = new List<Component>();
-        internal List<Component> PendingAdditions {get; set;} = new List<Component>();
-        internal List<Component> PendingRemovals {get; set;} = new List<Component>();
+        internal List<Component> ActiveComponents {get; private set;} = new();
+        internal List<Component> PendingAdditions {get; set;} = new();
+        internal List<Component> PendingRemovals {get; set;} = new();
+        public List<Camera> Cameras {get; set;} = new();
 
         #region List Methods
         // Methods for adding components to the manager. 
@@ -119,12 +120,29 @@ namespace ACL.UI
 
         public void Draw(GameTime gameTime) // Draw components.
         {
+            // Draw all components.
+            SpriteBatch.Begin(samplerState: Game.SpritebatchSamplerState);
             foreach (var component in ActiveComponents)
             {
-                if (component.ToDraw == true)
+                if (component.ToDraw)
                 {
                     component.Draw(gameTime, SpriteBatch);
                 }
+            }
+            SpriteBatch.End();
+
+            // Draw camera bound components.
+            foreach (Camera Camera in Cameras)
+            {
+                SpriteBatch.Begin(samplerState: Game.SpritebatchSamplerState, transformMatrix: Camera.Transform);
+                foreach (var component in Camera.SubComponents)
+                {
+                    if (component.ToDraw)
+                    {
+                        component.Draw(gameTime, SpriteBatch);
+                    }
+                }
+                SpriteBatch.End();
             }
         }
         #endregion

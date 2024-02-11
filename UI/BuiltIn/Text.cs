@@ -8,18 +8,18 @@ namespace ACL.UI.BuiltIn
     {
         #region Fields
 
-        protected QuadVector PreviousPosition { get; set; } = QuadVector.Zero;
-        protected float PreviousScale { get; set; } = 1f;
+        protected QuadVector PreviousPosition {get; set;} = QuadVector.Zero;
+        protected float PreviousScale {get; set;} = 1f;
 
         #endregion
 
         #region Properties
         
-        public string? Content { get; set; }
-        public Color TextColor { get; set; } = Color.White;
-        public float TextScale { get; set; } = 1f;
-        public SpriteFont? TextFont { get; set; }
-        public Vector2 TextBoundsSize { get; private set; }
+        public string? Content {get; set;}
+        public Color TextColor {get; set;} = Color.White;
+        public float TextScale {get; set;} = 1f;
+        public SpriteFont? TextFont {get; set;}
+        public Vector2 TextBoundsSize {get; private set;}
 
         #endregion
 

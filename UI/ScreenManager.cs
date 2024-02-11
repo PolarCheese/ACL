@@ -1,10 +1,12 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ACL.UI
 {
     public class ScreenManager
     {
         GameInstance Game;
+        SpriteBatch SpriteBatch => Game.SpriteBatch;
         ComponentManager ComponentManager => Game.ComponentManager;
         public List<Screen> LoadedScreens {get; private set;} = new List<Screen>();
         Screen? ActiveScreen;
@@ -77,10 +79,9 @@ namespace ACL.UI
         }
         public void Draw(GameTime gameTime)
         {
-            if (ActiveScreen != null)
-            {
-                ActiveScreen.Draw(gameTime);
-            }
+            SpriteBatch.Begin(samplerState: Game.SpritebatchSamplerState);
+            ActiveScreen?.Draw(gameTime);
+            SpriteBatch.End();
         }
     }
 }

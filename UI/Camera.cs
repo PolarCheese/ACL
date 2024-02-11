@@ -8,12 +8,15 @@ namespace ACL.UI
     {
         public GameInstance Game;
         protected Viewport Viewport => Game.GraphicsDevice.Viewport; // Game viewport
+        public Rectangle Cursor; // Cursor relative to the camera viewport
+        public List<Component> SubComponents {get; set;} = new List<Component>();
 
         #region Properties
-        public float Zoom { get; set; } = 1f; // Zoom level
-        public QuadVector Position { get; set; } = new(0, 0, 0, 0);
-        public Component?[] Target = new Component[1]; // Camera will follow the "target" component
-        public Matrix Transform { get; protected set; } // Camera Matrix
+        public bool Enabled {get; set;} = true;
+        public float Zoom {get; set;} = 1f; // Zoom level
+        public QuadVector Position {get; set;} = new(0, 0, 0, 0);
+        public Component?[] Target {get; set;}= new Component[1]; // If not null, camera will follow the "target" component
+        public Matrix Transform {get; protected set;} // Camera Matrix
         #endregion
 
         public Camera(GameInstance gameInstance)
@@ -24,6 +27,10 @@ namespace ACL.UI
         #region Methods
         public void Update()
         {
+            // Calculate cursor position from camera's perspective.
+            Vector2 TransformedPosition = Vector2.Transform(new(Game.Cursor.X, Game.Cursor.Y), Transform);
+            Cursor.X = (int)TransformedPosition.X; Cursor.Y = (int)TransformedPosition.Y;
+
             // Check for target
             if (Target[0] != null)
             {

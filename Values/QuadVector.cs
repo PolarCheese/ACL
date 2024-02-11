@@ -9,7 +9,7 @@ namespace ACL.Values
         public float RelativeY {get; set;} = 0;
         public float AbsoluteX {get; set;} = 0;
         public float AbsoluteY {get; set;} = 0;
-        public static QuadVector Zero { get; } = new QuadVector(0, 0, 0, 0);
+        public static QuadVector Zero {get;} = new QuadVector(0, 0, 0, 0);
 
         public QuadVector(float relativeX, float relativeY, float absoluteX, float absoluteY)
         {

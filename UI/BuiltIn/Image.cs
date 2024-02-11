@@ -10,26 +10,26 @@ namespace ACL.UI.BuiltIn
         #region Properties
 
         // Image
-        public Color ImageColor { get; set; } = Color.White;
-        public Color ImageBackgroundColor { get; set; } // If the image is transparent, this will be the color shown behind.
-        public Texture2D ImageTexture { get; set; } = GameInstance.PlainTexture;
+        public Color ImageColor {get; set;} = Color.White;
+        public Color ImageBackgroundColor {get; set;} // If the image is transparent, this will be the color shown behind.
+        public Texture2D ImageTexture {get; set;} = GameInstance.PlainTexture;
 
         // Outline/Inline
-        public Color OutlineColor { get; set; } = Color.White;
-        public Color InlineColor { get; set; } = Color.White;
+        public Color OutlineColor {get; set;} = Color.White;
+        public Color InlineColor {get; set;} = Color.White;
 
-        public int OutlineSize { get; set; } = 0;
-        public int InlineSize { get; set; } = 0;
+        public int OutlineSize {get; set;} = 0;
+        public int InlineSize {get; set;} = 0;
 
         // Texturing
-        public Rectangle TextureSourceRectangle { get; set; }
-        public QuadVector TextureSourcePosition { get; set; } = new(0, 0, 0, 0);
-        public QuadVector TextureSourceSize { get; set; } = new(1, 1, 0, 0);
+        public Rectangle TextureSourceRectangle {get; set;}
+        public QuadVector TextureSourcePosition {get; set;} = new(0, 0, 0, 0);
+        public QuadVector TextureSourceSize {get; set;} = new(1, 1, 0, 0);
 
         #endregion
 
-        public Rectangle ImageBounds { get; set; }
-        public Rectangle Outline { get; set; }
+        public Rectangle ImageBounds {get; set;}
+        public Rectangle Outline {get; set;}
 
         public Image(GameInstance game) : base(game)
         {

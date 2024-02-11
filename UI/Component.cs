@@ -1,5 +1,6 @@
 using ACL.Values;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ACL.UI
@@ -19,6 +20,8 @@ namespace ACL.UI
         public bool PositionChildrenToParent {get; set;} = true;
         public bool SizeChildrenToParent {get; set;} = true;
         public bool RotateChildrenToParent {get; set;} = true;
+        
+        public Camera? Bound {get; set;} = null; // If not null, component will take the cursor's position from the camera it is bound to.
 
         // Logic Toggles
         public bool ToUpdate {get; set;} = true;
@@ -32,9 +35,13 @@ namespace ACL.UI
         protected QuadVector _previousSize = QuadVector.Zero;
         public Vector2 ActualPosition {get; protected set;} = Vector2.Zero;
         public Vector2 ActualSize {get; protected set;} = Vector2.Zero;
-        
         public float Rotation {get; set;} = 0f;
-        
+
+        // Cursor
+        public Rectangle Cursor {get; set;}
+        public MouseState MouseState {get; set;}
+        protected Rectangle _previousCursor;
+        protected MouseState _previousMouseState; 
         #endregion
 
         #region nodes
@@ -60,7 +67,13 @@ namespace ACL.UI
         #region Update/Draw
         public virtual void Update(GameTime gameTime)
         {
-            UpdateProperties();
+            // Update cursor properties
+            _previousMouseState = MouseState;
+            MouseState = Mouse.GetState();
+
+            _previousCursor = Cursor;
+            Cursor = Bound == null ? Game.Cursor : Bound.Cursor;
+            UpdateProperties(); // Update component properties
             foreach (Component Child in Children)
             {
                 if (Child.ToUpdate)

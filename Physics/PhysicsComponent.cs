@@ -9,10 +9,10 @@ namespace ACL.Physics
         // Physics
         public PhysicsEngine PhysicsEngine => Game.PhysicsEngine;
         public bool PhysicsEnabled {get; set;} = true; // Tells the Physics Engine if object should have physics.
-        public Vector2 Velocity { get; set; } = new(0,0);
-        public Vector2 Acceleration { get; set; } = new(0,0);
-        public float Mass { get; set; } = 0f;
-        public float Friction { get; set; } = 0f;
+        public Vector2 Velocity {get; set;} = new(0,0);
+        public Vector2 Acceleration {get; set;} = new(0,0);
+        public float Mass {get; set;} = 0f;
+        public float Friction {get; set;} = 0f;
         
         public virtual void FixedUpdate() 
         {

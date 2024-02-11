@@ -18,8 +18,8 @@ public class GameInstance : Game
     public PhysicsEngine PhysicsEngine {get; protected set;} = null!;
     
     // Properties
-    public static Texture2D PlainTexture { get; protected set; } = null!; // 1x1 white pixel texture
-    public SamplerState SpritebatchSamplerState {get; protected set; } = SamplerState.PointClamp; // Determines if the spritebatch uses the PointClamp SamplerState
+    public static Texture2D PlainTexture {get; protected set;} = null!; // 1x1 white pixel texture
+    public SamplerState SpritebatchSamplerState {get; protected set;} = SamplerState.PointClamp; // Determines if the spritebatch uses the PointClamp SamplerState
 
     // Fixed updates (aka Physics)
     protected const float TargetFixedFrameRate = 90f;
@@ -27,8 +27,7 @@ public class GameInstance : Game
     protected float SinceLastFixedUpdate = 0f;
 
     // Cursor & Camera
-    public Rectangle PlayerCursor;
-    public Camera Camera { get; set; } = null!;
+    public Rectangle Cursor;
 
 
     public GameInstance()
@@ -38,7 +37,6 @@ public class GameInstance : Game
         ScreenManager = new ScreenManager(this);
         ComponentManager = new ComponentManager(this);
         PhysicsEngine = new PhysicsEngine(this);
-        Camera = new Camera(this);
 
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
@@ -57,13 +55,13 @@ public class GameInstance : Game
     protected override void LoadContent() // Load method
     {
         base.LoadContent();
-        
+
         // Set Game viewport
         GraphicsDevice.Viewport = new Viewport(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
         SpriteBatch = new SpriteBatch(GraphicsDevice);
         PlainTexture = new Texture2D(GraphicsDevice, 1, 1);
-        PlainTexture.SetData(new[] { Color.White });
+        PlainTexture.SetData(new[] {Color.White});
     }
     protected override void UnloadContent() // Unload method
     {
@@ -80,7 +78,6 @@ public class GameInstance : Game
             // Trigger fixed update
             FixedUpdate(gameTime);
         }
-        Camera.Update();
         base.Update(gameTime);
     }
 
@@ -93,10 +90,8 @@ public class GameInstance : Game
     protected override void Draw(GameTime gameTime) // Draw method
     {
         base.Draw(gameTime);
-        SpriteBatch.Begin(samplerState: SpritebatchSamplerState, transformMatrix: Camera.Transform);
         ScreenManager.Draw(gameTime);
         ComponentManager.Draw(gameTime);
-        SpriteBatch.End();
     }
 
     protected override void OnExiting(object sender, EventArgs args) // Exiting method
@@ -125,7 +120,8 @@ public class GameInstance : Game
     // Cursor
     public void GetPlayerCursor(MouseState mouseState)
     {
-        PlayerCursor.X = mouseState.X; PlayerCursor.Y = mouseState.Y;
+        // Calculate the cursor's position.
+        Cursor.X = mouseState.X; Cursor.Y = mouseState.Y;
     }
 
     // Framerate

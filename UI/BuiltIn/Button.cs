@@ -9,13 +9,7 @@ namespace ACL.UI.BuiltIn
     {
         #region Fields
 
-        protected MouseState _currentMouseState;
-        protected MouseState _previousMouseState;
-
-        protected Rectangle _currentMouse;
-        protected Rectangle _previousMouse;
-
-        public bool _isHovering { get; protected set; }
+        public bool IsHovering { get; protected set; }
 
         #endregion
 
@@ -25,26 +19,26 @@ namespace ACL.UI.BuiltIn
         public bool Locked { get; set;} = false;
 
         // Appearence
-        public Texture2D ButtonTexture { get; set; } = GameInstance.PlainTexture;
-        public Color ButtonColor { get; set; } = Color.White;
-        public Color ButtonHoverColor { get; set; } = new(200, 200, 200, 255);
-        public Color ButtonLockedColor { get; set; } = new(127, 127, 127, 255);
-        public Color TextColor { get; set; } = Color.White;
-        public Color TextHoverColor { get; set; } = new(200, 200, 200, 255);
+        public Texture2D ButtonTexture {get; set;} = GameInstance.PlainTexture;
+        public Color ButtonColor {get; set;} = Color.White;
+        public Color ButtonHoverColor {get; set;} = new(200, 200, 200, 255);
+        public Color ButtonLockedColor {get; set;} = new(127, 127, 127, 255);
+        public Color TextColor {get; set;} = Color.White;
+        public Color TextHoverColor {get; set;} = new(200, 200, 200, 255);
 
-        public string? Text { get; set; }
-        public QuadVector TextPosition { get; set; } = new(.5f, .5f, 0, 0);
-        public float TextScale { get; set; } = 1f;
-        public SpriteFont? TextFont { get; set; }
+        public string? Text {get; set;}
+        public QuadVector TextPosition {get; set;} = new(.5f, .5f, 0, 0);
+        public float TextScale {get; set;} = 1f;
+        public SpriteFont? TextFont {get; set;}
 
         // Texturing
-        public Rectangle TextureSourceRectangle { get; set; }
-        public QuadVector TextureSourcePosition { get; set; } = new(0, 0, 0, 0);
-        public QuadVector TextureSourceSize { get; set; } = new(1, 1, 0, 0);
+        public Rectangle TextureSourceRectangle {get; set;}
+        public QuadVector TextureSourcePosition {get; set;} = new(0, 0, 0, 0);
+        public QuadVector TextureSourceSize {get; set;} = new(1, 1, 0, 0);
 
         #endregion
 
-        public Rectangle ButtonRectangle { get; set; }
+        public Rectangle ButtonRectangle {get; set;}
 
         
         public Button(GameInstance game) : base(game)
@@ -57,23 +51,22 @@ namespace ACL.UI.BuiltIn
 
         public override void Update(GameTime gameTime)
         {
-            _previousMouseState = _currentMouseState;
-            _currentMouseState = Mouse.GetState();
+            _previousMouseState = MouseState;
+            MouseState = Mouse.GetState();
 
-            _previousMouse = _currentMouse;
-            _currentMouse = Game.PlayerCursor;
+            _previousCursor = Cursor;
+            Cursor = Bound == null ? Game.Cursor : Bound.Cursor;
 
-            _isHovering = false;
-
-            if (_currentMouse.Intersects(ButtonRectangle))
+            if (Cursor.Intersects(ButtonRectangle))
             {
-                _isHovering = true;
+                IsHovering = true;
 
-                if (_currentMouseState.LeftButton == ButtonState.Released && _previousMouseState.LeftButton == ButtonState.Pressed && !Locked)
+                if (MouseState.LeftButton == ButtonState.Released && _previousMouseState.LeftButton == ButtonState.Pressed && !Locked)
                 {
                     Click?.Invoke(this, new EventArgs());
                 }
             }
+            else { IsHovering = false; }
 
             UpdateSourceRectangles();
             base.Update(gameTime);
@@ -86,7 +79,7 @@ namespace ACL.UI.BuiltIn
             {
                 // Draw Button
                 Color DrawColor;
-                if (Locked) { DrawColor = ButtonLockedColor; } else { DrawColor = _isHovering ? ButtonHoverColor : ButtonColor; }
+                if (Locked) { DrawColor = ButtonLockedColor; } else { DrawColor = IsHovering ? ButtonHoverColor : ButtonColor; }
                 spriteBatch.Draw(ButtonTexture, ButtonRectangle, TextureSourceRectangle, DrawColor, MathHelper.ToRadians(Rotation), new(0,0), SpriteEffects.None, 0.1f);
 
                 // Draw Text
@@ -96,7 +89,7 @@ namespace ACL.UI.BuiltIn
                     var yOffset = ButtonRectangle.Height * TextPosition.RelativeY + TextPosition.AbsoluteY;
                     var x = ButtonRectangle.X + xOffset - TextFont.MeasureString(Text).X / 2f * TextScale;
                     var y = ButtonRectangle.Y + yOffset - TextFont.MeasureString(Text).Y / 2f * TextScale;
-                    var textColor = _isHovering ? TextHoverColor : TextColor;
+                    var textColor = IsHovering ? TextHoverColor : TextColor;
                     spriteBatch.DrawString(TextFont, Text, new(x, y), textColor, 0f, Vector2.Zero, TextScale, SpriteEffects.None, 0.25f);
                 }
             }

@@ -10,25 +10,25 @@ namespace ACL.UI.BuiltIn
         #region Properties
 
         // Background
-        public Color BackgroundColor { get; set; } = new(0, 0, 0, 255);
-        public Texture2D BackgroundTexture { get; set; } = GameInstance.PlainTexture;
+        public Color BackgroundColor {get; set;} = new(0, 0, 0, 255);
+        public Texture2D BackgroundTexture {get; set;} = GameInstance.PlainTexture;
 
         // Outline/Inline
-        public Color OutlineColor { get; set; } = Color.White;
-        public Color InlineColor { get; set; } = Color.White;
+        public Color OutlineColor {get; set;} = Color.White;
+        public Color InlineColor {get; set;} = Color.White;
 
-        public int OutlineSize { get; set; } = 0;
-        public int InlineSize { get; set; } = 0;
+        public int OutlineSize {get; set;} = 0;
+        public int InlineSize {get; set;} = 0;
 
         // Texturing
-        public Rectangle TextureSourceRectangle { get; set; }
-        public QuadVector TextureSourcePosition { get; set; } = new(0, 0, 0, 0);
-        public QuadVector TextureSourceSize { get; set; } = new(1, 1, 0, 0);
+        public Rectangle TextureSourceRectangle {get; set;}
+        public QuadVector TextureSourcePosition {get; set;} = new(0, 0, 0, 0);
+        public QuadVector TextureSourceSize {get; set;} = new(1, 1, 0, 0);
 
         #endregion
 
-        public Rectangle Body { get; set; }
-        public Rectangle Outline { get; set; }
+        public Rectangle Body {get; set;}
+        public Rectangle Outline {get; set;}
 
         public Container(GameInstance game) : base(game)
         {
