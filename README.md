@@ -8,9 +8,10 @@ ACL (Almond's Class Library) is a Monogame class library made with the purpose o
 - JSON serialization/deserialization.
 
 # Roadmap :
-- Components and Component Manager [✓]
+- Component Management System [✓]
   - Component [✓]
   - Component Manager [✓]
+  - Camera class [✓]
 - Screen Management System
   - Base Screen class [✓]
   - Screen Manager [✓]
