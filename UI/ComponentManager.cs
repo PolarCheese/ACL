@@ -48,16 +48,28 @@ namespace ACL.UI
             }
         }
 
-        public void Clear() // Completely clear ComponentManager of any components.
+        // Methods for managing cameras.
+        public void AddCamera(Camera camera)
+        {
+            Cameras.Add(camera);
+        }
+        public void RemoveCamera(Camera camera)
+        {
+            if (Cameras.Contains(camera)) { Cameras.Remove(camera); }
+        }
+
+        public void Clear() // Completely clear ComponentManager of any components and cameras.
         {
             ActiveComponents.Clear();
             PhysicsEngine.PhysicsObjects.Clear(); // Remove remaining components in the physics engine.
+            Cameras.Clear();
         }
         #endregion
 
         #region Manage Methods
 
-        public void DisableComponents(params Component[] Components) // Disable Update+Draw for the given components.
+        // Methods for disabling Update+Draw for components.
+        public void DisableComponents(params Component[] Components)
         {
             foreach (var component in Components)
             {
@@ -65,7 +77,24 @@ namespace ACL.UI
             }
         }
 
-        public void EnableComponents(params Component[] Components) // Enable Update+Draw for the given components.
+        public void DisableComponents(IEnumerable<Component> Components)
+        {
+            foreach (var component in Components)
+            {
+                component.ToDraw = false; component.ToUpdate = false;
+            }
+        }
+
+        // Methods for enabling Update+Draw for components.
+        public void EnableComponents(params Component[] Components)
+        {
+            foreach (var component in Components)
+            {
+                component.ToDraw = true; component.ToUpdate = true;
+            }
+        }
+
+        public void EnableComponents(IEnumerable<Component> Components)
         {
             foreach (var component in Components)
             {
@@ -100,7 +129,7 @@ namespace ACL.UI
             // Update active components.
             foreach (var component in ActiveComponents)
             {
-                if (component.ToUpdate == true)
+                if (component.ToUpdate)
                 {
                     component.Update(gameTime);
                 }
@@ -116,6 +145,19 @@ namespace ACL.UI
                 }
             }
             PendingRemovals.Clear();
+
+            // Draw camera bound components.
+            foreach (Camera camera in Cameras)
+            {
+                camera.Update();
+                foreach (var component in camera.SubComponents)
+                {
+                    if (component.ToUpdate)
+                    {
+                        component.Update(gameTime);
+                    }
+                }
+            }
         }
 
         public void Draw(GameTime gameTime) // Draw components.
@@ -132,10 +174,10 @@ namespace ACL.UI
             SpriteBatch.End();
 
             // Draw camera bound components.
-            foreach (Camera Camera in Cameras)
+            foreach (Camera camera in Cameras)
             {
-                SpriteBatch.Begin(samplerState: Game.SpritebatchSamplerState, transformMatrix: Camera.Transform);
-                foreach (var component in Camera.SubComponents)
+                SpriteBatch.Begin(samplerState: Game.SpritebatchSamplerState, transformMatrix: camera.Transform);
+                foreach (var component in camera.SubComponents)
                 {
                     if (component.ToDraw)
                     {

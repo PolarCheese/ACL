@@ -1,3 +1,4 @@
+using ACL.Physics;
 using ACL.Values;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,7 +8,9 @@ namespace ACL.UI
     public class Camera
     {
         public GameInstance Game;
-        protected Viewport Viewport => Game.GraphicsDevice.Viewport; // Game viewport
+        ComponentManager ComponentManager => Game.ComponentManager;
+        PhysicsEngine PhysicsEngine => Game.PhysicsEngine;
+        Viewport Viewport => Game.GraphicsDevice.Viewport; // Game viewport
         public Rectangle Cursor; // Cursor relative to the camera viewport
         public List<Component> SubComponents {get; set;} = new List<Component>();
 
@@ -15,16 +18,31 @@ namespace ACL.UI
         public bool Enabled {get; set;} = true;
         public float Zoom {get; set;} = 1f; // Zoom level
         public QuadVector Position {get; set;} = new(0, 0, 0, 0);
-        public Component?[] Target {get; set;}= new Component[1]; // If not null, camera will follow the "target" component
-        public Matrix Transform {get; protected set;} // Camera Matrix
+        public Component?[] Target {get; set;} = new Component[1]; // If not null, camera will follow the "target" component
+        public Matrix Transform {get; protected set;} = Matrix.Identity; // Camera Matrix
         #endregion
 
         public Camera(GameInstance gameInstance)
         {
             Game = gameInstance;
+            ComponentManager.AddCamera(this);
         }
 
         #region Methods
+        // Methods for adding subcomponents to the camera.
+        public void AddSubcomponents(params Component[] Components)
+        {
+            foreach (var component in Components)
+            {
+                component.Bound = this;
+                SubComponents.Add(component);
+                if (component is PhysicsComponent PhysicsObject)
+                {
+                    PhysicsEngine.AddComponent(PhysicsObject);
+                }
+            }
+        }
+
         public void Update()
         {
             // Calculate cursor position from camera's perspective.

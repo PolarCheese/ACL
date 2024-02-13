@@ -14,7 +14,7 @@ namespace ACL.UI
             Game = game;
         }
 
-        #region properties
+        #region Properties
         public Component? Parent {get; set;}
         public List<Component> Children {get;} = new List<Component>();
         public bool PositionChildrenToParent {get; set;} = true;
@@ -44,7 +44,7 @@ namespace ACL.UI
         protected MouseState _previousMouseState; 
         #endregion
 
-        #region nodes
+        #region Nodes
         public void AddChildren(params Component[] Components)
         {
             foreach (var Child in Components)
