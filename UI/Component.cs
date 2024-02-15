@@ -16,10 +16,12 @@ namespace ACL.UI
 
         #region Properties
         public Component? Parent {get; set;}
-        public List<Component> Children {get;} = new List<Component>();
-        public bool PositionChildrenToParent {get; set;} = true;
-        public bool SizeChildrenToParent {get; set;} = true;
-        public bool RotateChildrenToParent {get; set;} = true;
+        public List<Component> Subcomponents {get;} = new List<Component>();
+        
+        // If any of the bools below are true, the subcomponents of this component will change their properties relative to their parent component.
+        public bool PositionSubcomponents {get; set;} = true;
+        public bool ScaleSubcomponents {get; set;} = true;
+        public bool RotateSubcomponents {get; set;} = true;
         
         public Camera? Bound {get; set;} = null; // If not null, component will take the cursor's position from the camera it is bound to.
 
@@ -49,7 +51,7 @@ namespace ACL.UI
         {
             foreach (var Child in Components)
             {
-                Children.Add(Child);
+                Subcomponents.Add(Child);
                 Child.Parent = this;
             }
         }
@@ -58,7 +60,7 @@ namespace ACL.UI
         {
             foreach (var Child in Components)
             {
-                Children.Add(Child);
+                Subcomponents.Add(Child);
                 Child.Parent = null;
             }
         }
@@ -74,7 +76,7 @@ namespace ACL.UI
             _previousCursor = Cursor;
             Cursor = Bound == null ? Game.Cursor : Bound.Cursor;
             UpdateProperties(); // Update component properties
-            foreach (Component Child in Children)
+            foreach (Component Child in Subcomponents)
             {
                 if (Child.ToUpdate)
                 {
@@ -85,7 +87,7 @@ namespace ACL.UI
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            foreach (Component Child in Children)
+            foreach (Component Child in Subcomponents)
             {
                 if (Child.ToDraw)
                 {
@@ -101,13 +103,13 @@ namespace ACL.UI
             bool HasParent = Parent != null;
             if (Size.IsEqual(_previousSize) == false) {
                 // Size has changed. Recalculate actual size.
-                if (HasParent && Parent!.SizeChildrenToParent) {ActualSize = Size.ToVector2(Parent.ActualSize);}
+                if (HasParent && Parent!.ScaleSubcomponents) {ActualSize = Size.ToVector2(Parent.ActualSize);}
                 else {ActualSize = Size.ToVector2(Game);}
                 _previousSize = new(Size);
             }
             if (Position.IsEqual(_previousPosition) == false) {
                 // Position has changed. Recalculate actual position.
-                if (HasParent && Parent!.PositionChildrenToParent) {ActualPosition = Parent.ActualPosition + Position.ToVector2(Parent.ActualSize) - ActualSize * Origin;}
+                if (HasParent && Parent!.PositionSubcomponents) {ActualPosition = Parent.ActualPosition + Position.ToVector2(Parent.ActualSize) - ActualSize * Origin;}
                 else {ActualPosition = Position.ToVector2(Game) - Size.ToVector2(Game) * Origin;}
                 _previousPosition = new(Position);
             }
