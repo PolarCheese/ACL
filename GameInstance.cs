@@ -16,7 +16,7 @@ public class GameInstance : Game
     public ScreenManager ScreenManager {get; protected set;} = null!;
     public ComponentManager ComponentManager {get; protected set;} = null!;
     public PhysicsEngine PhysicsEngine {get; protected set;} = null!;
-    
+
     // Properties
     public static Texture2D PlainTexture {get; protected set;} = null!; // 1x1 white pixel texture
     public SamplerState SpritebatchSamplerState {get; protected set;} = SamplerState.PointClamp; // Determines if the spritebatch uses the PointClamp SamplerState
@@ -41,15 +41,12 @@ public class GameInstance : Game
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         TargetElapsedTime = TimeSpan.FromSeconds(1f / 90);
+
+        Window.ClientSizeChanged += Window_ClientSizeChanged;
     }
     #region Methods
     protected override void Initialize() // Startup
     {
-        // Window Properties
-        Window.AllowUserResizing = false;
-        Window.AllowAltF4 = true;
-        Window.Title = "Game Window";
-
         base.Initialize();
     }
     protected override void LoadContent() // Load method
@@ -69,14 +66,28 @@ public class GameInstance : Game
     }
     protected override void Update(GameTime gameTime) // Update method
     {
-        GetPlayerCursor(Mouse.GetState());
+        // Update Cursor position
+        MouseState mouseState = Mouse.GetState();
+        Cursor.X = mouseState.X; Cursor.Y = mouseState.Y;
+
+        // Update Screens/Components
         ScreenManager.Update(gameTime);
         ComponentManager.Update(gameTime);
+
+        // Fixed update call cycle
         SinceLastFixedUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
         if (SinceLastFixedUpdate >= FixedDeltaTime)
         {
+            // Count number of cycles.
+            int cycles = (int)(SinceLastFixedUpdate / FixedDeltaTime);
+            
             // Trigger fixed update
-            FixedUpdate(gameTime);
+            while (cycles > 0)
+            {
+                FixedUpdate(gameTime);
+                SinceLastFixedUpdate -= FixedDeltaTime;
+                cycles--;
+            }
         }
         base.Update(gameTime);
     }
@@ -84,7 +95,7 @@ public class GameInstance : Game
     protected virtual void FixedUpdate(GameTime gameTime) // Fixed update method
     {
         // This method is for calling the physics engine at a rate independent from the Update/Draw framerate.
-        PhysicsEngine.FixedUpdate();
+        PhysicsEngine.FixedUpdate(gameTime);
     }
 
     protected override void Draw(GameTime gameTime) // Draw method
@@ -94,13 +105,19 @@ public class GameInstance : Game
         ComponentManager.Draw(gameTime);
     }
 
+    protected virtual void Window_ClientSizeChanged(object? sender, EventArgs args) // Window resize method
+    {
+        // Call ComponentManager to rescale components.
+        ComponentManager.Resize();
+    }
+
     protected override void OnExiting(object sender, EventArgs args) // Exiting method
     {
         base.OnExiting(sender, args);
     }
 
-    // Resolution
-    public void SetWindowResolution(int Width, int Height)
+    // Buffer
+    public void SetBufferResolution(int Width, int Height) // Sets Graphics PreferredBackBuffer (window size)
     {
         if (Width > 0 && Height > 0)
         {
@@ -109,20 +126,37 @@ public class GameInstance : Game
             _graphics.ApplyChanges();
         }
     }
-
-    public int[] GetWindowResolution()
+    public int[] GetBufferResolution() // Returns Graphics PreferredBackBuffer (window size)
     {
-        int [] resolution = new int[2];
+        int[] resolution = new int[2];
+        resolution[0] = _graphics.PreferredBackBufferWidth; resolution[1] = _graphics.PreferredBackBufferHeight;
+        return resolution;
+    }
+    
+    // Viewport
+    public void SetViewportResolution(int Width, int Height) // Sets viewport size
+    {
+        if (Width > 0 && Height > 0)
+        {
+            GraphicsDevice.Viewport = new(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y, Width, Height);
+        }
+    }
+
+    public int[] GetViewportResolution() // Returns viewport size
+    {
+        int[] resolution = new int[2];
         resolution[0] = GraphicsDevice.Viewport.Width; resolution[1] = GraphicsDevice.Viewport.Height;
         return resolution;
     }
-
-    // Cursor
-    public void GetPlayerCursor(MouseState mouseState)
+    
+    // Window
+    public int[] GetWindowSize()
     {
-        // Calculate the cursor's position.
-        Cursor.X = mouseState.X; Cursor.Y = mouseState.Y;
+        int[] size = new int[2];
+        size[0] = Window.ClientBounds.Width; size[1] = Window.ClientBounds.Height;
+        return size;
     }
+
 
     // Framerate
     public void SetFramerate(int framerate)

@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ACL.IO;
 using ACL.UI;
@@ -7,14 +8,14 @@ namespace ACL.Physics
     public class PhysicsEngine
     {
         readonly GameInstance Game;
-        ComponentManager ComponentManager => Game.ComponentManager;
-        FileManager FileManager => Game.FileManager;
-        SpriteBatch Spritebatch => Game.SpriteBatch;
+        protected ComponentManager ComponentManager => Game.ComponentManager;
+        protected FileManager FileManager => Game.FileManager;
+        protected SpriteBatch Spritebatch => Game.SpriteBatch;
 
         // Objects
-        public List<PhysicsComponent> PhysicsObjects = new();
-        public List<PhysicsComponent> PendingObjects = new(); // Objects that will be added next Fixed Update call.
-        public List<PhysicsComponent> RemovableObjects = new(); // Objects that will be removed next Fixed Update call.
+        protected List<PhysicsComponent> PhysicsObjects = new(); // Objects currently updated by the physics engine.
+        protected List<PhysicsComponent> PendingObjects = new(); // Objects that will be added next Fixed Update call.
+        protected List<PhysicsComponent> RemovableObjects = new(); // Objects that will be removed next Fixed Update call.
         private HashSet<int> CheckedPairs = new();
 
         // Properties
@@ -42,6 +43,11 @@ namespace ACL.Physics
             }
         }
 
+        public void Clear()
+        {
+            PhysicsObjects.Clear();
+        }
+
         int GetPairHash(PhysicsComponent objectA, PhysicsComponent objectB) // Get a hash value from a pair of Dynamic Components.
         {
             // Generate a unique hash value for the object pair
@@ -52,7 +58,7 @@ namespace ACL.Physics
 
         #region Physics Methods
         // Methods used for calculating physics, resolving collisions etc.
-        public void FixedUpdate()
+        public void FixedUpdate(GameTime gameTime)
         {
             // Add pending physics objects.
             foreach (var Object in PendingObjects)

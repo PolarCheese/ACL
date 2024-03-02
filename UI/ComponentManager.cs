@@ -7,15 +7,15 @@ namespace ACL.UI
     public class ComponentManager
     {
         public GameInstance Game;
-        internal SpriteBatch SpriteBatch => Game.SpriteBatch;
-        internal PhysicsEngine PhysicsEngine => Game.PhysicsEngine;
+        protected SpriteBatch SpriteBatch => Game.SpriteBatch;
+        protected PhysicsEngine PhysicsEngine => Game.PhysicsEngine;
         public ComponentManager(GameInstance GameInstance)
         {
             Game = GameInstance;
         }
-        internal List<Component> ActiveComponents {get; private set;} = new();
-        internal List<Component> PendingAdditions {get; set;} = new();
-        internal List<Component> PendingRemovals {get; set;} = new();
+        protected List<Component> SubComponents {get; private set;} = new();
+        protected List<Component> PendingAdditions {get; set;} = new();
+        protected List<Component> PendingRemovals {get; set;} = new();
         public List<Camera> Cameras {get; set;} = new();
 
         #region List Methods
@@ -55,13 +55,13 @@ namespace ACL.UI
         }
         public void RemoveCamera(Camera camera)
         {
-            if (Cameras.Contains(camera)) { Cameras.Remove(camera); }
+            Cameras.Remove(camera);
         }
 
         public void Clear() // Completely clear ComponentManager of any components and cameras.
         {
-            ActiveComponents.Clear();
-            PhysicsEngine.PhysicsObjects.Clear(); // Remove remaining components in the physics engine.
+            SubComponents.Clear();
+            PhysicsEngine.Clear(); // Remove remaining components in the physics engine.
             Cameras.Clear();
         }
         #endregion
@@ -118,7 +118,7 @@ namespace ACL.UI
             // Add pending components.
             foreach (var component in PendingAdditions)
             {
-                ActiveComponents.Add(component);
+                SubComponents.Add(component);
                 if (component is PhysicsComponent PhysicsObject)
                 {
                     PhysicsEngine.AddComponent(PhysicsObject);
@@ -127,7 +127,7 @@ namespace ACL.UI
             PendingAdditions.Clear();
             
             // Update active components.
-            foreach (var component in ActiveComponents)
+            foreach (var component in SubComponents)
             {
                 if (component.ToUpdate)
                 {
@@ -138,7 +138,7 @@ namespace ACL.UI
             // Remove unwanted components.
             foreach (var component in PendingRemovals)
             {
-                ActiveComponents.Remove(component);
+                SubComponents.Remove(component);
                 if (component is PhysicsComponent PhysicsObject)
                 {
                     PhysicsEngine.RemoveComponent(PhysicsObject);
@@ -146,16 +146,31 @@ namespace ACL.UI
             }
             PendingRemovals.Clear();
 
-            // Draw camera bound components.
+            // Update cameras.
             foreach (Camera camera in Cameras)
             {
-                camera.Update();
-                foreach (var component in camera.SubComponents)
-                {
-                    if (component.ToUpdate)
+                camera.Update(); // Update camera.
+
+                if (camera.Enabled) {
+                    foreach (Component component in camera.PendingAdditions) // Add subcomponents.
                     {
-                        component.Update(gameTime);
+                        camera.SubComponents.Add(component);
                     }
+                    camera.PendingAdditions.Clear();
+
+                    foreach (Component component in camera.SubComponents) // Update subcomponents
+                    {
+                        if (component.ToUpdate)
+                        {
+                            component.Update(gameTime);
+                        }
+                    }
+
+                    foreach (Component component in camera.PendingRemovals) // Remove unwanted subcomponents.
+                    {
+                        camera.SubComponents.Remove(component);
+                    }
+                    camera.PendingRemovals.Clear();
                 }
             }
         }
@@ -164,7 +179,7 @@ namespace ACL.UI
         {
             // Draw all components.
             SpriteBatch.Begin(samplerState: Game.SpritebatchSamplerState);
-            foreach (var component in ActiveComponents)
+            foreach (var component in SubComponents)
             {
                 if (component.ToDraw)
                 {
@@ -176,16 +191,30 @@ namespace ACL.UI
             // Draw camera bound components.
             foreach (Camera camera in Cameras)
             {
-                SpriteBatch.Begin(samplerState: Game.SpritebatchSamplerState, transformMatrix: camera.Transform);
-                foreach (var component in camera.SubComponents)
-                {
-                    if (component.ToDraw)
+                if (camera.Enabled) {
+                    camera.Draw(); // Calculates the position before drawing. This is to avoid the camera "stuttering" behind the target's position.
+                    SpriteBatch.Begin(samplerState: Game.SpritebatchSamplerState, transformMatrix: camera.GetTransform());
+                    foreach (var component in camera.SubComponents)
                     {
-                        component.Draw(gameTime, SpriteBatch);
+                        if (component.ToDraw)
+                        {
+                            component.Draw(gameTime, SpriteBatch);
+                        }
                     }
+                    SpriteBatch.End();
                 }
-                SpriteBatch.End();
             }
+        }
+
+        public void Resize()
+        {
+            // Resize all components which need to be rescaled.
+            /*
+            foreach (var component in SubComponents)
+            {
+                // Not Implemented.
+            }
+            */
         }
         #endregion
     }

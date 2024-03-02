@@ -1,5 +1,3 @@
-using ACL;
-using ACL.Values;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -23,8 +21,8 @@ namespace ACL.UI.BuiltIn
 
         // Texturing
         public Rectangle TextureSourceRectangle {get; set;}
-        public QuadVector TextureSourcePosition {get; set;} = new(0, 0, 0, 0);
-        public QuadVector TextureSourceSize {get; set;} = new(1, 1, 0, 0);
+        public Vector2 TextureSourcePosition {get; set;} = Vector2.Zero;
+        public Vector2 TextureSourceSize {get; set;} = Vector2.One;
 
         #endregion
 
@@ -48,13 +46,13 @@ namespace ACL.UI.BuiltIn
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            ImageBounds = new((int)ActualPosition.X, (int)ActualPosition.Y, (int)ActualSize.X, (int)ActualSize.Y);
+            ImageBounds = new((int)(Position.X - Size.X * Origin.X), (int)(Position.Y - Size.Y * Origin.Y), (int)Size.X, (int)Size.Y);
             if (ImageBounds.Width != 0 && ImageBounds.Height != 0)
             {
                 if (OutlineSize > 0)
                 {
                     // Draw outline
-                    Outline = new(ImageBounds.X - OutlineSize/2, ImageBounds.Y - OutlineSize/2, ImageBounds.Width + OutlineSize, ImageBounds.Height + OutlineSize);
+                    Outline = new(ImageBounds.X - OutlineSize, ImageBounds.Y - OutlineSize, ImageBounds.Width + 2*OutlineSize, ImageBounds.Height + 2*OutlineSize);
                     spriteBatch.Draw(GameInstance.PlainTexture, Outline, OutlineColor);
                 }
                 if (ImageBackgroundColor.A > 0)
@@ -70,9 +68,7 @@ namespace ACL.UI.BuiltIn
         
         public virtual void UpdateSourceRectangles()
         {
-            Rectangle TextureBounds = new(0, 0, ImageTexture.Width, ImageTexture.Height);
-            Vector2 Position = TextureSourcePosition.ToVector2(TextureBounds); Vector2 Size = TextureSourceSize.ToVector2(TextureBounds);
-            TextureSourceRectangle = new((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            TextureSourceRectangle = new((int)TextureSourcePosition.X, (int)TextureSourcePosition.Y, (int)TextureSourceSize.X, (int)TextureSourceSize.Y);
         }
         #endregion
     }

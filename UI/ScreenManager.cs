@@ -9,7 +9,7 @@ namespace ACL.UI
         SpriteBatch SpriteBatch => Game.SpriteBatch;
         ComponentManager ComponentManager => Game.ComponentManager;
         public List<Screen> LoadedScreens {get; private set;} = new List<Screen>();
-        Screen? ActiveScreen;
+        public Screen? ActiveScreen;
         public ScreenManager(GameInstance CurrentGame)
         {
             Game = CurrentGame;

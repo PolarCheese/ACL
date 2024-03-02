@@ -1,4 +1,3 @@
-using ACL.Values;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -27,15 +26,15 @@ namespace ACL.UI.BuiltIn
         public Color TextHoverColor {get; set;} = new(200, 200, 200, 255);
 
         public string? Text {get; set;}
-        public QuadVector TextPosition {get; set;} = new(.5f, .5f, 0, 0);
+        public Vector2 TextPosition {get; set;} = Vector2.Zero;
         public bool CenterTextY{get; set;} = true;
         public float TextScale {get; set;} = 1f;
         public SpriteFont? TextFont {get; set;}
 
         // Texturing
         public Rectangle TextureSourceRectangle {get; set;}
-        public QuadVector TextureSourcePosition {get; set;} = new(0, 0, 0, 0);
-        public QuadVector TextureSourceSize {get; set;} = new(1, 1, 0, 0);
+        public Vector2 TextureSourcePosition {get; set;} = Vector2.Zero;
+        public Vector2 TextureSourceSize {get; set;} = Vector2.One;
 
         #endregion
 

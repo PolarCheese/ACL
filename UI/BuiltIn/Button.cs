@@ -1,4 +1,3 @@
-using ACL.Values;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -27,14 +26,14 @@ namespace ACL.UI.BuiltIn
         public Color TextHoverColor {get; set;} = new(200, 200, 200, 255);
 
         public string? Text {get; set;}
-        public QuadVector TextPosition {get; set;} = new(.5f, .5f, 0, 0);
+        public Vector2 TextPosition {get; set;} = new(.5f, .5f);
         public float TextScale {get; set;} = 1f;
         public SpriteFont? TextFont {get; set;}
 
         // Texturing
         public Rectangle TextureSourceRectangle {get; set;}
-        public QuadVector TextureSourcePosition {get; set;} = new(0, 0, 0, 0);
-        public QuadVector TextureSourceSize {get; set;} = new(1, 1, 0, 0);
+        public Vector2 TextureSourcePosition {get; set;} = Vector2.Zero;
+        public Vector2 TextureSourceSize {get; set;} = Vector2.One;
 
         #endregion
 
@@ -74,7 +73,7 @@ namespace ACL.UI.BuiltIn
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            ButtonRectangle = new((int)ActualPosition.X, (int)ActualPosition.Y, (int)ActualSize.X, (int)ActualSize.Y);
+            ButtonRectangle = new((int)(Position.X - Size.X * Origin.X), (int)(Position.Y - Size.Y * Origin.Y), (int)Size.X, (int)Size.Y);
             if (ButtonRectangle.Width != 0 && ButtonRectangle.Height != 0)
             {
                 // Draw Button
@@ -85,8 +84,8 @@ namespace ACL.UI.BuiltIn
                 // Draw Text
                 if (!string.IsNullOrEmpty(Text) && TextFont != null)
                 {
-                    var xOffset = ButtonRectangle.Width * TextPosition.RelativeX + TextPosition.AbsoluteX;
-                    var yOffset = ButtonRectangle.Height * TextPosition.RelativeY + TextPosition.AbsoluteY;
+                    var xOffset = ButtonRectangle.Width * TextPosition.X;
+                    var yOffset = ButtonRectangle.Height * TextPosition.Y;
                     var x = ButtonRectangle.X + xOffset - TextFont.MeasureString(Text).X / 2f * TextScale;
                     var y = ButtonRectangle.Y + yOffset - TextFont.MeasureString(Text).Y / 2f * TextScale;
                     var textColor = IsHovering ? TextHoverColor : TextColor;
@@ -99,9 +98,7 @@ namespace ACL.UI.BuiltIn
 
         public virtual void UpdateSourceRectangles()
         {
-            Rectangle TextureBounds = new(0, 0, ButtonTexture.Width, ButtonTexture.Height);
-            Vector2 Position = TextureSourcePosition.ToVector2(TextureBounds); Vector2 Size = TextureSourceSize.ToVector2(TextureBounds);
-            TextureSourceRectangle = new((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            TextureSourceRectangle = new((int)TextureSourcePosition.X, (int)TextureSourcePosition.Y, (int)TextureSourceSize.X, (int)TextureSourceSize.Y);
         }
         #endregion
     }

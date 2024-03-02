@@ -1,5 +1,4 @@
 using ACL.Physics;
-using ACL.Values;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,16 +7,22 @@ namespace ACL.UI
     public class Camera
     {
         public GameInstance Game;
-        ComponentManager ComponentManager => Game.ComponentManager;
-        PhysicsEngine PhysicsEngine => Game.PhysicsEngine;
-        Viewport Viewport => Game.GraphicsDevice.Viewport; // Game viewport
+        protected ComponentManager ComponentManager => Game.ComponentManager;
+        protected PhysicsEngine PhysicsEngine => Game.PhysicsEngine;
+        protected Viewport Viewport => Game.GraphicsDevice.Viewport; // Game viewport
         public Rectangle Cursor; // Cursor relative to the camera viewport
-        public List<Component> SubComponents {get; set;} = new List<Component>();
+
+        // Subcomponents
+        public List<Component> SubComponents {get; set;} = new();
+        public List<Component> PendingAdditions {get; set;} = new();
+        internal List<Component> PendingRemovals {get; set;} = new();
+        
 
         #region Properties
         public bool Enabled {get; set;} = true;
-        public float Zoom {get; set;} = 1f; // Zoom level
-        public QuadVector Position {get; set;} = new(0, 0, 0, 0);
+        public float Zoom {get; set;} = 1f;
+        public Vector2 Position {get; set;} = Vector2.Zero;
+        public float Rotation {get; set;} = 0f;
         public Component?[] Target {get; set;} = new Component[1]; // If not null, camera will follow the "target" component
         public Matrix Transform {get; protected set;} = Matrix.Identity; // Camera Matrix
         #endregion
@@ -29,16 +34,27 @@ namespace ACL.UI
         }
 
         #region Methods
-        // Methods for adding subcomponents to the camera.
-        public void AddSubcomponents(params Component[] Components)
+        public void AddSubcomponents(params Component[] Components) // Method for adding subcomponents.
         {
-            foreach (var component in Components)
+            foreach (Component component in Components)
             {
                 component.Bound = this;
-                SubComponents.Add(component);
+                PendingAdditions.Add(component);
                 if (component is PhysicsComponent PhysicsObject)
                 {
                     PhysicsEngine.AddComponent(PhysicsObject);
+                }
+            }
+        }
+        public void RemoveSubcomponents(params Component[] Components) // Method for removing subcomponents.
+        {
+            foreach (Component component in Components)
+            {
+                component.Bound = null;
+                PendingRemovals.Remove(component);
+                if (component is PhysicsComponent PhysicsObject)
+                {
+                    PhysicsEngine.RemoveComponent(PhysicsObject);
                 }
             }
         }
@@ -46,19 +62,16 @@ namespace ACL.UI
         public void Update()
         {
             // Update Transform
-            Transform = Matrix.CreateTranslation(new Vector3(-Position.ToVector2(Viewport.Bounds), 0f)) *
-                        Matrix.CreateScale(Zoom) *
-                        Matrix.CreateTranslation(new Vector3(Viewport.Width * 0.5f, Viewport.Height * 0.5f, 0f));
+            Transform = GetTransform();
 
             // Calculate cursor position from camera's perspective.
             Vector2 TransformedPosition = Vector2.Transform(new(Game.Cursor.X, Game.Cursor.Y), Transform);
             Cursor.X = (int)TransformedPosition.X; Cursor.Y = (int)TransformedPosition.Y;
+        }
 
-            // Check for target
-            if (Target[0] != null)
-            {
-                Position = new(Target[0]!.Position);
-            }
+        public void Draw()
+        {
+            CalculatePosition(); // Update Position before Draw.
         }
         
         public void SetTarget(Component Component) // Set the camera to follow a specific component
@@ -69,6 +82,23 @@ namespace ACL.UI
         public void RemoveTarget() // Set Target to null
         {
             Target[0] = null;
+        }
+
+        void CalculatePosition() // This method is for calculating the camera's position in case there is a target assigned.
+        {
+            // Check for target
+            if (Target[0] != null)
+            {
+                Position = new(Target[0]!.Position.X + Target[0]!.Size.X / 2, Target[0]!.Position.Y + Target[0]!.Size.Y / 2);
+            }
+        } 
+
+        public Matrix GetTransform() // Get the camera's tranform matrix;
+        {
+            return Transform = Matrix.CreateTranslation(new Vector3(-Position, 0f)) *
+                               Matrix.CreateScale(Zoom) *
+                               Matrix.CreateFromYawPitchRoll(0, 0, Rotation) *
+                               Matrix.CreateTranslation(new Vector3(Viewport.Width * 0.5f, Viewport.Height * 0.5f, 0f));
         }
         #endregion
     }

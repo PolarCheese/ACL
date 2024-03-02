@@ -1,4 +1,3 @@
-using ACL.Values;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -29,17 +28,17 @@ namespace ACL.UI.BuiltIn
         public Color TextHoverColor {get; set;} = new(200, 200, 200, 255);
 
         public string? Text {get; set;}
-        public QuadVector TextPosition {get; set;} = new(1.25f, 0, 0, 0);
+        public Vector2 TextPosition {get; set;} = new Vector2(1.25f, 0f);
         public bool CenterTextY{get; set;} = true;
         public float TextScale {get; set;} = 1f;
         public SpriteFont? TextFont {get; set;}
 
         // Texturing
         public Rectangle TextureSourceRectangle {get; set;}
-        public QuadVector TextureOffSourcePosition {get; set;} = new(0, 0, 0, 0);
-        public QuadVector TextureOffSourceSize {get; set;} = new(.5f, .5f, 0, 0);
-        public QuadVector TextureOnSourcePosition {get; set;} = new(.5f, 0, 0, 0);
-        public QuadVector TextureOnSourceSize {get; set;} = new(.5f, .5f, 0, 0);
+        public Vector2 TextureOffSourcePosition {get; set;} = new(1.25f, 0f);
+        public Vector2 TextureOffSourceSize {get; set;} = new(.5f, .5f);
+        public Vector2 TextureOnSourcePosition {get; set;} = new(.5f, 0f);
+        public Vector2 TextureOnSourceSize {get; set;} = new(.5f, .5f);
 
         #endregion
 
@@ -79,7 +78,7 @@ namespace ACL.UI.BuiltIn
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            CheckboxRectangle = new((int)ActualPosition.X, (int)ActualPosition.Y, (int)ActualSize.X, (int)ActualSize.Y);
+            CheckboxRectangle = new((int)(Position.X - Size.X * Origin.X), (int)(Position.Y - Size.Y * Origin.Y), (int)Size.X, (int)Size.Y);
             if (CheckboxRectangle.Width != 0 && CheckboxRectangle.Height != 0)
             {
                 // Draw Checkbox
@@ -90,10 +89,9 @@ namespace ACL.UI.BuiltIn
                 // Draw Text
                 if (!string.IsNullOrEmpty(Text) && TextFont != null)
                 {
-                    var xOffset = CheckboxRectangle.Width * TextPosition.RelativeX + TextPosition.AbsoluteX;
-                    var yOffset = CenterTextY ? (CheckboxRectangle.Height / 2) - (TextFont.MeasureString(Text).Y / 2f * TextScale) : CheckboxRectangle.Height * TextPosition.RelativeY + TextPosition.AbsoluteY;
-                    var x = CheckboxRectangle.X + xOffset;
-                    var y = CheckboxRectangle.Y + yOffset;
+                    var x = CheckboxRectangle.X + CheckboxRectangle.Width * TextPosition.X;
+                    var y = CenterTextY ? CheckboxRectangle.Y + (CheckboxRectangle.Height / 2) - (TextFont.MeasureString(Text).Y / 2f * TextScale) :
+                    CheckboxRectangle.Y + CheckboxRectangle.Height * TextPosition.Y;
                     var textColor = IsHovering ? TextHoverColor : TextColor;
                     spriteBatch.DrawString(TextFont, Text, new(x, y), textColor, 0f, Vector2.Zero, TextScale, SpriteEffects.None, 0.1f);
                 }
@@ -109,11 +107,8 @@ namespace ACL.UI.BuiltIn
 
         public virtual void UpdateSourceRectangles()
         {
-            Rectangle TextureBounds = new(0, 0, CheckboxTexture.Width, CheckboxTexture.Height);
-            Vector2 OffPosition = TextureOffSourcePosition.ToVector2(TextureBounds); Vector2 OnPosition = TextureOnSourcePosition.ToVector2(TextureBounds);
-            Vector2 OffSize = TextureOffSourceSize.ToVector2(TextureBounds); Vector2 OnSize = TextureOnSourceSize.ToVector2(TextureBounds);
-            if (!Value) { TextureSourceRectangle = new((int)OffPosition.X, (int)OffPosition.Y, (int)OffSize.X, (int)OffSize.Y); } 
-            else {TextureSourceRectangle = new((int)OnPosition.X, (int)OnPosition.Y, (int)OnSize.X, (int)OnSize.Y); } 
+            if (!Value) { TextureSourceRectangle = new((int)TextureOffSourcePosition.X, (int)TextureOffSourcePosition.Y, (int)TextureOffSourceSize.X, (int)TextureOffSourceSize.Y); } 
+            else {TextureSourceRectangle = new((int)TextureOnSourcePosition.X, (int)TextureOnSourcePosition.Y, (int)TextureOnSourceSize.X, (int)TextureOnSourceSize.Y); } 
         }
         #endregion
     }

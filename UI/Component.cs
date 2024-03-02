@@ -1,4 +1,3 @@
-using ACL.Values;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
@@ -31,13 +30,12 @@ namespace ACL.UI
 
         // Positioning, Size and Rotation
         public Vector2 Origin {get; set;} = Vector2.Zero;
-        public QuadVector Position {get; set;} = QuadVector.Zero;
-        public QuadVector Size {get; set;} = QuadVector.Zero;
-        protected QuadVector _previousPosition = QuadVector.Zero;
-        protected QuadVector _previousSize = QuadVector.Zero;
-        public Vector2 ActualPosition {get; protected set;} = Vector2.Zero;
-        public Vector2 ActualSize {get; protected set;} = Vector2.Zero;
+        public Vector2 Position {get; set;} = Vector2.Zero;
+        public Vector2 Size {get; set;} = Vector2.Zero;
         public float Rotation {get; set;} = 0f;
+        protected Vector2 _previousPosition = Vector2.Zero;
+        protected Vector2 _previousSize = Vector2.Zero;
+        protected float _previousRotation = 0f;
 
         // Cursor
         public Rectangle Cursor {get; set;}
@@ -75,7 +73,6 @@ namespace ACL.UI
 
             _previousCursor = Cursor;
             Cursor = Bound == null ? Game.Cursor : Bound.Cursor;
-            UpdateProperties(); // Update component properties
             foreach (Component Child in Subcomponents)
             {
                 if (Child.ToUpdate)
@@ -95,24 +92,6 @@ namespace ACL.UI
                 }
             }
 
-        }
-
-        public virtual void UpdateProperties()
-        {
-            // Update actual size/position etc.
-            bool HasParent = Parent != null;
-            if (Size.IsEqual(_previousSize) == false) {
-                // Size has changed. Recalculate actual size.
-                if (HasParent && Parent!.ScaleSubcomponents) {ActualSize = Size.ToVector2(Parent.ActualSize);}
-                else {ActualSize = Size.ToVector2(Game);}
-                _previousSize = new(Size);
-            }
-            if (Position.IsEqual(_previousPosition) == false) {
-                // Position has changed. Recalculate actual position.
-                if (HasParent && Parent!.PositionSubcomponents) {ActualPosition = Parent.ActualPosition + Position.ToVector2(Parent.ActualSize) - ActualSize * Origin;}
-                else {ActualPosition = Position.ToVector2(Game) - Size.ToVector2(Game) * Origin;}
-                _previousPosition = new(Position);
-            }
         }
         #endregion
     }
