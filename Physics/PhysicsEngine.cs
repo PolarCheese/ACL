@@ -19,7 +19,6 @@ namespace ACL.Physics
         private HashSet<int> CheckedPairs = new();
 
         // Properties
-        public float Gravity = 10;
         public PhysicsEngine(GameInstance CurrentGame)
         {
             Game = CurrentGame;
