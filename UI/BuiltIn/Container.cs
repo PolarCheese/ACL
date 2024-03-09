@@ -39,7 +39,8 @@ namespace ACL.UI.BuiltIn
 
         public override void Update(GameTime gameTime)
         {
-            UpdateSourceRectangles();
+            // Update texture source rectangle
+            TextureSourceRectangle = new((int)TextureSourcePosition.X, (int)TextureSourcePosition.Y, (int)TextureSourceSize.X, (int)TextureSourceSize.Y);
             base.Update(gameTime);
         }
 
@@ -59,12 +60,6 @@ namespace ACL.UI.BuiltIn
             }
             base.Draw(gameTime, spriteBatch);
         }
-        
-        public virtual void UpdateSourceRectangles()
-        {
-            TextureSourceRectangle = new((int)TextureSourcePosition.X, (int)TextureSourcePosition.Y, (int)TextureSourceSize.X, (int)TextureSourceSize.Y);
-        }
-
         #endregion
     }
 }

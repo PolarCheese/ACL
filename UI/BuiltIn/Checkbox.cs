@@ -72,7 +72,9 @@ namespace ACL.UI.BuiltIn
             }
             else { IsHovering = false; }
 
-            UpdateSourceRectangles();
+            // Update texture source rectangle
+            if (!Value) { TextureSourceRectangle = new((int)TextureOffSourcePosition.X, (int)TextureOffSourcePosition.Y, (int)TextureOffSourceSize.X, (int)TextureOffSourceSize.Y); } 
+            else {TextureSourceRectangle = new((int)TextureOnSourcePosition.X, (int)TextureOnSourcePosition.Y, (int)TextureOnSourceSize.X, (int)TextureOnSourceSize.Y); } 
             base.Update(gameTime);
         }
 
@@ -103,12 +105,6 @@ namespace ACL.UI.BuiltIn
         public virtual void Toggle(bool? NewValue = null)
         {
             if (NewValue.HasValue) {Value = NewValue.Value;} else {Value = !Value;}
-        }
-
-        public virtual void UpdateSourceRectangles()
-        {
-            if (!Value) { TextureSourceRectangle = new((int)TextureOffSourcePosition.X, (int)TextureOffSourcePosition.Y, (int)TextureOffSourceSize.X, (int)TextureOffSourceSize.Y); } 
-            else {TextureSourceRectangle = new((int)TextureOnSourcePosition.X, (int)TextureOnSourcePosition.Y, (int)TextureOnSourceSize.X, (int)TextureOnSourceSize.Y); } 
         }
         #endregion
     }
