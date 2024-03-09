@@ -135,7 +135,7 @@ namespace ACL.Physics
             // Print properties of this node.
             if (Nodes[0] == null)
             {
-                string properties = $"Depth: {Depth}{Environment.NewLine}Obj-Count: {Objects.Count}{Environment.NewLine}";
+                string properties = $"Depth: {Depth}{System.Environment.NewLine}Obj-Count: {Objects.Count}{System.Environment.NewLine}";
                 spriteBatch.DrawString(font, properties, new Vector2(Bounds.X + 5, Bounds.Y + 5), Color.White);
             }
 
