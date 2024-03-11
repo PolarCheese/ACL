@@ -66,7 +66,7 @@ namespace ACL.UI
             foreach (Component component in Components)
             {
                 component.Bound = null;
-                PendingRemovals.Remove(component);
+                PendingRemovals.Add(component);
                 if (component is PhysicsComponent PhysicsObject)
                 {
                     PhysicsEngine.RemoveComponent(PhysicsObject);
@@ -78,7 +78,7 @@ namespace ACL.UI
             foreach (Component component in Components)
             {
                 component.Bound = null;
-                PendingRemovals.Remove(component);
+                PendingRemovals.Add(component);
                 if (component is PhysicsComponent PhysicsObject)
                 {
                     PhysicsEngine.RemoveComponent(PhysicsObject);
