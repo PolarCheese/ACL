@@ -34,7 +34,8 @@ namespace ACL.UI
         }
 
         #region Methods
-        public void AddSubcomponents(params Component[] Components) // Method for adding subcomponents.
+        // Methods for adding subcomponents.
+        public void AddSubcomponents(params Component[] Components) 
         {
             foreach (Component component in Components)
             {
@@ -46,7 +47,33 @@ namespace ACL.UI
                 }
             }
         }
-        public void RemoveSubcomponents(params Component[] Components) // Method for removing subcomponents.
+        public void AddSubcomponents(IEnumerable<Component> Components)
+        {
+            foreach (Component component in Components)
+            {
+                component.Bound = this;
+                PendingAdditions.Add(component);
+                if (component is PhysicsComponent PhysicsObject)
+                {
+                    PhysicsEngine.AddComponent(PhysicsObject);
+                }
+            }
+        }
+
+        // Methods for removing subcomponents.
+        public void RemoveSubcomponents(params Component[] Components) 
+        {
+            foreach (Component component in Components)
+            {
+                component.Bound = null;
+                PendingRemovals.Remove(component);
+                if (component is PhysicsComponent PhysicsObject)
+                {
+                    PhysicsEngine.RemoveComponent(PhysicsObject);
+                }
+            }
+        }
+        public void RemoveSubcomponents(IEnumerable<Component> Components) 
         {
             foreach (Component component in Components)
             {
