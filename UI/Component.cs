@@ -28,14 +28,12 @@ namespace ACL.UI
         public bool ToUpdate {get; set;} = true;
         public bool ToDraw {get; set;} = true;
 
-        // Positioning, Size and Rotation
+        // Positioning, Size, Rotation and Depth
         public Vector2 Origin {get; set;} = Vector2.Zero;
         public Vector2 Position {get; set;} = Vector2.Zero;
         public Vector2 Size {get; set;} = Vector2.Zero;
         public float Rotation {get; set;} = 0f;
-        protected Vector2 _previousPosition = Vector2.Zero;
-        protected Vector2 _previousSize = Vector2.Zero;
-        protected float _previousRotation = 0f;
+        public float Depth {get; set;} = 0f;
 
         // Cursor
         public Rectangle Cursor {get; set;}
