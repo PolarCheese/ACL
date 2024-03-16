@@ -176,10 +176,13 @@ namespace ACL.UI
         }
 
         public void Draw(GameTime gameTime) // Draw components.
-        {
+        {   
+            // Order components based off depth.
+            var SortedComponents = SubComponents.OrderBy(c => c.Depth);
+
             // Draw all components.
             SpriteBatch.Begin(samplerState: Game.SpritebatchSamplerState);
-            foreach (var component in SubComponents)
+            foreach (var component in SortedComponents)
             {
                 if (component.ToDraw)
                 {
@@ -193,8 +196,10 @@ namespace ACL.UI
             {
                 if (camera.Enabled) {
                     camera.Draw(); // Calculates the position before drawing. This is to avoid the camera "stuttering" behind the target's position.
+                    var SortedCameraComponents = camera.SubComponents.OrderBy(c => c.Depth);
+
                     SpriteBatch.Begin(samplerState: Game.SpritebatchSamplerState, transformMatrix: camera.GetTransform());
-                    foreach (var component in camera.SubComponents)
+                    foreach (var component in SortedCameraComponents)
                     {
                         if (component.ToDraw)
                         {

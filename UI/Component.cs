@@ -39,7 +39,7 @@ namespace ACL.UI
         public Rectangle Cursor {get; set;}
         public MouseState MouseState {get; set;}
         protected Rectangle _previousCursor;
-        protected MouseState _previousMouseState; 
+        protected MouseState _previousMouseState;
         #endregion
 
         #region Nodes
