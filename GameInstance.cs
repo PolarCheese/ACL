@@ -116,37 +116,13 @@ public class GameInstance : Game
         base.OnExiting(sender, args);
     }
 
-    // Buffer
-    public void SetBufferResolution(int Width, int Height) // Sets Graphics PreferredBackBuffer (window size)
+    // Screen
+    public int[] GetScreenSize()
     {
-        if (Width > 0 && Height > 0)
-        {
-            _graphics.PreferredBackBufferWidth = Width;
-            _graphics.PreferredBackBufferHeight = Height;
-            _graphics.ApplyChanges();
-        }
-    }
-    public int[] GetBufferResolution() // Returns Graphics PreferredBackBuffer (window size)
-    {
-        int[] resolution = new int[2];
-        resolution[0] = _graphics.PreferredBackBufferWidth; resolution[1] = _graphics.PreferredBackBufferHeight;
-        return resolution;
-    }
-    
-    // Viewport
-    public void SetViewportResolution(int Width, int Height) // Sets viewport size
-    {
-        if (Width > 0 && Height > 0)
-        {
-            GraphicsDevice.Viewport = new(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y, Width, Height);
-        }
-    }
-
-    public int[] GetViewportResolution() // Returns viewport size
-    {
-        int[] resolution = new int[2];
-        resolution[0] = GraphicsDevice.Viewport.Width; resolution[1] = GraphicsDevice.Viewport.Height;
-        return resolution;
+        int[] size = new int[2];
+        size[0] = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+        size[1] = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+        return size;
     }
     
     // Window
