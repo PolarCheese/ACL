@@ -21,9 +21,9 @@ namespace ACL.UI.BuiltIn
         // Appearence
 
         public Texture2D CheckboxTexture {get; set;} = GameInstance.PlainTexture;
-        public Color CheckboxColor {get; set;} = Color.White;
-        public Color CheckboxHoverColor {get; set;} = new(200, 200, 200, 255);
-        public Color CheckboxLockedColor {get; set;} = new(127, 127, 127, 255);
+        public Color Color {get; set;} = Color.White;
+        public Color HoverColor {get; set;} = new(200, 200, 200, 255);
+        public Color LockedColor {get; set;} = new(127, 127, 127, 255);
         public Color TextColor {get; set;} = Color.White;
         public Color TextHoverColor {get; set;} = new(200, 200, 200, 255);
 
@@ -85,7 +85,7 @@ namespace ACL.UI.BuiltIn
             {
                 // Draw Checkbox
                 Color DrawColor;
-                if (Locked) { DrawColor = CheckboxLockedColor; } else { DrawColor = IsHovering ? CheckboxHoverColor : CheckboxColor; }
+                if (Locked) { DrawColor = LockedColor; } else { DrawColor = IsHovering ? HoverColor : Color; }
                 spriteBatch.Draw(CheckboxTexture, CheckboxRectangle, TextureSourceRectangle, DrawColor);
                 
                 // Draw Text
