@@ -20,6 +20,7 @@ namespace ACL.UI
 
         #region Properties
         public bool Enabled {get; set;} = true;
+        public bool AllowComponentResize {get; set;} = false; // If set to true, the component manager will resize the components if the game's window is resized.
         public float Zoom {get; set;} = 1f;
         public Vector2 Position {get; set;} = Vector2.Zero;
         public float Rotation {get; set;} = 0f;
