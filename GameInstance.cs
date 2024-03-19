@@ -133,6 +133,13 @@ public class GameInstance : Game
         return size;
     }
 
+    // Buffer
+    public void SetBufferSize(int width, int height)
+    {
+        _graphics.PreferredBackBufferWidth= width; _graphics.PreferredBackBufferHeight = height;
+        _graphics.ApplyChanges();
+    }
+
 
     // Framerate
     public void SetFramerate(int framerate)
