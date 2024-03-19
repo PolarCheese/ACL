@@ -138,6 +138,8 @@ public class GameInstance : Game
     {
         _graphics.PreferredBackBufferWidth= width; _graphics.PreferredBackBufferHeight = height;
         _graphics.ApplyChanges();
+
+        ComponentManager.UpdateWindowSize();
     }
     public int[] GetBufferSize()
     {

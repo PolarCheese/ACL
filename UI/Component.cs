@@ -16,6 +16,7 @@ namespace ACL.UI
         #region Properties
         public Component? Parent {get; set;}
         public List<Component> Subcomponents {get;} = new List<Component>();
+        public bool AllowResizing {get; set;} = true; // If true, the component manager will resize the component when the game window is resized.
         
         // If any of the bools below are true, the subcomponents of this component will change their properties relative to their parent component.
         public bool PositionSubcomponents {get; set;} = true;

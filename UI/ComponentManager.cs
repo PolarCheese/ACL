@@ -12,11 +12,14 @@ namespace ACL.UI
         public ComponentManager(GameInstance GameInstance)
         {
             Game = GameInstance;
+            UpdateWindowSize();
         }
         protected List<Component> SubComponents {get; private set;} = new();
         protected List<Component> PendingAdditions {get; set;} = new();
         protected List<Component> PendingRemovals {get; set;} = new();
         public List<Camera> Cameras {get; set;} = new();
+
+        public int[] GameWindowSize {get; private set;} = null!; 
 
         #region List Methods
         // Methods for adding components to the manager. 
@@ -213,13 +216,42 @@ namespace ACL.UI
 
         public void Resize()
         {
-            // Resize all components which need to be rescaled.
-            /*
+            // Get the new Window Size.
+            int[] newWindowSize = Game.GetWindowSize();
+            float xDifference = (float)newWindowSize[0]/GameWindowSize[0];
+            float yDifference = (float)newWindowSize[1]/GameWindowSize[1];
+            Vector2 resizeVector = new(xDifference, yDifference);
+
+            // Resize components in the component manager.
             foreach (var component in SubComponents)
             {
-                // Not Implemented.
+                if (component.AllowResizing)
+                {
+                    // Resize the component.
+                    component.Position *= resizeVector; component.Size *= resizeVector;
+                }
             }
-            */
+
+            // Resize components in camera instances.
+            foreach (var camera in Cameras)
+            {
+                if (camera.AllowComponentResize)
+                {
+                    foreach(var component in camera.SubComponents)
+                    {
+                        // Resize the component.
+                        component.Position *= resizeVector; component.Size *= resizeVector;
+                    }
+                }
+            }
+
+            GameWindowSize = newWindowSize;
+        }
+
+        public void UpdateWindowSize()
+        {
+            // This method is for forcefully updating the component manager's GameWindowSize values (because using SetBufferSize does not trigger the Window_ClientSizeChanged method in GameInstance)
+            GameWindowSize = Game.GetWindowSize();
         }
         #endregion
     }
