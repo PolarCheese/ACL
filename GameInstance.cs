@@ -139,7 +139,12 @@ public class GameInstance : Game
         _graphics.PreferredBackBufferWidth= width; _graphics.PreferredBackBufferHeight = height;
         _graphics.ApplyChanges();
     }
-
+    public int[] GetBufferSize()
+    {
+        int[] size = new int[2];
+        size[0] = _graphics.PreferredBackBufferWidth; size[1] = _graphics.PreferredBackBufferHeight;
+        return size;
+    }
 
     // Framerate
     public void SetFramerate(int framerate)
