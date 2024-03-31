@@ -50,6 +50,8 @@ namespace ACL.UI.BuiltIn
 
         public override void Update(GameTime gameTime)
         {
+            ButtonRectangle = new((int)(Position.X - Size.X * Origin.X), (int)(Position.Y - Size.Y * Origin.Y), (int)Size.X, (int)Size.Y);
+            
             _previousMouseState = MouseState;
             MouseState = Mouse.GetState();
 
@@ -74,7 +76,6 @@ namespace ACL.UI.BuiltIn
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            ButtonRectangle = new((int)(Position.X - Size.X * Origin.X), (int)(Position.Y - Size.Y * Origin.Y), (int)Size.X, (int)Size.Y);
             if (ButtonRectangle.Width != 0 && ButtonRectangle.Height != 0)
             {
                 // Draw Button

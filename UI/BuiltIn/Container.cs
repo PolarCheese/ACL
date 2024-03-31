@@ -39,6 +39,8 @@ namespace ACL.UI.BuiltIn
 
         public override void Update(GameTime gameTime)
         {
+            Body = new((int)(Position.X - Size.X * Origin.X), (int)(Position.Y - Size.Y * Origin.Y), (int)Size.X, (int)Size.Y);
+
             // Update texture source rectangle
             TextureSourceRectangle = new((int)TextureSourcePosition.X, (int)TextureSourcePosition.Y, (int)TextureSourceSize.X, (int)TextureSourceSize.Y);
             base.Update(gameTime);
@@ -46,7 +48,6 @@ namespace ACL.UI.BuiltIn
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Body = new((int)(Position.X - Size.X * Origin.X), (int)(Position.Y - Size.Y * Origin.Y), (int)Size.X, (int)Size.Y);
             if (Body.Width != 0 && Body.Height != 0)
             {
                 if (OutlineSize > 0)
