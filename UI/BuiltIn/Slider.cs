@@ -16,25 +16,46 @@ namespace ACL.UI.BuiltIn
         public event EventHandler Click = null!;
         public bool Locked {get; set;} = false;
 
+        // Functionality
+        public float MinimumValue { get; set; } = 0;
+        public float MaximumValue { get; set; } = 100;
+        public float Value { get; set; }
+        public float RoundByNumber { get; set; } = 0;
+
         // Appearence
         public Texture2D SliderTexture {get; set;} = GameInstance.PlainTexture;
         public Color SliderBarColor {get; set;} = Color.White;
         public Color ThumbColor {get; set;} = Color.White;
         public Color ThumbHoverColor {get; set;} = new(200, 200, 200, 255);
         public Color ThumbLockedColor {get; set;} = new(127, 127, 127, 255);
+
+        public int EdgesWidth {get; set;} = 4;
+        
+
+        public string? Text {get; set;} // Text
         public Color TextColor {get; set;} = Color.White;
         public Color TextHoverColor {get; set;} = new(200, 200, 200, 255);
-
-        public string? Text {get; set;}
         public Vector2 TextPosition {get; set;} = Vector2.Zero;
-        public bool CenterTextY{get; set;} = true;
+        public bool CenterTextY {get; set;} = true;
         public float TextScale {get; set;} = 1f;
         public SpriteFont? TextFont {get; set;}
 
         // Texturing
-        public Rectangle TextureSourceRectangle {get; set;}
-        public Vector2 TextureSourcePosition {get; set;} = Vector2.Zero;
-        public Vector2 TextureSourceSize {get; set;} = Vector2.One;
+        Rectangle BarTextureSourceRectangle {get; set;} // Bar
+        public Vector2 BarTextureSourcePosition {get; set;} = Vector2.Zero;
+        public Vector2 BarTextureSourceSize {get; set;} = Vector2.One;
+
+        Rectangle ThumbTextureSourceRectangle {get; set;} // Thumb
+        public Vector2 ThumbTextureSourcePosition {get; set;} = Vector2.Zero;
+        public Vector2 ThumbTextureSourceSize {get; set;} = Vector2.One;
+
+        Rectangle EdgeLTextureSourceRectangle {get; set;} // Left Edge
+        public Vector2 EdgeLTextureSourcePosition {get; set;} = Vector2.Zero;
+        public Vector2 EdgeLTextureSourceSize {get; set;} = Vector2.One;
+
+        Rectangle EdgeRTextureSourceRectangle {get; set;} // Right Edge
+        public Vector2 EdgeRTextureSourcePosition {get; set;} = Vector2.Zero;
+        public Vector2 EdgeRTextureSourceSize {get; set;} = Vector2.One;
 
         #endregion
 
@@ -46,7 +67,74 @@ namespace ACL.UI.BuiltIn
         {
             SliderBar = new();
             ThumbRectangle = new();
-            TextureSourceRectangle = new();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            // Update rectangles
+            SliderBar = new((int)(Position.X - Size.X * Origin.X), (int)(Position.Y - Size.Y * Origin.Y), (int)Size.X, (int)Size.Y);
+
+            float thumbSize = SliderBar.Height * 1.25f;
+            float thumbPosition = (Value - MinimumValue) / (MaximumValue - MinimumValue) * (SliderBar.Width - thumbSize);
+            ThumbRectangle = new((int)(SliderBar.X + thumbPosition), (int)(SliderBar.Y + (SliderBar.Height - thumbSize) / 2), (int)thumbSize, (int)thumbSize);
+
+
+            BarTextureSourceRectangle = new((int)BarTextureSourcePosition.X, (int)BarTextureSourcePosition.Y, (int)BarTextureSourceSize.X, (int)BarTextureSourceSize.Y);
+            ThumbTextureSourceRectangle = new((int)ThumbTextureSourcePosition.X, (int)ThumbTextureSourcePosition.Y, (int)ThumbTextureSourceSize.X, (int)ThumbTextureSourceSize.Y);
+            EdgeLTextureSourceRectangle = new((int)EdgeLTextureSourcePosition.X, (int)EdgeLTextureSourcePosition.Y, (int)EdgeLTextureSourceSize.X, (int)EdgeLTextureSourceSize.Y);
+            EdgeRTextureSourceRectangle = new((int)EdgeRTextureSourcePosition.X, (int)EdgeRTextureSourcePosition.Y, (int)EdgeRTextureSourceSize.X, (int)EdgeRTextureSourceSize.Y);
+
+            // Cursor logic
+            _previousMouseState = MouseState;
+            MouseState = Mouse.GetState();
+
+            _previousCursor = Cursor;
+            Cursor = Bound == null ? Game.Cursor : Bound.Cursor;
+
+            if (Cursor.Intersects(ThumbRectangle))
+            {
+                IsHovering = true;
+
+                if (MouseState.LeftButton == ButtonState.Pressed)
+                {
+                    // Calculate value
+                    float MouseRelativeX = Cursor.X - SliderBar.X;
+                    float SliderEndX = SliderBar.Width - ThumbRectangle.Width / 4; // end of the slider X RelativePosition
+                    float RelativePercentage = MouseRelativeX / SliderEndX;
+                    float RelativeInterval = MaximumValue - MinimumValue;
+                    Value = (int)(RelativePercentage * RelativeInterval + MinimumValue); // result
+
+                    if (RoundByNumber != 0)
+                    {
+                        // Round value
+                        Value = (float)Math.Ceiling(Value / RoundByNumber) * RoundByNumber;
+                    }
+
+                    // Update Thumb positioning
+                    float newthumbPosition = (Value - MinimumValue) / (MaximumValue - MinimumValue) * (SliderBar.Width - thumbSize);
+                    ThumbRectangle = new((int)(SliderBar.X + thumbPosition), (int)(SliderBar.Y + (SliderBar.Height - thumbSize) / 2), (int)thumbSize, (int)thumbSize);
+
+                    Click?.Invoke(this, new EventArgs());
+                }
+            }
+            else { IsHovering = false; }
+
+            base.Update(gameTime);
+        }
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            // Draw slider
+            spriteBatch.Draw(SliderTexture, SliderBar, BarTextureSourceRectangle, SliderBarColor, MathHelper.ToRadians(Rotation), new(0,0), SpriteEffects.None, 0.1f); // Draw bar
+            spriteBatch.Draw(SliderTexture, new(SliderBar.X - EdgesWidth, SliderBar.Y, EdgesWidth, SliderBar.Height), EdgeLTextureSourceRectangle, SliderBarColor, MathHelper.ToRadians(Rotation), new(0,0), SpriteEffects.None, 0.1f); // Draw left edge
+            spriteBatch.Draw(SliderTexture, new(SliderBar.X + SliderBar.Width, SliderBar.Y, EdgesWidth, SliderBar.Height), EdgeRTextureSourceRectangle, SliderBarColor, MathHelper.ToRadians(Rotation), new(0,0), SpriteEffects.None, 0.1f); // Draw right edge
+
+            // Draw Thumb
+            Color StateColor;
+            if (Locked) { StateColor = ThumbLockedColor; } else { StateColor = IsHovering ? ThumbHoverColor : ThumbColor; }
+            spriteBatch.Draw(SliderTexture, ThumbRectangle, ThumbTextureSourceRectangle, StateColor, MathHelper.ToRadians(Rotation), new(0,0), SpriteEffects.None, 0.1f); // Draw bar
+
+            base.Draw(gameTime, spriteBatch);
         }
     }
 }
