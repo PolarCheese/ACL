@@ -29,12 +29,12 @@ namespace ACL.UI.BuiltIn
 
         public string? Text {get; set;}
         public Vector2 TextPosition {get; set;} = new Vector2(1.25f, 0f);
-        public bool CenterTextY{get; set;} = true;
+        public bool CenterTextY {get; set;} = true;
         public float TextScale {get; set;} = 1f;
         public SpriteFont? TextFont {get; set;}
 
         // Texturing
-        public Rectangle TextureSourceRectangle {get; set;}
+        Rectangle TextureSourceRectangle {get; set;}
         public Vector2 TextureOffSourcePosition {get; set;} = new(1.25f, 0f);
         public Vector2 TextureOffSourceSize {get; set;} = new(.5f, .5f);
         public Vector2 TextureOnSourcePosition {get; set;} = new(.5f, 0f);

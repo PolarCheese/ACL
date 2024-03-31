@@ -31,14 +31,13 @@ namespace ACL.UI.BuiltIn
         public SpriteFont? TextFont {get; set;}
 
         // Texturing
-        public Rectangle TextureSourceRectangle {get; set;}
+        Rectangle TextureSourceRectangle {get; set;}
         public Vector2 TextureSourcePosition {get; set;} = Vector2.Zero;
         public Vector2 TextureSourceSize {get; set;} = Vector2.One;
 
         #endregion
 
         public Rectangle ButtonRectangle {get; set;}
-
         
         public Button(GameInstance game) : base(game)
         {
