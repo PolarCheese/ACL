@@ -73,11 +73,7 @@ namespace ACL.UI.BuiltIn
         {
             // Update rectangles
             SliderBar = new((int)(Position.X - Size.X * Origin.X), (int)(Position.Y - Size.Y * Origin.Y), (int)Size.X, (int)Size.Y);
-
             float thumbSize = SliderBar.Height * 1.25f;
-            float thumbPosition = (Value - MinimumValue) / (MaximumValue - MinimumValue) * (SliderBar.Width - thumbSize);
-            ThumbRectangle = new((int)(SliderBar.X + thumbPosition), (int)(SliderBar.Y + (SliderBar.Height - thumbSize) / 2), (int)thumbSize, (int)thumbSize);
-
 
             BarTextureSourceRectangle = new((int)BarTextureSourcePosition.X, (int)BarTextureSourcePosition.Y, (int)BarTextureSourceSize.X, (int)BarTextureSourceSize.Y);
             ThumbTextureSourceRectangle = new((int)ThumbTextureSourcePosition.X, (int)ThumbTextureSourcePosition.Y, (int)ThumbTextureSourceSize.X, (int)ThumbTextureSourceSize.Y);
@@ -99,25 +95,29 @@ namespace ACL.UI.BuiltIn
                 {
                     // Calculate value
                     float MouseRelativeX = Cursor.X - SliderBar.X;
-                    float SliderEndX = SliderBar.Width - ThumbRectangle.Width / 4; // end of the slider X RelativePosition
-                    float RelativePercentage = MouseRelativeX / SliderEndX;
+                    float SliderLength = SliderBar.Width; // end of the slider X RelativePosition
+                    float RelativePercentage = MouseRelativeX / SliderLength;
                     float RelativeInterval = MaximumValue - MinimumValue;
-                    Value = (int)(RelativePercentage * RelativeInterval + MinimumValue); // result
+                    float calcValue = (float)((float)RelativePercentage * (float)RelativeInterval + (float)MinimumValue); // result
 
+                    // clamp value
+                    if (MinimumValue > calcValue) { Value = MinimumValue; }
+                    else if (calcValue > MaximumValue) { Value = MaximumValue; }
+                    else { Value = calcValue; }
                     if (RoundByNumber != 0)
                     {
                         // Round value
                         Value = (float)Math.Ceiling(Value / RoundByNumber) * RoundByNumber;
                     }
 
-                    // Update Thumb positioning
-                    float newthumbPosition = (Value - MinimumValue) / (MaximumValue - MinimumValue) * (SliderBar.Width - thumbSize);
-                    ThumbRectangle = new((int)(SliderBar.X + thumbPosition), (int)(SliderBar.Y + (SliderBar.Height - thumbSize) / 2), (int)thumbSize, (int)thumbSize);
-
                     Click?.Invoke(this, new EventArgs());
                 }
             }
             else { IsHovering = false; }
+
+            // Update thumb position
+            float thumbPosition = (float)(Value - MinimumValue) / (float)(MaximumValue - MinimumValue) * SliderBar.Width - thumbSize / 2f;
+            ThumbRectangle = new((int)(SliderBar.X + thumbPosition), (int)(SliderBar.Y + (SliderBar.Height - thumbSize) / 2f), (int)thumbSize, (int)thumbSize);
 
             base.Update(gameTime);
         }
