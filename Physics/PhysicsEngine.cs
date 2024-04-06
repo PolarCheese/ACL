@@ -57,7 +57,7 @@ namespace ACL.Physics
 
         #region Physics Methods
         // Methods used for calculating physics, resolving collisions etc.
-        public void FixedUpdate(GameTime gameTime)
+        public void FixedUpdate(GameTime gameTime) // Repeats each cycle.
         {
             // Add pending physics objects.
             foreach (var Object in PendingObjects)
@@ -65,6 +65,13 @@ namespace ACL.Physics
                 PhysicsObjects.Add(Object);
             }
             PendingObjects.Clear();
+
+            // Remove unwanted physics objects.
+            foreach (var Object in RemovableObjects)
+            {
+                PhysicsObjects.Remove(Object);
+            }
+            RemovableObjects.Clear();
 
             // Update all object positions
             foreach (var Object in PhysicsObjects)
@@ -74,12 +81,8 @@ namespace ACL.Physics
                 }
             }
 
-            // Remove unwanted physics objects.
-            foreach (var Object in RemovableObjects)
-            {
-                PhysicsObjects.Remove(Object);
-            }
-            RemovableObjects.Clear();
+            // Calculate collisions
+            
         }
 
         public void Draw(SpriteFont font)

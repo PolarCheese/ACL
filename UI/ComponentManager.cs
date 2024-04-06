@@ -128,15 +128,6 @@ namespace ACL.UI
                 }
             }
             PendingAdditions.Clear();
-            
-            // Update active components.
-            foreach (var component in SubComponents)
-            {
-                if (component.ToUpdate)
-                {
-                    component.Update(gameTime);
-                }
-            }
 
             // Remove unwanted components.
             foreach (var component in PendingRemovals)
@@ -148,6 +139,15 @@ namespace ACL.UI
                 }
             }
             PendingRemovals.Clear();
+            
+            // Update active components.
+            foreach (var component in SubComponents)
+            {
+                if (component.ToUpdate)
+                {
+                    component.Update(gameTime);
+                }
+            }
 
             // Update cameras.
             foreach (Camera camera in Cameras)
@@ -161,6 +161,12 @@ namespace ACL.UI
                     }
                     camera.PendingAdditions.Clear();
 
+                    foreach (Component component in camera.PendingRemovals) // Remove unwanted subcomponents.
+                    {
+                        camera.SubComponents.Remove(component);
+                    }
+                    camera.PendingRemovals.Clear();
+
                     foreach (Component component in camera.SubComponents) // Update subcomponents
                     {
                         if (component.ToUpdate)
@@ -168,12 +174,6 @@ namespace ACL.UI
                             component.Update(gameTime);
                         }
                     }
-
-                    foreach (Component component in camera.PendingRemovals) // Remove unwanted subcomponents.
-                    {
-                        camera.SubComponents.Remove(component);
-                    }
-                    camera.PendingRemovals.Clear();
                 }
             }
         }
