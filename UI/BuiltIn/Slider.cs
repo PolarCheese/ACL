@@ -87,7 +87,7 @@ namespace ACL.UI.BuiltIn
             _previousCursor = Cursor;
             Cursor = Bound == null ? Game.Cursor : Bound.Cursor;
 
-            if (Cursor.Intersects(ThumbRectangle))
+            if (Cursor.Intersects(ThumbRectangle) || Cursor.Intersects(SliderBar))
             {
                 IsHovering = true;
 
@@ -99,16 +99,14 @@ namespace ACL.UI.BuiltIn
                     float RelativePercentage = MouseRelativeX / SliderLength;
                     float RelativeInterval = MaximumValue - MinimumValue;
                     float calcValue = (float)((float)RelativePercentage * (float)RelativeInterval + (float)MinimumValue); // result
+                    
+                    // Round calculated value
+                    if (RoundByNumber != 0) { calcValue = (float)Math.Ceiling(calcValue / RoundByNumber) * RoundByNumber; }
 
-                    // clamp value
+                    // Clamp value
                     if (MinimumValue > calcValue) { Value = MinimumValue; }
                     else if (calcValue > MaximumValue) { Value = MaximumValue; }
                     else { Value = calcValue; }
-                    if (RoundByNumber != 0)
-                    {
-                        // Round value
-                        Value = (float)Math.Ceiling(Value / RoundByNumber) * RoundByNumber;
-                    }
 
                     Click?.Invoke(this, new EventArgs());
                 }
