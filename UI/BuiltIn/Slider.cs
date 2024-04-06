@@ -35,7 +35,7 @@ namespace ACL.UI.BuiltIn
         public string? Text {get; set;} // Text
         public Color TextColor {get; set;} = Color.White;
         public Color TextHoverColor {get; set;} = new(200, 200, 200, 255);
-        public Vector2 TextPosition {get; set;} = Vector2.Zero;
+        public Vector2 TextPosition {get; set;} = new(1.25f, 0);
         public bool CenterTextY {get; set;} = true;
         public float TextScale {get; set;} = 1f;
         public SpriteFont? TextFont {get; set;}
@@ -131,6 +131,16 @@ namespace ACL.UI.BuiltIn
             Color StateColor;
             if (Locked) { StateColor = ThumbLockedColor; } else { StateColor = IsHovering ? ThumbHoverColor : ThumbColor; }
             spriteBatch.Draw(SliderTexture, ThumbRectangle, ThumbTextureSourceRectangle, StateColor, MathHelper.ToRadians(Rotation), new(0,0), SpriteEffects.None, 0.1f); // Draw bar
+
+            // Draw Value as test
+            if (!string.IsNullOrEmpty(Text) && TextFont != null)
+            {
+                var x = Position.X + Size.X * TextPosition.X;
+                var y = CenterTextY ? Position.Y + (Size.Y / 2) - (TextFont.MeasureString(Text).Y / 2f * TextScale) :
+                Position.Y + Size.Y * TextPosition.Y;
+                var textDrawColor = IsHovering ? TextHoverColor : TextColor;
+                spriteBatch.DrawString(TextFont, Text, new(x, y), textDrawColor, 0f, Vector2.Zero, TextScale, SpriteEffects.None, 0f);
+            }
 
             base.Draw(gameTime, spriteBatch);
         }
