@@ -132,7 +132,7 @@ namespace ACL.UI.BuiltIn
             if (Locked) { StateColor = ThumbLockedColor; } else { StateColor = IsHovering ? ThumbHoverColor : ThumbColor; }
             spriteBatch.Draw(SliderTexture, ThumbRectangle, ThumbTextureSourceRectangle, StateColor, MathHelper.ToRadians(Rotation), new(0,0), SpriteEffects.None, 0.1f); // Draw bar
 
-            // Draw Value as test
+            // Draw Value as text
             if (!string.IsNullOrEmpty(Text) && TextFont != null)
             {
                 var x = Position.X + Size.X * TextPosition.X;
