@@ -28,6 +28,33 @@ namespace ACL.IO
             if (File.Exists(GetGamePath(path))) { return true; }
             return false;
         }
+
+        public string ListFiles(string path) // Returns a string listing every file in a given path.
+        {
+            string List = string.Empty, gamePath = GetGamePath(path);
+            if (CheckDirectory(path)) // Check for directory.
+            {
+                foreach (var file in Directory.EnumerateFiles(gamePath))
+                {
+                    var shortFile = file.Split("/").Last();
+                    List += $"{shortFile} ";
+                }
+            }
+            return List;
+        }
+        public string ListAll(string path) // Returns a string listing every directory and file in a given path.
+        {
+            string List = string.Empty, gamePath = GetGamePath(path);
+            if (CheckDirectory(path)) // Check for directory.
+            {
+                foreach (string Entry in Directory.EnumerateFileSystemEntries(gamePath))
+                {
+                    var shortDir = Entry.Split("/").Last();
+                    List += $"{shortDir} ";
+                }
+            }
+            return List;
+        }
         #endregion
         #region Directories
         public void CreateDirectory(string path)
@@ -45,6 +72,19 @@ namespace ACL.IO
             // Check for a directory.
             if (Directory.Exists(GetGamePath(path))) { return true; }
             return false;
+        }
+        public string ListDirectories(string path) // Returns a string listing every directory in a given path.
+        {
+            string List = string.Empty, gamePath = GetGamePath(path);
+            if (CheckDirectory(path)) // Check for directory.
+            {
+                foreach (string directory in Directory.EnumerateDirectories(gamePath))
+                {
+                    var shortDir = directory.Split("/").Last();
+                    List += $"{shortDir} ";
+                }
+            }
+            return List;
         }
         #endregion
         #region JSON
