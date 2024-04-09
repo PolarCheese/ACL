@@ -95,13 +95,12 @@ namespace ACL.UI.BuiltIn
                 {
                     // Calculate value
                     float MouseRelativeX = Cursor.X - SliderBar.X;
-                    float SliderLength = SliderBar.Width; // end of the slider X RelativePosition
-                    float RelativePercentage = MouseRelativeX / SliderLength;
+                    float RelativePercentage = MouseRelativeX / SliderBar.Width;
                     float RelativeInterval = MaximumValue - MinimumValue;
                     float calcValue = (float)((float)RelativePercentage * (float)RelativeInterval + (float)MinimumValue); // result
                     
                     // Round calculated value
-                    if (RoundByNumber != 0) { calcValue = (float)Math.Ceiling(calcValue / RoundByNumber) * RoundByNumber; }
+                    if (RoundByNumber != 0 && calcValue > MinimumValue && calcValue < MaximumValue) { calcValue = (float)Math.Ceiling(calcValue / RoundByNumber) * RoundByNumber; }
 
                     // Clamp value
                     if (MinimumValue > calcValue) { Value = MinimumValue; }
