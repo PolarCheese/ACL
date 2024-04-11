@@ -157,17 +157,17 @@ namespace ACL.UI
                 if (camera.Enabled) {
                     foreach (Component component in camera.PendingAdditions) // Add subcomponents.
                     {
-                        camera.SubComponents.Add(component);
+                        camera.Subcomponents.Add(component);
                     }
                     camera.PendingAdditions.Clear();
 
                     foreach (Component component in camera.PendingRemovals) // Remove unwanted subcomponents.
                     {
-                        camera.SubComponents.Remove(component);
+                        camera.Subcomponents.Remove(component);
                     }
                     camera.PendingRemovals.Clear();
 
-                    foreach (Component component in camera.SubComponents) // Update subcomponents
+                    foreach (Component component in camera.Subcomponents) // Update subcomponents
                     {
                         if (component.ToUpdate)
                         {
@@ -199,7 +199,7 @@ namespace ACL.UI
             {
                 if (camera.Enabled) {
                     camera.Draw(); // Calculates the position before drawing. This is to avoid the camera "stuttering" behind the target's position.
-                    var SortedCameraComponents = camera.SubComponents.OrderBy(c => c.Depth);
+                    var SortedCameraComponents = camera.Subcomponents.OrderBy(c => c.Depth);
 
                     SpriteBatch.Begin(samplerState: Game.SpritebatchSamplerState, transformMatrix: camera.GetTransform());
                     foreach (var component in SortedCameraComponents)
@@ -237,7 +237,7 @@ namespace ACL.UI
             {
                 if (camera.AllowComponentResize)
                 {
-                    foreach(var component in camera.SubComponents)
+                    foreach(var component in camera.Subcomponents)
                     {
                         // Resize the component.
                         component.Position *= resizeVector; component.Size *= resizeVector;

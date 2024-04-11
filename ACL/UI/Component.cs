@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ACL.UI
 {
-    public abstract class Component
+    public abstract class Component : INode
     {
         public GameInstance Game;
 
@@ -15,7 +15,7 @@ namespace ACL.UI
 
         #region Properties
         public Component? Parent {get; set;}
-        public List<Component> Subcomponents {get;} = new List<Component>();
+        public List<Component> Subcomponents {get;} = new();
         public bool AllowResizing {get; set;} = true; // If true, the component manager will resize the component when the game window is resized.
         
         // If any of the bools below are true, the subcomponents of this component will change their properties relative to their parent component.
@@ -44,7 +44,15 @@ namespace ACL.UI
         #endregion
 
         #region Nodes
-        public void AddChildren(params Component[] Components)
+        public void AddSubcomponents(params Component[] Components)
+        {
+            foreach (var Child in Components)
+            {
+                Subcomponents.Add(Child);
+                Child.Parent = this;
+            }
+        }
+        public void AddSubcomponents(IEnumerable<Component> Components)
         {
             foreach (var Child in Components)
             {
@@ -53,7 +61,15 @@ namespace ACL.UI
             }
         }
 
-        public void RemoveChildren(params Component[] Components)
+        public void RemoveSubcomponents(params Component[] Components)
+        {
+            foreach (var Child in Components)
+            {
+                Subcomponents.Add(Child);
+                Child.Parent = null;
+            }
+        }
+        public void RemoveSubcomponents(IEnumerable<Component> Components)
         {
             foreach (var Child in Components)
             {

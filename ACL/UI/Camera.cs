@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ACL.UI
 {
-    public class Camera
+    public class Camera : INode
     {
         public GameInstance Game;
         protected ComponentManager ComponentManager => Game.ComponentManager;
@@ -13,10 +13,9 @@ namespace ACL.UI
         public Rectangle Cursor; // Cursor relative to the camera viewport
 
         // Subcomponents
-        public List<Component> SubComponents {get; set;} = new();
+        public List<Component> Subcomponents {get; set;} = new();
         public List<Component> PendingAdditions {get; set;} = new();
         internal List<Component> PendingRemovals {get; set;} = new();
-        
 
         #region Properties
         public bool Enabled {get; set;} = true;
