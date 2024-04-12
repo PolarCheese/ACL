@@ -1,6 +1,5 @@
 bin/
 obj/
-ACL.sln
 
 *.user
 *.vscode
@@ -9,3 +8,4 @@ ACL.sln
 *.dll
 *.pdb
 *.log
+*.sln
