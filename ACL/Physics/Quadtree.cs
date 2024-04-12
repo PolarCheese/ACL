@@ -24,7 +24,6 @@ namespace ACL.Physics
         #endregion
 
         #region Methods
-
         public void Insert(PhysicsComponent dynamicComponent) // Adds a dynamic component to the quadtree.
         {
             if (Nodes[0] != null) // Check for nodes.

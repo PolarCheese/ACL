@@ -14,7 +14,7 @@ namespace ACL.UI
             Game = GameInstance;
             UpdateWindowSize();
         }
-        protected List<Component> SubComponents {get; private set;} = new();
+        protected List<Component> Components {get; private set;} = new();
         protected List<Component> PendingAdditions {get; set;} = new();
         protected List<Component> PendingRemovals {get; set;} = new();
         public List<Camera> Cameras {get; set;} = new();
@@ -63,7 +63,7 @@ namespace ACL.UI
 
         public void Clear() // Completely clear ComponentManager of any components and cameras.
         {
-            SubComponents.Clear();
+            Components.Clear();
             PhysicsEngine.Clear(); // Remove remaining components in the physics engine.
             Cameras.Clear();
         }
@@ -121,7 +121,7 @@ namespace ACL.UI
             // Add pending components.
             foreach (var component in PendingAdditions)
             {
-                SubComponents.Add(component);
+                Components.Add(component);
                 if (component is PhysicsComponent PhysicsObject)
                 {
                     PhysicsEngine.AddComponent(PhysicsObject);
@@ -132,7 +132,7 @@ namespace ACL.UI
             // Remove unwanted components.
             foreach (var component in PendingRemovals)
             {
-                SubComponents.Remove(component);
+                Components.Remove(component);
                 if (component is PhysicsComponent PhysicsObject)
                 {
                     PhysicsEngine.RemoveComponent(PhysicsObject);
@@ -141,7 +141,7 @@ namespace ACL.UI
             PendingRemovals.Clear();
             
             // Update active components.
-            foreach (var component in SubComponents)
+            foreach (var component in Components)
             {
                 if (component.ToUpdate)
                 {
@@ -181,7 +181,7 @@ namespace ACL.UI
         public void Draw(GameTime gameTime) // Draw components.
         {   
             // Order components based off depth.
-            var SortedComponents = SubComponents.OrderBy(c => c.Depth);
+            var SortedComponents = Components.OrderBy(c => c.Depth);
 
             // Draw all components.
             SpriteBatch.Begin(samplerState: Game.SpritebatchSamplerState);
@@ -214,6 +214,7 @@ namespace ACL.UI
             }
         }
 
+        /// <summary> Resizes every component relative to the new game window size. </summary>
         public void Resize()
         {
             // Get the new Window Size.
@@ -223,7 +224,7 @@ namespace ACL.UI
             Vector2 resizeVector = new(xDifference, yDifference);
 
             // Resize components in the component manager.
-            foreach (var component in SubComponents)
+            foreach (var component in Components)
             {
                 if (component.AllowResizing)
                 {

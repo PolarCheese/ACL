@@ -8,13 +8,16 @@ namespace ACL.UI
         GameInstance Game;
         SpriteBatch SpriteBatch => Game.SpriteBatch;
         ComponentManager ComponentManager => Game.ComponentManager;
-        public List<Screen> LoadedScreens {get; private set;} = new List<Screen>();
+        public List<Screen> LoadedScreens {get; private set;} = new();
         public Screen? ActiveScreen;
         public ScreenManager(GameInstance CurrentGame)
         {
             Game = CurrentGame;
         }
 
+        /// <summary> Load a screen into the screen manager. </summary>
+        /// <param name="screen"> The screen that will be loaded. </param>
+        /// <param name="autoactivation"> Autoactivation. If true, the screen manager will set this screen as the active one. </param>
         public void LoadScreen(Screen screen, bool autoactivation = true)
         {
             // Set screen as loaded.
@@ -30,9 +33,12 @@ namespace ACL.UI
             // Check if the screen is set to automatically activate.
             if (autoactivation)
             {
-                SetCurrentScreen(screen);
+                SetActiveScreen(screen);
             }
         }
+
+        /// <summary> Unload a screen from the screen manager. </summary>
+        /// <param name="screen"> The screen that will be unloaded. </param>
         public void UnloadScreen(Screen screen)
         {
             // Check if the screen is loaded.
@@ -51,7 +57,10 @@ namespace ACL.UI
                 LoadedScreens.Remove(screen);
             }
         }
-        public void SetCurrentScreen(Screen screen)
+
+        /// <summary> Unload a screen from the screen manager. </summary>
+        /// <param name="screen"> The screen that will be unloaded. </param>
+        public void SetActiveScreen(Screen screen)
         {
             // Check if the screen is loaded and isn't already active.
             if (screen != null && LoadedScreens.Contains(screen) && ActiveScreen != screen)

@@ -3,7 +3,6 @@ using ACL.UI;
 namespace ACL;
 public interface INode
 {
-    
     public void AddSubcomponents(params Component[] Components);
 
     public void AddSubcomponents(IEnumerable<Component> Components);

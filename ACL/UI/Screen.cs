@@ -26,9 +26,14 @@ namespace ACL.UI
         {
             Game = CurrentGame;
         }
+        
+        /// <summary> Triggers when this screen is loaded. </summary>
         public virtual void OnLoad(){}
+        /// <summary> Triggers when this screen is unloaded. </summary>
         public virtual void OnUnload(){}
+        /// <summary> Triggers when this screen set as active. </summary>
         public virtual void OnActivation(){}
+        /// <summary> Triggers when this screen set as inactive. </summary>
         public virtual void OnUnactivation(){}
 
         public virtual void Update(GameTime gameTime){}
