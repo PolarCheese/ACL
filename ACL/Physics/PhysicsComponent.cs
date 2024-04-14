@@ -6,7 +6,7 @@ namespace ACL.Physics
     public abstract class PhysicsComponent : Component
     {
         // Physics
-        public PhysicsEngine PhysicsEngine => Game.PhysicsEngine;
+        public IPhysicsEngine PhysicsEngine => Game.PhysicsEngine;
         public bool PhysicsEnabled {get; set;} = true; // Tells the Physics Engine if object should have physics.
         public Environment? Environment { get; set; } // Physics object's environment.
         public List<Vector2> Forces {get; set;} = new(); // Forces applied specifically to this component.

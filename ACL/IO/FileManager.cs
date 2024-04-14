@@ -2,7 +2,7 @@ using System.Text.Json;
 
 namespace ACL.IO
 {
-    public class FileManager
+    public class FileManager : IFileManager
     {   
         public string GetGamePath(string name) => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, name);
 

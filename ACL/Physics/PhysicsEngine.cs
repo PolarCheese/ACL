@@ -5,11 +5,10 @@ using ACL.UI;
 
 namespace ACL.Physics
 {
-    public class PhysicsEngine
+    public class PhysicsEngine : IPhysicsEngine
     {
         readonly GameInstance Game;
         protected ComponentManager ComponentManager => Game.ComponentManager;
-        protected FileManager FileManager => Game.FileManager;
         protected SpriteBatch Spritebatch => Game.SpriteBatch;
 
         // Objects

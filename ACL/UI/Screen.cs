@@ -12,10 +12,10 @@ namespace ACL.UI
         public ContentManager Content => Game.Content;
         public GraphicsDevice GraphicsDevice => Game.GraphicsDevice;
         public GameServiceContainer Services => Game.Services;
-        public ScreenManager ScreenManager => Game.ScreenManager;
-        public FileManager FileManager => Game.FileManager;
         public ComponentManager ComponentManager => Game.ComponentManager;
-
+        public ScreenManager ScreenManager => Game.ScreenManager;
+        public IFileManager FileManager => Game.FileManager;
+        
         public List<Component> ScreenComponents {get; private set;} = new List<Component>();
         public void AddScreenComponents(params Component[] components)
         {

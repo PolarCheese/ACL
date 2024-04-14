@@ -8,7 +8,7 @@ namespace ACL.UI
     {
         public GameInstance Game;
         protected ComponentManager ComponentManager => Game.ComponentManager;
-        protected PhysicsEngine PhysicsEngine => Game.PhysicsEngine;
+        protected IPhysicsEngine PhysicsEngine => Game.PhysicsEngine;
         protected Viewport Viewport => Game.GraphicsDevice.Viewport; // Game viewport
         public Rectangle Cursor; // Cursor relative to the camera viewport
 

@@ -12,10 +12,10 @@ public class GameInstance : Game
     // Managers
     protected readonly GraphicsDeviceManager _graphics;
     protected internal SpriteBatch SpriteBatch {get; protected set;} = null!;
-    public FileManager FileManager {get; protected set;} = null!;
-    public ScreenManager ScreenManager {get; protected set;} = null!;
-    public ComponentManager ComponentManager {get; protected set;} = null!;
-    public PhysicsEngine PhysicsEngine {get; protected set;} = null!;
+    public ComponentManager ComponentManager {get; protected set;}
+    public ScreenManager ScreenManager {get; protected set;}
+    public IFileManager FileManager {get; protected set;}
+    public IPhysicsEngine PhysicsEngine {get; protected set;}
 
     // Properties
     public static Texture2D PlainTexture {get; protected set;} = null!; // 1x1 white pixel texture
@@ -29,14 +29,13 @@ public class GameInstance : Game
     // Cursor & Camera
     public Rectangle Cursor;
 
-
-    public GameInstance()
+    public GameInstance(IPhysicsEngine? physicsEngine, IFileManager? fileManager)
     {
         _graphics = new GraphicsDeviceManager(this);
-        FileManager = new FileManager();
-        ScreenManager = new ScreenManager(this);
         ComponentManager = new ComponentManager(this);
-        PhysicsEngine = new PhysicsEngine(this);
+        ScreenManager = new ScreenManager(this);
+        FileManager = fileManager ?? new FileManager();
+        PhysicsEngine = physicsEngine ?? new PhysicsEngine(this);
 
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
