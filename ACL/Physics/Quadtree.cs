@@ -6,8 +6,8 @@ namespace ACL.Physics
     public class QuadTree
     {
         #region Properties and Fields
-        private const int MaxComponentsPerNode = 4;
-        private const int MaxTreeDepth = 4;
+        readonly int MaxComponentsPerNode = 4;
+        readonly int MaxTreeDepth = 4;
 
         public int Depth;
         public Rectangle Bounds;
@@ -18,13 +18,13 @@ namespace ACL.Physics
         {
             Depth = depth;
             Bounds = bounds;
-            Objects = new List<PhysicsComponent>();
+            Objects = new();
             Nodes = new QuadTree[4]; // Parent quadtree nodes.
         }
         #endregion
 
         #region Methods
-        public void Insert(PhysicsComponent dynamicComponent) // Adds a dynamic component to the quadtree.
+        public void Insert(PhysicsComponent physicsComponent) // Adds a physics component to the quadtree.
         {
             if (Nodes[0] != null) // Check for nodes.
             {
@@ -32,12 +32,12 @@ namespace ACL.Physics
                 int index = GetIndex(hitbox); // Find where the hitbox fits.
                 if (index != -1)
                 {
-                    Nodes[index].Insert(dynamicComponent);
-                    Objects.Remove(dynamicComponent);
+                    Nodes[index].Insert(physicsComponent);
+                    Objects.Remove(physicsComponent);
                 }
             }
 
-            Objects.Add(dynamicComponent);
+            Objects.Add(physicsComponent);
 
             if (Objects.Count > MaxComponentsPerNode && Depth < MaxTreeDepth) 
             {
@@ -57,14 +57,14 @@ namespace ACL.Physics
             Nodes[2] = new QuadTree(Depth + 1, new Rectangle(x, y + subHeight, subWidth, subHeight)); //bottom-left
             Nodes[3] = new QuadTree(Depth + 1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight)); //bottom-right
 
-            foreach (PhysicsComponent dynamicComponent in Objects.ToList()) // Send the parent quadtree components to the nodes.
+            foreach (PhysicsComponent physicsComponent in Objects.ToList()) // Send the parent quadtree components to the nodes.
             {
                 var hitbox = new Rectangle(0, 0, 1, 1); // requires replacement
                 int index = GetIndex(hitbox);
                 if (index != -1)
                 {
-                    Nodes[index].Insert(dynamicComponent);
-                    Objects.Remove(dynamicComponent);
+                    Nodes[index].Insert(physicsComponent);
+                    Objects.Remove(physicsComponent);
                 }
             }
         }
@@ -94,7 +94,7 @@ namespace ACL.Physics
             bool topQuadrant = bounds.Y < horizontalMidpoint && bounds.Y + bounds.Height < horizontalMidpoint;
             bool bottomQuadrant = bounds.Y > horizontalMidpoint && bounds.Y + bounds.Height < MaxHeight;
 
-            if (bounds.X < verticalMidpoint && bounds.X + bounds.Width < verticalMidpoint) // Check if bounds are contained in the left.
+            if (bounds.X < verticalMidpoint && bounds.X + bounds.Width < verticalMidpoint) // if contained in the left.
             {
                 if (topQuadrant) // If top
                 {

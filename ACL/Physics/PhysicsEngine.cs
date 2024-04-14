@@ -18,14 +18,21 @@ namespace ACL.Physics
         protected List<PhysicsComponent> RemovableObjects = new(); // Objects that will be removed next Fixed Update call.
         private HashSet<int> CheckedPairs = new();
 
+        public QuadTree MainQuadTree {get; set;}
+
         // Properties
+        public uint MaxIterations = 4;
+        public uint RootQuadtreeSize = 2^32;
+        public bool DebugMode = false;
+
         public PhysicsEngine(GameInstance CurrentGame)
         {
             Game = CurrentGame;
+
+            int size = (int)RootQuadtreeSize;
+            MainQuadTree = new(0, new(-size/2, -size/2, size, size));
         }
 
-        #region Processing Methods
-        // Methods used for processing (Checking hash sets, grouping objects etc.)
         public void AddComponent(params PhysicsComponent[] Objects) // Add from list
         {
             foreach (var Object in Objects)
@@ -42,21 +49,31 @@ namespace ACL.Physics
             }
         }
 
-        public void Clear()
+        public void Clear() // Remove all objects
         {
             PhysicsObjects.Clear();
         }
 
-        int GetPairHash(PhysicsComponent objectA, PhysicsComponent objectB) // Get a hash value from a pair of Dynamic Components.
+        int GetPairHash(PhysicsComponent objectA, PhysicsComponent objectB) // Get a hash value from a pair of physics objects
         {
             // Generate a unique hash value for the object pair
             int hash = objectA.GetHashCode() ^ objectB.GetHashCode();
             return hash;
         }
-        #endregion
 
-        #region Physics Methods
-        // Methods used for calculating physics, resolving collisions etc.
+        private void CheckPair(PhysicsComponent objectA, PhysicsComponent objectB) // Check if a pair of objects was already checked
+        {
+            int pairHash = GetPairHash(objectA, objectB);
+            if (!CheckedPairs.Contains(pairHash))
+            {
+                // Check pair for collisions
+                BroadCollisionCheck(objectA, objectB);
+
+                // Mark hash as checked.
+                CheckedPairs.Add(pairHash);
+            }
+        }
+
         public void FixedUpdate(GameTime gameTime) // Repeats each cycle.
         {
             // Add pending physics objects.
@@ -87,15 +104,34 @@ namespace ACL.Physics
 
         public void Draw(SpriteFont font)
         {
-            // This method will be used for debugging later.
-
+            if (DebugMode)
+            {
+                // Draw Quadtrees
+                
+            }
         }
 
-        #endregion
+        private void BroadCollisionCheck(PhysicsComponent objectA, PhysicsComponent objectB) // AABB broad collision check
+        {
+            Rectangle BoundA = new((int)objectA.Position.X, (int)objectA.Position.Y, (int)objectA.Size.X, (int)objectA.Size.Y);
+            Rectangle BoundB = new((int)objectB.Position.X, (int)objectB.Position.Y, (int)objectB.Size.X, (int)objectB.Size.Y);
 
-        #region Texture Methods
-        // Methods used for procesing Texture data (Getting texture format type, converting to lines etc.)
+            if (BoundA.Intersects(BoundB))
+            {
+                // Do a precise collision check
+                bool Collision = PreciseCollisionCheck(objectA, objectB);
+                if (Collision) { ResolveCollision(); }
+            }
+        }
 
-        #endregion
+        private bool PreciseCollisionCheck(PhysicsComponent objectA, PhysicsComponent objectB) // Phase 2 of collision checking
+        {
+            return false;
+        }
+
+        private void ResolveCollision()
+        {
+            // ..
+        }
     }
 }
