@@ -14,8 +14,8 @@ public class GameInstance : Game
     protected internal SpriteBatch SpriteBatch {get; protected set;} = null!;
     public ComponentManager ComponentManager {get; protected set;}
     public ScreenManager ScreenManager {get; protected set;}
-    public IFileManager FileManager {get; protected set;}
-    public IPhysicsEngine PhysicsEngine {get; protected set;}
+    public IFileManager IFileManager {get; protected set;}
+    public IPhysicsEngine IPhysicsEngine {get; protected set;}
 
     // Properties
     public static Texture2D PlainTexture {get; protected set;} = null!; // 1x1 white pixel texture
@@ -29,13 +29,13 @@ public class GameInstance : Game
     // Cursor & Camera
     public Rectangle Cursor;
 
-    public GameInstance(IPhysicsEngine? physicsEngine, IFileManager? fileManager)
+    public GameInstance(IPhysicsEngine? physicsEngine = null, IFileManager? fileManager = null)
     {
         _graphics = new GraphicsDeviceManager(this);
         ComponentManager = new ComponentManager(this);
         ScreenManager = new ScreenManager(this);
-        FileManager = fileManager ?? new FileManager();
-        PhysicsEngine = physicsEngine ?? new PhysicsEngine(this);
+        IFileManager = fileManager ?? new FileManager();
+        IPhysicsEngine = physicsEngine ?? new PhysicsEngine(this);
 
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
@@ -95,7 +95,7 @@ public class GameInstance : Game
     protected virtual void FixedUpdate(GameTime gameTime) // Fixed update method
     {
         // This method is for calling the physics engine at a rate independent from the Update/Draw framerate.
-        PhysicsEngine.FixedUpdate(gameTime);
+        IPhysicsEngine.FixedUpdate(gameTime);
     }
 
     protected override void Draw(GameTime gameTime) // Draw method
