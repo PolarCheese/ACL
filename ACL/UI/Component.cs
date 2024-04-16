@@ -20,7 +20,6 @@ namespace ACL.UI
         
         // If any of the bools below are true, the subcomponents of this component will change their properties relative to their parent component.
         public bool PositionSubcomponents {get; set;} = true;
-        public bool ScaleSubcomponents {get; set;} = true;
         public bool RotateSubcomponents {get; set;} = true;
         
         public Camera? Bound {get; set;} = null; // If not null, component will take the cursor's position from the camera it is bound to.
@@ -48,16 +47,14 @@ namespace ACL.UI
         {
             foreach (var Child in Components)
             {
-                Subcomponents.Add(Child);
-                Child.Parent = this;
+                SubcomponentAddition(Child);
             }
         }
         public void AddSubcomponents(IEnumerable<Component> Components)
         {
             foreach (var Child in Components)
             {
-                Subcomponents.Add(Child);
-                Child.Parent = this;
+                SubcomponentAddition(Child);
             }
         }
 
@@ -65,18 +62,37 @@ namespace ACL.UI
         {
             foreach (var Child in Components)
             {
-                Subcomponents.Add(Child);
-                Child.Parent = null;
+                SubcomponentRemoval(Child);
             }
         }
         public void RemoveSubcomponents(IEnumerable<Component> Components)
         {
             foreach (var Child in Components)
             {
-                Subcomponents.Add(Child);
-                Child.Parent = null;
+                SubcomponentRemoval(Child);
             }
         }
+
+        protected void SubcomponentAddition(Component Subcomponent)
+        {
+            // Set node status
+            Subcomponents.Add(Subcomponent);
+            Subcomponent.Parent = this;
+
+            // Update Position/Rotation
+            if (PositionSubcomponents) { Subcomponent.Position += Position - Size*Origin; }
+            if (RotateSubcomponents) { Subcomponent.Rotation += Rotation; }
+        }
+        protected void SubcomponentRemoval(Component Subcomponent)
+        {
+            // Remove node status
+            Subcomponents.Add(Subcomponent);
+            Subcomponent.Parent = null;
+
+            // Update Position/Rotation
+            if (PositionSubcomponents) { Subcomponent.Position -= Position + Size*Origin; }
+            if (RotateSubcomponents) { Subcomponent.Rotation -= Rotation; }
+        } 
         #endregion
 
         #region Update/Draw
