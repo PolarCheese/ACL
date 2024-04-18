@@ -9,7 +9,7 @@ namespace ACL.UI.BuiltIn
         #region Properties
 
         // Background
-        public Color BackgroundColor {get; set;} = new(0, 0, 0, 255);
+        public Color BackgroundColor {get; set;} = Color.Black;
         public Texture2D BackgroundTexture {get; set;} = GameInstance.PlainTexture;
 
         // Outline/Inline
@@ -27,12 +27,10 @@ namespace ACL.UI.BuiltIn
         #endregion
 
         public Rectangle Body {get; set;}
-        public Rectangle Outline {get; set;}
 
         public Container(GameInstance game) : base(game)
         {
             Body = new();
-            Outline = new();
         }
 
         #region Methods
@@ -53,11 +51,31 @@ namespace ACL.UI.BuiltIn
                 if (OutlineSize > 0)
                 {
                     // Draw outline
-                    Outline = new(Body.X - OutlineSize/2, Body.Y - OutlineSize/2, Body.Width + OutlineSize, Body.Height + OutlineSize);
-                    spriteBatch.Draw(GameInstance.PlainTexture, Outline, OutlineColor);
+                    Rectangle TopOutline = new(Body.X - OutlineSize, Body.Y - OutlineSize, Body.Width + OutlineSize * 2, OutlineSize);
+                    Rectangle BottomOutline = new(Body.X - OutlineSize, Body.Y + Body.Height, Body.Width + OutlineSize * 2, OutlineSize);
+                    Rectangle LeftOutline = new(Body.X - OutlineSize, Body.Y, OutlineSize, Body.Height);
+                    Rectangle RightOutline = new(Body.X + Body.Width, Body.Y, OutlineSize, Body.Height);
+                    spriteBatch.Draw(GameInstance.PlainTexture, TopOutline, OutlineColor);
+                    spriteBatch.Draw(GameInstance.PlainTexture, BottomOutline, OutlineColor);
+                    spriteBatch.Draw(GameInstance.PlainTexture, LeftOutline, OutlineColor);
+                    spriteBatch.Draw(GameInstance.PlainTexture, RightOutline, OutlineColor);
                 }
+
                 // Draw body
                 spriteBatch.Draw(BackgroundTexture, Body, TextureSourceRectangle, BackgroundColor);
+
+                if (InlineSize > 0)
+                {
+                    // Draw inline
+                    Rectangle TopInline = new(Body.X, Body.Y, Body.Width, InlineSize);
+                    Rectangle BottomInline = new(Body.X, Body.Y + Body.Height - InlineSize, Body.Width, InlineSize);
+                    Rectangle LeftInline = new(Body.X, Body.Y + InlineSize, InlineSize, Body.Height -  InlineSize * 2);
+                    Rectangle RightInline = new(Body.X + Body.Width - InlineSize, Body.Y + InlineSize, InlineSize, Body.Height -  InlineSize * 2);
+                    spriteBatch.Draw(GameInstance.PlainTexture, TopInline, InlineColor);
+                    spriteBatch.Draw(GameInstance.PlainTexture, BottomInline, InlineColor);
+                    spriteBatch.Draw(GameInstance.PlainTexture, LeftInline, InlineColor);
+                    spriteBatch.Draw(GameInstance.PlainTexture, RightInline, InlineColor);
+                }
             }
             base.Draw(gameTime, spriteBatch);
         }
