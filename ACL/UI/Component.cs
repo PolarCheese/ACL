@@ -29,10 +29,10 @@ namespace ACL.UI
         public bool ToDraw {get; set;} = true;
 
         // Positioning, Size, Rotation and Depth
-        public Vector2 Origin {get; set;} = Vector2.Zero;
-        public Vector2 Position {get; set;} = Vector2.Zero;
-        public Vector2 Size {get; set;} = Vector2.Zero;
-        public float Rotation {get; set;} = 0f;
+        public Vector2 Origin {get; protected set;} = Vector2.Zero;
+        public Vector2 Position {get; protected set;} = Vector2.Zero;
+        public Vector2 Size {get; protected set;} = Vector2.Zero;
+        public float Rotation {get; protected set;} = 0f;
         public float Depth {get; set;} = 0f;
 
         // Cursor
@@ -86,12 +86,8 @@ namespace ACL.UI
         protected void SubcomponentRemoval(Component Subcomponent)
         {
             // Remove node status
-            Subcomponents.Add(Subcomponent);
+            Subcomponents.Remove(Subcomponent);
             Subcomponent.Parent = null;
-
-            // Update Position/Rotation
-            if (PositionSubcomponents) { Subcomponent.Position -= Position + Size*Origin; }
-            if (RotateSubcomponents) { Subcomponent.Rotation -= Rotation; }
         } 
         #endregion
 
@@ -123,6 +119,74 @@ namespace ACL.UI
                 }
             }
 
+        }
+        #endregion
+
+        #region Set methods
+
+        public void SetPosition(Vector2 NewPosition)
+        {
+            UpdateSubcomponentsPosition(NewPosition - Position); Position = NewPosition;
+        }
+        public void SetRotation(float NewRotation)
+        {
+            UpdateSubcomponentsRotation(NewRotation - Rotation); Rotation = NewRotation;
+        }
+        // Updating subcomponents after setting size and origin is not implemented yet.
+        public void SetSize(Vector2 NewSize) 
+        {
+            Size = NewSize;
+        }
+        public void SetOrigin(Vector2 NewOrigin)
+        {
+            Origin = NewOrigin; 
+        }
+        
+        protected void UpdateSubcomponentsPosition(Vector2 RelativePositionChange)
+        {
+            if (RotateSubcomponents)
+            {
+                foreach (Component Subcomponent in Subcomponents) { Subcomponent.Position += RelativePositionChange; }
+            }
+        }
+
+        protected void UpdateSubcomponentsRotation(float RelativeRotationChange)
+        {
+            if (RotateSubcomponents) 
+            {
+                foreach (Component Subcomponent in Subcomponents) { Subcomponent.Rotation += RelativeRotationChange; }
+            }
+        }
+
+        public void SetSubcomponentPositioning(bool Value = true)
+        {
+            if (PositionSubcomponents != Value)
+            {
+                if (Value)
+                {
+                    // Update subcomponents
+                }
+                else
+                {
+                    // Set back to initial state
+                }
+            }
+            PositionSubcomponents = Value;
+        }
+        public void SetSubcomponentRotating(bool Value = true)
+        {
+            if (RotateSubcomponents != Value)
+            {
+                if (Value)
+                {
+                    // Update subcomponents
+                }
+                else
+                {
+                    // Set back to initial state
+                }
+            }
+            RotateSubcomponents = Value;
         }
         #endregion
     }

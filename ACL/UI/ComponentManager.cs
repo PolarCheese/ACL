@@ -229,7 +229,7 @@ namespace ACL.UI
                 if (component.AllowResizing)
                 {
                     // Resize the component.
-                    component.Position *= resizeVector; component.Size *= resizeVector;
+                    component.SetPosition(component.Position * resizeVector); component.SetSize(component.Size * resizeVector);
                 }
             }
 
@@ -241,7 +241,7 @@ namespace ACL.UI
                     foreach(var component in camera.Subcomponents)
                     {
                         // Resize the component.
-                        component.Position *= resizeVector; component.Size *= resizeVector;
+                        component.SetPosition(component.Position * resizeVector); component.SetSize(component.Size * resizeVector);
                     }
                 }
             }
