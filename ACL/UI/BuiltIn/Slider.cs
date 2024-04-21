@@ -72,7 +72,7 @@ namespace ACL.UI.BuiltIn
         public override void Update(GameTime gameTime)
         {
             // Update rectangles
-            SliderBar = new((int)(Position.X - Size.X * Origin.X), (int)(Position.Y - Size.Y * Origin.Y), (int)Size.X, (int)Size.Y);
+            SliderBar = new((int)ActualPosition.X, (int)ActualPosition.Y, (int)Size.X, (int)Size.Y);
             float thumbSize = SliderBar.Height * 1.25f;
 
             BarTextureSourceRectangle = new((int)BarTextureSourcePosition.X, (int)BarTextureSourcePosition.Y, (int)BarTextureSourceSize.X, (int)BarTextureSourceSize.Y);
@@ -134,9 +134,9 @@ namespace ACL.UI.BuiltIn
             // Draw Value as text
             if (!string.IsNullOrEmpty(Text) && TextFont != null)
             {
-                var x = Position.X + Size.X * TextPosition.X;
-                var y = CenterTextY ? Position.Y + (Size.Y / 2) - (TextFont.MeasureString(Text).Y / 2f * TextScale) :
-                Position.Y + Size.Y * TextPosition.Y;
+                var x = ActualPosition.X + Size.X * TextPosition.X;
+                var y = CenterTextY ? ActualPosition.Y + (Size.Y / 2) - (TextFont.MeasureString(Text).Y / 2f * TextScale) :
+                ActualPosition.Y + Size.Y * TextPosition.Y;
                 var textDrawColor = IsHovering ? TextHoverColor : TextColor;
                 spriteBatch.DrawString(TextFont, Text, new(x, y), textDrawColor, 0f, Vector2.Zero, TextScale, SpriteEffects.None, 0f);
             }

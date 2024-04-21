@@ -54,7 +54,7 @@ namespace ACL.UI.BuiltIn
 
         public override void Update(GameTime gameTime)
         {
-            CheckboxRectangle = new((int)(Position.X - Size.X * Origin.X), (int)(Position.Y - Size.Y * Origin.Y), (int)Size.X, (int)Size.Y);
+            CheckboxRectangle = new((int)ActualPosition.X, (int)ActualPosition.Y, (int)Size.X, (int)Size.Y);
 
             _previousMouseState = MouseState;
             MouseState = Mouse.GetState();

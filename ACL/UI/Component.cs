@@ -17,10 +17,8 @@ namespace ACL.UI
         public Component? Parent {get; set;}
         public List<Component> Subcomponents {get;} = new();
         public bool AllowResizing {get; set;} = true; // If true, the component manager will resize the component when the game window is resized.
-        
-        // If any of the bools below are true, the subcomponents of this component will change their properties relative to their parent component.
-        public bool PositionSubcomponents {get; set;} = true;
-        public bool RotateSubcomponents {get; set;} = true;
+        public bool ApplyParentPosition {get; set;} = true; // If true, the component will position itself relative to the parent component.
+        public bool ApplyParentRotation {get; set;} = true; // If true, the component will rotate itself relative to the parent component.
         
         public Camera? Bound {get; set;} = null; // If not null, component will take the cursor's position from the camera it is bound to.
 
@@ -29,10 +27,47 @@ namespace ACL.UI
         public bool ToDraw {get; set;} = true;
 
         // Positioning, Size, Rotation and Depth
-        public Vector2 Origin {get; protected set;} = Vector2.Zero;
-        public Vector2 Position {get; protected set;} = Vector2.Zero;
-        public Vector2 Size {get; protected set;} = Vector2.Zero;
-        public float Rotation {get; protected set;} = 0f;
+        public Vector2 Origin {get; set;} = Vector2.Zero;
+        public Vector2 Position {get; set;} = Vector2.Zero;
+        public Vector2 ActualPosition 
+        {
+            get 
+            {
+                Vector2 ActualPosition;
+                if (Parent != null && ApplyParentPosition)
+                {
+                    // Calculate absolute position using parent absolute position.
+                    ActualPosition = Position + Parent.ActualPosition - Size * Origin;
+                }
+                else
+                {
+                    // No parent, calculate absolute position normally.
+                    ActualPosition = Position - Size * Origin;
+                }
+
+                return ActualPosition;
+            }
+        }
+        public Vector2 Size {get; set;} = Vector2.Zero;
+        public float Rotation {get; set;} = 0f;
+        public float ActualRotation 
+        {
+            get
+            {
+                float ActualRotation;
+                if (Parent != null && ApplyParentRotation)
+                {
+                    // Add parent rotation.
+                    ActualRotation = Rotation + Parent.ActualRotation;
+                }
+                else
+                {
+                    ActualRotation = Rotation;
+                }
+
+                return ActualRotation;
+            }
+        }
         public float Depth {get; set;} = 0f;
 
         // Cursor
@@ -78,10 +113,6 @@ namespace ACL.UI
             // Set node status
             Subcomponents.Add(Subcomponent);
             Subcomponent.Parent = this;
-
-            // Update Position/Rotation
-            if (PositionSubcomponents) { Subcomponent.Position += Position - Size*Origin; }
-            if (RotateSubcomponents) { Subcomponent.Rotation += Rotation; }
         }
         protected void SubcomponentRemoval(Component Subcomponent)
         {
@@ -119,74 +150,6 @@ namespace ACL.UI
                 }
             }
 
-        }
-        #endregion
-
-        #region Set methods
-
-        public void SetPosition(Vector2 NewPosition)
-        {
-            UpdateSubcomponentsPosition(NewPosition - Position); Position = NewPosition;
-        }
-        public void SetRotation(float NewRotation)
-        {
-            UpdateSubcomponentsRotation(NewRotation - Rotation); Rotation = NewRotation;
-        }
-        // Updating subcomponents after setting size and origin is not implemented yet.
-        public void SetSize(Vector2 NewSize) 
-        {
-            Size = NewSize;
-        }
-        public void SetOrigin(Vector2 NewOrigin)
-        {
-            Origin = NewOrigin; 
-        }
-        
-        protected void UpdateSubcomponentsPosition(Vector2 RelativePositionChange)
-        {
-            if (RotateSubcomponents)
-            {
-                foreach (Component Subcomponent in Subcomponents) { Subcomponent.Position += RelativePositionChange; }
-            }
-        }
-
-        protected void UpdateSubcomponentsRotation(float RelativeRotationChange)
-        {
-            if (RotateSubcomponents) 
-            {
-                foreach (Component Subcomponent in Subcomponents) { Subcomponent.Rotation += RelativeRotationChange; }
-            }
-        }
-
-        public void SetSubcomponentPositioning(bool Value = true)
-        {
-            if (PositionSubcomponents != Value)
-            {
-                if (Value)
-                {
-                    // Update subcomponents
-                }
-                else
-                {
-                    // Set back to initial state
-                }
-            }
-            PositionSubcomponents = Value;
-        }
-        public void SetSubcomponentRotating(bool Value = true)
-        {
-            if (RotateSubcomponents != Value)
-            {
-                if (Value)
-                {
-                    // Update subcomponents
-                }
-                else
-                {
-                    // Set back to initial state
-                }
-            }
-            RotateSubcomponents = Value;
         }
         #endregion
     }

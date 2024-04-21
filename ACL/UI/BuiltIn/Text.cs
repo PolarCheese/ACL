@@ -25,7 +25,7 @@ namespace ACL.UI.BuiltIn
             if (TextFont != null)
             {
                 // Center text to origin
-                Vector2 renderPosition = Position - TextFont.MeasureString(Content) * TextScale * Origin;
+                Vector2 renderPosition = ActualPosition - TextFont.MeasureString(Content) * TextScale * Origin;
 
                 spriteBatch.DrawString(TextFont, Content, renderPosition, TextColor, Rotation, Vector2.Zero, TextScale, SpriteEffects.None, 0);
             }
