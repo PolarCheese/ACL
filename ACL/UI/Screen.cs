@@ -14,7 +14,6 @@ namespace ACL.UI
         public GameServiceContainer Services => Game.Services;
         public ComponentManager ComponentManager => Game.ComponentManager;
         public ScreenManager ScreenManager => Game.ScreenManager;
-        public IFileManager IFileManager => Game.IFileManager;
         
         public List<Component> ScreenComponents {get; private set;} = new List<Component>();
         public void AddScreenComponents(params Component[] components)
