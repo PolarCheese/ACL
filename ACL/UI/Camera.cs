@@ -8,7 +8,7 @@ namespace ACL.UI
     {
         public GameInstance Game;
         protected ComponentManager ComponentManager => Game.ComponentManager;
-        protected IPhysicsEngine IPhysicsEngine => Game.IPhysicsEngine;
+        protected PhysicsEngine PhysicsEngine => Game.PhysicsEngine;
         protected Viewport Viewport => Game.GraphicsDevice.Viewport; // Game viewport
         public Rectangle Cursor; // Cursor relative to the camera viewport
 
@@ -43,7 +43,7 @@ namespace ACL.UI
                 PendingAdditions.Add(component);
                 if (component is PhysicsComponent PhysicsObject)
                 {
-                    IPhysicsEngine.AddComponent(PhysicsObject);
+                    PhysicsEngine.AddComponent(PhysicsObject);
                 }
             }
         }
@@ -55,7 +55,7 @@ namespace ACL.UI
                 PendingAdditions.Add(component);
                 if (component is PhysicsComponent PhysicsObject)
                 {
-                    IPhysicsEngine.AddComponent(PhysicsObject);
+                    PhysicsEngine.AddComponent(PhysicsObject);
                 }
             }
         }
@@ -69,7 +69,7 @@ namespace ACL.UI
                 PendingRemovals.Add(component);
                 if (component is PhysicsComponent PhysicsObject)
                 {
-                    IPhysicsEngine.RemoveComponent(PhysicsObject);
+                    PhysicsEngine.RemoveComponent(PhysicsObject);
                 }
             }
         }
@@ -81,7 +81,7 @@ namespace ACL.UI
                 PendingRemovals.Add(component);
                 if (component is PhysicsComponent PhysicsObject)
                 {
-                    IPhysicsEngine.RemoveComponent(PhysicsObject);
+                    PhysicsEngine.RemoveComponent(PhysicsObject);
                 }
             }
         }

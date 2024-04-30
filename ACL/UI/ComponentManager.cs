@@ -8,7 +8,7 @@ namespace ACL.UI
     {
         public GameInstance Game;
         protected SpriteBatch SpriteBatch => Game.SpriteBatch;
-        protected IPhysicsEngine IPhysicsEngine => Game.IPhysicsEngine;
+        protected PhysicsEngine IPhysicsEngine => Game.PhysicsEngine;
         public ComponentManager(GameInstance GameInstance)
         {
             Game = GameInstance;

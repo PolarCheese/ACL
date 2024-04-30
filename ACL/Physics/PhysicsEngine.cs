@@ -1,11 +1,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ACL.IO;
 using ACL.UI;
 
 namespace ACL.Physics
 {
-    public class PhysicsEngine : IPhysicsEngine
+    public class PhysicsEngine
     {
         readonly GameInstance Game;
         protected ComponentManager ComponentManager => Game.ComponentManager;
@@ -17,19 +16,20 @@ namespace ACL.Physics
         protected List<PhysicsComponent> RemovableObjects = new(); // Objects that will be removed next Fixed Update call.
         private HashSet<int> CheckedPairs = new();
 
-        public QuadTree MainQuadTree {get; set;}
+        public QuadTree? RootQuadTree {get; set;}
 
         // Properties
+        public int MaxComponentsPerNode = 4;
+        public int MaxTreeDepth = 4;
         public uint MaxIterations = 4;
-        public uint RootQuadtreeSize = 2^32;
+        public uint RootQuadtreeSize {get; protected set;} = 2^32;
+        public bool SkipPreciseCollisionStep = false;
         public bool DebugMode = false;
 
         public PhysicsEngine(GameInstance CurrentGame)
         {
             Game = CurrentGame;
-
-            int size = (int)RootQuadtreeSize;
-            MainQuadTree = new(0, new(-size/2, -size/2, size, size));
+            ResetRootQuadtree();
         }
 
         public void AddComponent(params PhysicsComponent[] Objects) // Add from list
@@ -103,10 +103,10 @@ namespace ACL.Physics
 
         public void Draw(SpriteFont font)
         {
-            if (DebugMode)
+            if (DebugMode && font != null && RootQuadTree != null)
             {
                 // Draw Quadtrees
-                
+                RootQuadTree.DrawDebug(Spritebatch, font);
             }
         }
 
@@ -117,9 +117,14 @@ namespace ACL.Physics
 
             if (BoundA.Intersects(BoundB))
             {
-                // Do a precise collision check
-                bool Collision = PreciseCollisionCheck(objectA, objectB);
-                if (Collision) { ResolveCollision(); }
+                // AABB Collsion !!
+                if (!SkipPreciseCollisionStep) {  }
+                else
+                {
+                    // Do a precise collision check
+                    bool Collision = PreciseCollisionCheck(objectA, objectB);
+                    if (Collision) { ResolveCollision(); }
+                }
             }
         }
 
@@ -131,6 +136,18 @@ namespace ACL.Physics
         private void ResolveCollision()
         {
             // ..
+        }
+
+        public void SetRootQuadtreeSize(uint size)
+        {
+            RootQuadtreeSize = size;
+            ResetRootQuadtree();
+        }
+
+        public void ResetRootQuadtree()
+        {
+            int size = (int)RootQuadtreeSize;
+            RootQuadTree = new(this, 0, new(-size/2, -size/2, size, size));
         }
     }
 }

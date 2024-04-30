@@ -5,17 +5,16 @@ namespace ACL.Physics
 {
     public class QuadTree
     {
+        public PhysicsEngine PhysicsEngine {get; set;}
         #region Properties and Fields
-        readonly int MaxComponentsPerNode = 4;
-        readonly int MaxTreeDepth = 4;
-
         public int Depth;
         public Rectangle Bounds;
         public List<PhysicsComponent> Objects;
         public QuadTree[] Nodes;
 
-        public QuadTree(int depth, Rectangle bounds)
+        public QuadTree(PhysicsEngine physicsEngine, int depth, Rectangle bounds)
         {
+            PhysicsEngine = physicsEngine;
             Depth = depth;
             Bounds = bounds;
             Objects = new();
@@ -39,7 +38,7 @@ namespace ACL.Physics
 
             Objects.Add(physicsComponent);
 
-            if (Objects.Count > MaxComponentsPerNode && Depth < MaxTreeDepth) 
+            if (Objects.Count > PhysicsEngine.MaxComponentsPerNode && Depth < PhysicsEngine.MaxTreeDepth) 
             {
                 Split(); // Limits reached, split this quadtree.
             }
@@ -52,10 +51,10 @@ namespace ACL.Physics
             int x = Bounds.X;
             int y = Bounds.Y;
 
-            Nodes[0] = new QuadTree(Depth + 1, new Rectangle(x, y, subWidth, subHeight)); //top-left
-            Nodes[1] = new QuadTree(Depth + 1, new Rectangle(x + subWidth, y, subWidth, subHeight)); //top-right
-            Nodes[2] = new QuadTree(Depth + 1, new Rectangle(x, y + subHeight, subWidth, subHeight)); //bottom-left
-            Nodes[3] = new QuadTree(Depth + 1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight)); //bottom-right
+            Nodes[0] = new QuadTree(PhysicsEngine, Depth + 1, new Rectangle(x, y, subWidth, subHeight)); //top-left
+            Nodes[1] = new QuadTree(PhysicsEngine, Depth + 1, new Rectangle(x + subWidth, y, subWidth, subHeight)); //top-right
+            Nodes[2] = new QuadTree(PhysicsEngine, Depth + 1, new Rectangle(x, y + subHeight, subWidth, subHeight)); //bottom-left
+            Nodes[3] = new QuadTree(PhysicsEngine, Depth + 1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight)); //bottom-right
 
             foreach (PhysicsComponent physicsComponent in Objects.ToList()) // Send the parent quadtree components to the nodes.
             {
@@ -71,7 +70,7 @@ namespace ACL.Physics
 
         public List<PhysicsComponent> Retrieve(Rectangle bounds) // Get all the objects inside of a quadtree space, even if its part of a smaller quadtree.
         {
-            List<PhysicsComponent> result = new List<PhysicsComponent>();
+            List<PhysicsComponent> result = new();
             int index = GetIndex(bounds);
 
             if (index != -1 && Nodes[0] != null)
@@ -131,16 +130,15 @@ namespace ACL.Physics
             spriteBatch.Draw(GameInstance.PlainTexture, Bounds, Color.White);
             spriteBatch.Draw(GameInstance.PlainTexture, new Rectangle(Bounds.X + 1, Bounds.Y + 1, Bounds.Width - 2, Bounds.Height - 2), Color.Black);
 
-            // Print properties of this node.
             if (Nodes[0] == null)
             {
+                // Print properties of this node.
                 string properties = $"Depth: {Depth}{System.Environment.NewLine}Obj-Count: {Objects.Count}{System.Environment.NewLine}";
                 spriteBatch.DrawString(font, properties, new Vector2(Bounds.X + 5, Bounds.Y + 5), Color.White);
             }
-
-            // Recursively draw and print children nodes.
-            if (Nodes[0] != null)
+            else
             {
+                // Recursively draw and print children nodes.
                 foreach (QuadTree node in Nodes)
                 {
                     node.DrawDebug(spriteBatch, font);
