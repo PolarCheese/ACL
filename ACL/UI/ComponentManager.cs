@@ -8,7 +8,7 @@ namespace ACL.UI
     {
         public GameInstance Game;
         protected SpriteBatch SpriteBatch => Game.SpriteBatch;
-        protected PhysicsEngine IPhysicsEngine => Game.PhysicsEngine;
+        protected PhysicsEngine PhysicsEngine => Game.PhysicsEngine;
         public ComponentManager(GameInstance GameInstance)
         {
             Game = GameInstance;
@@ -64,7 +64,7 @@ namespace ACL.UI
         public void Clear() // Completely clear ComponentManager of any components and cameras.
         {
             Components.Clear();
-            IPhysicsEngine.Clear(); // Remove remaining components in the physics engine.
+            PhysicsEngine.Clear(); // Remove remaining components in the physics engine.
             Cameras.Clear();
         }
         #endregion
@@ -124,7 +124,7 @@ namespace ACL.UI
                 Components.Add(component);
                 if (component is PhysicsComponent PhysicsObject)
                 {
-                    IPhysicsEngine.AddComponent(PhysicsObject);
+                    PhysicsEngine.AddComponent(PhysicsObject);
                 }
             }
             PendingAdditions.Clear();
@@ -135,7 +135,7 @@ namespace ACL.UI
                 Components.Remove(component);
                 if (component is PhysicsComponent PhysicsObject)
                 {
-                    IPhysicsEngine.RemoveComponent(PhysicsObject);
+                    PhysicsEngine.RemoveComponent(PhysicsObject);
                 }
             }
             PendingRemovals.Clear();

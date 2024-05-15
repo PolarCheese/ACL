@@ -10,26 +10,30 @@ namespace ACL.Physics
         protected ComponentManager ComponentManager => Game.ComponentManager;
         protected SpriteBatch Spritebatch => Game.SpriteBatch;
 
+        // Debug
+        public bool DebugMode = false;
+        public SpriteFont? DebugFont {get; set;}
+        public Camera? DebugCamera {get; set;}
+
         // Objects
         protected List<PhysicsComponent> PhysicsObjects = new(); // Objects currently updated by the physics engine.
         protected List<PhysicsComponent> PendingObjects = new(); // Objects that will be added next Fixed Update call.
         protected List<PhysicsComponent> RemovableObjects = new(); // Objects that will be removed next Fixed Update call.
         private HashSet<int> CheckedPairs = new();
 
-        public QuadTree? RootQuadTree {get; set;}
+        public QuadTree RootQuadTree {get; set;}
 
         // Properties
         public int MaxComponentsPerNode = 4;
         public int MaxTreeDepth = 4;
-        public uint MaxIterations = 4;
-        public uint RootQuadtreeSize {get; protected set;} = 2^32;
+        public int MaxIterations = 4;
+        public int RootQuadtreeSize = (int)Math.Pow(2, 32);
         public bool SkipPreciseCollisionStep = false;
-        public bool DebugMode = false;
 
         public PhysicsEngine(GameInstance CurrentGame)
         {
             Game = CurrentGame;
-            ResetRootQuadtree();
+            RootQuadTree = new(this, 0, CreateRootQuadtreeBounds());
         }
 
         public void AddComponent(params PhysicsComponent[] Objects) // Add from list
@@ -75,6 +79,10 @@ namespace ACL.Physics
 
         public void FixedUpdate(GameTime gameTime) // Repeats each cycle.
         {
+            // Redo quadtree
+            RootQuadTree.Clear();
+            RootQuadTree.Bounds = CreateRootQuadtreeBounds();
+
             // Add pending physics objects.
             foreach (var Object in PendingObjects)
             {
@@ -94,19 +102,24 @@ namespace ACL.Physics
             {
                 if (Object.PhysicsEnabled) {
                     Object.FixedUpdate();
+                    RootQuadTree.Insert(Object);
                 }
             }
 
+            // Clear checked pairs
+            CheckedPairs.Clear();
             // Calculate collisions
             
         }
 
-        public void Draw(SpriteFont font)
+        public void Draw()
         {
-            if (DebugMode && font != null && RootQuadTree != null)
+            if (DebugCamera != null && DebugFont != null && RootQuadTree != null)
             {
                 // Draw Quadtrees
-                RootQuadTree.DrawDebug(Spritebatch, font);
+                Spritebatch.Begin(samplerState: Game.SpritebatchSamplerState, transformMatrix: DebugCamera.GetTransform());
+                RootQuadTree.Draw(Spritebatch, DebugFont);
+                Spritebatch.End();
             }
         }
 
@@ -138,16 +151,10 @@ namespace ACL.Physics
             // ..
         }
 
-        public void SetRootQuadtreeSize(uint size)
+        private Rectangle CreateRootQuadtreeBounds()
         {
-            RootQuadtreeSize = size;
-            ResetRootQuadtree();
-        }
-
-        public void ResetRootQuadtree()
-        {
-            int size = (int)RootQuadtreeSize;
-            RootQuadTree = new(this, 0, new(-size/2, -size/2, size, size));
+            int size = RootQuadtreeSize;
+            return new(-size/2, -size/2, size, size);
         }
     }
 }

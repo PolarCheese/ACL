@@ -1,3 +1,4 @@
+using ACL.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -58,7 +59,7 @@ namespace ACL.Physics
 
             foreach (PhysicsComponent physicsComponent in Objects.ToList()) // Send the parent quadtree components to the nodes.
             {
-                var hitbox = new Rectangle(0, 0, 1, 1); // requires replacement
+                var hitbox = new Rectangle((int)physicsComponent.ActualPosition.X, (int)physicsComponent.ActualPosition.Y, (int)physicsComponent.Size.X, (int)physicsComponent.Size.Y); // requires replacement
                 int index = GetIndex(hitbox);
                 if (index != -1)
                 {
@@ -123,12 +124,10 @@ namespace ACL.Physics
         {
             Objects.Clear();
         }
-
-        public void DrawDebug(SpriteBatch spriteBatch, SpriteFont font) // Method used for Debugging
+        public void Draw(SpriteBatch spriteBatch, SpriteFont font) // Method used for Debugging
         {
             // Draw boundaries of this node.
-            spriteBatch.Draw(GameInstance.PlainTexture, Bounds, Color.White);
-            spriteBatch.Draw(GameInstance.PlainTexture, new Rectangle(Bounds.X + 1, Bounds.Y + 1, Bounds.Width - 2, Bounds.Height - 2), Color.Black);
+            spriteBatch.Draw(GameInstance.PlainTexture, Bounds, new(0, 63, 0, 32));
 
             if (Nodes[0] == null)
             {
@@ -141,7 +140,7 @@ namespace ACL.Physics
                 // Recursively draw and print children nodes.
                 foreach (QuadTree node in Nodes)
                 {
-                    node.DrawDebug(spriteBatch, font);
+                    node.Draw(spriteBatch, font);
                 }
             }
         }
