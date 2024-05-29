@@ -9,11 +9,7 @@ namespace ACL.Physics
         readonly GameInstance Game;
         protected ComponentManager ComponentManager => Game.ComponentManager;
         protected SpriteBatch Spritebatch => Game.SpriteBatch;
-
-        // Debug
-        public bool DebugMode = false;
-        public SpriteFont? DebugFont {get; set;}
-        public Camera? DebugCamera {get; set;}
+        public QuadTree RootQuadTree {get; set;}
 
         // Objects
         protected List<PhysicsComponent> PhysicsObjects = new(); // Objects currently updated by the physics engine.
@@ -21,21 +17,21 @@ namespace ACL.Physics
         protected List<PhysicsComponent> RemovableObjects = new(); // Objects that will be removed next Fixed Update call.
         private HashSet<int> CheckedPairs = new();
 
-        public QuadTree RootQuadTree {get; set;}
-
         // Properties
-        public int MaxComponentsPerNode = 4;
-        public int MaxTreeDepth = 4;
-        public int MaxIterations = 4;
-        public int RootQuadtreeSize = (int)Math.Pow(2, 32);
+        public int Quadtree_Size = (int)Math.Pow(2, 12);
         public bool SkipPreciseCollisionStep = false;
+
+        public bool DebugMode = false;
+        public Camera? DebugCamera;
+        public SpriteFont? DebugFont {get; set;}
 
         public PhysicsEngine(GameInstance CurrentGame)
         {
             Game = CurrentGame;
-            RootQuadTree = new(this, 0, CreateRootQuadtreeBounds());
+            RootQuadTree = new(0, CreateQuadtreeBounds(Quadtree_Size));
         }
 
+        #region Component methods
         public void AddComponent(params PhysicsComponent[] Objects) // Add from list
         {
             foreach (var Object in Objects)
@@ -56,6 +52,10 @@ namespace ACL.Physics
         {
             PhysicsObjects.Clear();
         }
+
+        #endregion
+
+        #region Physics methods
 
         int GetPairHash(PhysicsComponent objectA, PhysicsComponent objectB) // Get a hash value from a pair of physics objects
         {
@@ -81,7 +81,7 @@ namespace ACL.Physics
         {
             // Redo quadtree
             RootQuadTree.Clear();
-            RootQuadTree.Bounds = CreateRootQuadtreeBounds();
+            RootQuadTree.Bounds = CreateQuadtreeBounds(Quadtree_Size);
 
             // Add pending physics objects.
             foreach (var Object in PendingObjects)
@@ -108,7 +108,8 @@ namespace ACL.Physics
 
             // Clear checked pairs
             CheckedPairs.Clear();
-            // Calculate collisions
+
+            // Check for collisions
             
         }
 
@@ -123,7 +124,7 @@ namespace ACL.Physics
             }
         }
 
-        private void BroadCollisionCheck(PhysicsComponent objectA, PhysicsComponent objectB) // AABB broad collision check
+        private void BroadCollisionCheck(PhysicsComponent objectA, PhysicsComponent objectB) // AABB
         {
             Rectangle BoundA = new((int)objectA.Position.X, (int)objectA.Position.Y, (int)objectA.Size.X, (int)objectA.Size.Y);
             Rectangle BoundB = new((int)objectB.Position.X, (int)objectB.Position.Y, (int)objectB.Size.X, (int)objectB.Size.Y);
@@ -141,7 +142,7 @@ namespace ACL.Physics
             }
         }
 
-        private bool PreciseCollisionCheck(PhysicsComponent objectA, PhysicsComponent objectB) // Phase 2 of collision checking
+        private bool PreciseCollisionCheck(PhysicsComponent objectA, PhysicsComponent objectB)
         {
             return false;
         }
@@ -150,11 +151,24 @@ namespace ACL.Physics
         {
             // ..
         }
+        #endregion
 
-        private Rectangle CreateRootQuadtreeBounds()
+        #region Quadtree methods
+
+        private Rectangle CreateQuadtreeBounds(int size)
         {
-            int size = RootQuadtreeSize;
             return new(-size/2, -size/2, size, size);
         }
+
+        public void Quadtree_SetMaxObjects(int maxObjects)
+        {
+            RootQuadTree.MaxComponents = maxObjects > 0 ? maxObjects : 1;
+        }
+
+        public void Quadtree_SetMaxDepth(int maxDepth)
+        {
+            RootQuadTree.MaxTreeDepth = maxDepth;
+        }
+        #endregion
     }
 }

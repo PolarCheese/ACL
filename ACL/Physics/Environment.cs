@@ -1,4 +1,3 @@
-using ACL;
 using Microsoft.Xna.Framework;
 
 namespace ACL.Physics

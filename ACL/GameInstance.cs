@@ -101,7 +101,7 @@ public class GameInstance : Game
         base.Draw(gameTime);
         ScreenManager.Draw(gameTime);
         ComponentManager.Draw(gameTime);
-        PhysicsEngine.Draw();
+        if (PhysicsEngine.DebugMode) PhysicsEngine.Draw();
     }
 
     /// <summary> Triggers whenever the game window is resized by the user. </summary>
