@@ -70,17 +70,20 @@ namespace ACL.Physics
             foreach (QuadTree Q in Nodes) { Q.MaxComponents = MaxComponents; Q.MaxTreeDepth = MaxTreeDepth; } 
         }
 
-        public void Retrieve(List<PhysicsComponent> returnedObjs, PhysicsComponent Obj) // Get objects that could collide with an object.
-        {
+        public void Retrieve(List<PhysicsComponent> ReturnList, PhysicsComponent Obj) // Get objects that could collide with an object.
+        {   
+            foreach (PhysicsComponent quadtreeObj in Objects) if (quadtreeObj != Obj) ReturnList.Add(quadtreeObj); // Get objects in this quadtree except Obj
+
+            // Go through other nodes if present.
             if (Nodes[0] != null)
             {
                 var index = GetIndex(Obj);
-                if (index != -1) Nodes[index].Retrieve(returnedObjs, Obj);
-                else
+                if (index != -1) Nodes[index].Retrieve(ReturnList, Obj); // Object is only in 1 split of the quadtree
+                else // Object belongs to multiple splits
                 {
                     for (int i = 0; i < Nodes.Length; i++)
                     {
-                        Nodes[i].Retrieve(returnedObjs, Obj);
+                        Nodes[i].Retrieve(ReturnList, Obj);
                     }
                 }
             }
