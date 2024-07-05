@@ -57,10 +57,10 @@ namespace ACL.Physics
 
         #region Physics methods
 
-        int GetPairHash(PhysicsComponent objectA, PhysicsComponent objectB) // Get a hash value from a pair of physics objects
+        int GetPairHash(PhysicsComponent objectA, PhysicsComponent objectB) // Generate a unique hash value for an object pair
         {
-            // Generate a unique hash value for the object pair
-            int hash = objectA.GetHashCode() ^ objectB.GetHashCode();
+            int hashA = objectA.GetHashCode(); int hashB = objectB.GetHashCode();
+            int hash = hashA > hashB ? hashA + hashB * 17 : hashB + hashA * 17;
             return hash;
         }
 
@@ -74,6 +74,22 @@ namespace ACL.Physics
 
                 // Mark hash as checked.
                 CheckedPairs.Add(pairHash);
+            }
+        }
+
+        private void CheckQuadtreeNode(QuadTree Node)
+        {
+            List<PhysicsComponent> objs = new(); // List used to retrieve objects from node
+            foreach (PhysicsComponent objA in Node.Objects)
+            {
+                Node.Retrieve(objs, objA); // Retrieve all objects that could collide with this one
+                foreach(PhysicsComponent objB in objs)
+                {
+                    // Check for collision
+                    CheckPair(objA, objB);
+                    //Debug.WriteLine($"Checking quadtree pair {GetPairHash(objA, objB)} (depth {Node.Depth} | {Node.Objects.Count} objects )");
+                }
+                objs.Clear();
             }
         }
 
@@ -110,7 +126,7 @@ namespace ACL.Physics
             CheckedPairs.Clear();
 
             // Check for collisions
-            
+            CheckQuadtreeNode(RootQuadTree);
         }
 
         public void Draw()
@@ -132,6 +148,10 @@ namespace ACL.Physics
             if (BoundA.Intersects(BoundB))
             {
                 // AABB Collsion !!
+                // Debug.WriteLine("AABB at: {0} <A-B> {1}", objectA.ActualPosition, objectB.ActualPosition);
+                ResolveCollision(objectA, objectB);
+
+                /*
                 if (!SkipPreciseCollisionStep) {  }
                 else
                 {
@@ -139,15 +159,13 @@ namespace ACL.Physics
                     bool Collision = PreciseCollisionCheck(objectA, objectB);
                     if (Collision) { ResolveCollision(); }
                 }
+                */
             }
         }
 
-        private bool PreciseCollisionCheck(PhysicsComponent objectA, PhysicsComponent objectB)
-        {
-            return false;
-        }
+        //private bool PreciseCollisionCheck(PhysicsComponent objectA, PhysicsComponent objectB) { return false; }
 
-        private void ResolveCollision()
+        private void ResolveCollision(PhysicsComponent objectA, PhysicsComponent objectB)
         {
             // ..
         }
