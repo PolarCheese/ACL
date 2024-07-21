@@ -14,7 +14,7 @@ namespace ACL.UI.BuiltIn
 
         #region Properties
 
-        public event EventHandler Click = null!;
+        public event EventHandler? Click;
         public bool Locked { get; set;} = false;
 
         // Appearence
