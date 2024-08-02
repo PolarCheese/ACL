@@ -1,10 +1,8 @@
 using Microsoft.Xna.Framework;
 
-namespace ACL.Physics
+namespace ACL.Physics;
+public class Environment 
 {
-    public class Environment 
-    {
-        public List<PhysicsComponent> Subcomponents {get; set;} = new();
-        public List<Vector2> Forces {get; set;} = new();
-    }
+    public List<PhysicsComponent> Subcomponents {get; set;} = new();
+    public List<Vector2> Forces {get; set;} = new();
 }
