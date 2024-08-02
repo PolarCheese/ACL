@@ -126,11 +126,11 @@ public class PhysicsEngine
     private void BroadCollisionCheck(PhysicsComponent objectA, PhysicsComponent objectB) // AABB
     {
         Vector2[] aPoints = Collisions.GetRectangleVertices(objectA); Vector2[] bPoints = Collisions.GetRectangleVertices(objectB); // Fetch corners from both objects
-        
-        // SAT
-
-
-        ResolveCollision(objectA, objectB);
+        if(Collisions.IntersectPolygons(aPoints, bPoints))
+        {
+            System.Diagnostics.Debug.WriteLine("Polygons intersected.");
+            ResolveCollision(objectA, objectB);
+        }
     }
 
     private void ResolveCollision(PhysicsComponent objectA, PhysicsComponent objectB)
