@@ -69,7 +69,6 @@ public class ComponentManager
     #endregion
 
     #region Manage Methods
-
     // Methods for disabling Update+Draw for components.
     public void DisableComponents(params Component[] Components)
     {

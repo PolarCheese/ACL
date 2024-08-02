@@ -56,6 +56,7 @@ public static class IOManager
         return List;
     }
     #endregion
+
     #region Directories
     public static void CreateDirectory(string path)
     {
@@ -87,6 +88,7 @@ public static class IOManager
         return List;
     }
     #endregion
+    
     #region JSON
     // JSON Serializer
     public static readonly JsonSerializerOptions DefaultOptions = new()

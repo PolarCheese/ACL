@@ -7,11 +7,9 @@ public class Slider : Component
 {
     #region Fields
     public bool IsHovering {get; protected set;}
-
     #endregion
 
     #region Properties
-
     public event EventHandler? Click;
     public bool Locked {get; set;} = false;
 
@@ -55,12 +53,10 @@ public class Slider : Component
     Rectangle EdgeRTextureSourceRectangle {get; set;} // Right Edge
     public Vector2 EdgeRTextureSourcePosition {get; set;} = Vector2.Zero;
     public Vector2 EdgeRTextureSourceSize {get; set;} = Vector2.One;
-
     #endregion
 
     public Rectangle SliderBar {get; set;}
     public Rectangle ThumbRectangle {get; set;}
-
         
     public Slider(GameInstance game) : base(game)
     {
@@ -68,6 +64,7 @@ public class Slider : Component
         ThumbRectangle = new();
     }
 
+    #region Methods
     public override void Update(GameTime gameTime)
     {
         // Update rectangles
@@ -142,4 +139,5 @@ public class Slider : Component
 
         base.Draw(gameTime, spriteBatch);
     }
+    #endregion
 }

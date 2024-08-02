@@ -6,13 +6,10 @@ namespace ACL.UI.BuiltIn;
 public class Button : Component
 {
     #region Fields
-
     public bool IsHovering { get; protected set; }
-
     #endregion
 
     #region Properties
-
     public event EventHandler? Click;
     public bool Locked { get; set;} = false;
 
@@ -33,7 +30,6 @@ public class Button : Component
     Rectangle TextureSourceRectangle {get; set;}
     public Vector2 TextureSourcePosition {get; set;} = Vector2.Zero;
     public Vector2 TextureSourceSize {get; set;} = Vector2.One;
-
     #endregion
 
     public Rectangle ButtonRectangle {get; set;}
@@ -45,7 +41,6 @@ public class Button : Component
     }
 
     #region Methods
-
     public override void Update(GameTime gameTime)
     {
         ButtonRectangle = new((int)ActualPosition.X, (int)ActualPosition.Y, (int)Size.X, (int)Size.Y);

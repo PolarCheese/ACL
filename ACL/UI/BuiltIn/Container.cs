@@ -5,7 +5,6 @@ namespace ACL.UI.BuiltIn;
 public class Container : Component
 {
     #region Properties
-
     // Background
     public Color BackgroundColor {get; set;} = Color.Black;
     public Texture2D BackgroundTexture {get; set;} = GameInstance.PlainTexture;
@@ -21,7 +20,6 @@ public class Container : Component
     Rectangle TextureSourceRectangle {get; set;}
     public Vector2 TextureSourcePosition {get; set;} = Vector2.Zero;
     public Vector2 TextureSourceSize {get; set;} = Vector2.One;
-
     #endregion
 
     public Rectangle Body {get; set;}
@@ -32,7 +30,6 @@ public class Container : Component
     }
 
     #region Methods
-
     public override void Update(GameTime gameTime)
     {
         Body = new((int)ActualPosition.X, (int)ActualPosition.Y, (int)Size.X, (int)Size.Y);

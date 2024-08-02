@@ -6,13 +6,10 @@ namespace ACL.UI.BuiltIn;
 public class Checkbox : Component
 {
     #region Fields
-
     public bool IsHovering { get; protected set; }
-
     #endregion
 
     #region Properties
-
     public event EventHandler? Click;
     public bool Value {get; set;} = false;
     public bool Locked { get; set;} = false;
@@ -38,7 +35,6 @@ public class Checkbox : Component
     public Vector2 TextureOffSourceSize {get; set;} = new(.5f, .5f);
     public Vector2 TextureOnSourcePosition {get; set;} = new(.5f, 0f);
     public Vector2 TextureOnSourceSize {get; set;} = new(.5f, .5f);
-
     #endregion
 
     public Rectangle CheckboxRectangle {get; set;}
@@ -50,7 +46,6 @@ public class Checkbox : Component
     }
 
     #region Methods
-
     public override void Update(GameTime gameTime)
     {
         CheckboxRectangle = new((int)ActualPosition.X, (int)ActualPosition.Y, (int)Size.X, (int)Size.Y);

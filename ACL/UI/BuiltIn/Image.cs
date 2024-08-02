@@ -3,9 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ACL.UI.BuiltIn;
 public class Image : Component
-    {
+{
     #region Properties
-
     // Image
     public Color ImageColor {get; set;} = Color.White;
     public Color ImageBackgroundColor {get; set;} // If the image is transparent, this will be the color shown behind.
@@ -22,7 +21,6 @@ public class Image : Component
     Rectangle TextureSourceRectangle {get; set;}
     public Vector2 TextureSourcePosition {get; set;} = Vector2.Zero;
     public Vector2 TextureSourceSize {get; set;} = Vector2.One;
-
     #endregion
 
     public Rectangle ImageBounds {get; set;}
@@ -34,7 +32,6 @@ public class Image : Component
     }
 
     #region Methods
-
     public override void Update(GameTime gameTime)
     {
         ImageBounds = new((int)ActualPosition.X, (int)ActualPosition.Y, (int)Size.X, (int)Size.Y);
