@@ -197,7 +197,7 @@ public class ComponentManager
         foreach (Camera camera in Cameras)
         {
             if (camera.Enabled) {
-                camera.Draw(); // Calculates the position before drawing. This is to avoid the camera "stuttering" behind the target's position.
+                camera.Recenter(); // This is here to avoid the camera lagging/stuttering behind the target's position.
                 var SortedCameraComponents = camera.Subcomponents.OrderBy(c => c.Depth);
 
                 SpriteBatch.Begin(samplerState: Game.SpritebatchSamplerState, transformMatrix: camera.GetTransform());

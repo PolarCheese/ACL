@@ -23,7 +23,7 @@ public class Camera : INode
     public float Zoom {get; set;} = 1f;
     public Vector2 Position {get; set;} = Vector2.Zero;
     public float Rotation {get; set;} = 0f;
-    public Component?[] Target {get; set;} = new Component[1]; // If not null, camera will follow the "target" component
+    public Component? Target {get; set;} // If not null, camera will follow the "target" component
     public Matrix Transform {get; protected set;} = Matrix.Identity; // Camera Matrix
     #endregion
 
@@ -96,27 +96,24 @@ public class Camera : INode
         Cursor.X = (int)TransformedPosition.X; Cursor.Y = (int)TransformedPosition.Y;
     }
 
-    public void Draw()
-    {
-        CalculatePosition(); // Update Position before Draw.
-    }
+    public void Draw() {}
         
     public void SetTarget(Component Component) // Set the camera to follow a specific component
     {
-        Target[0] = Component;
+        Target = Component;
     }
 
     public void RemoveTarget() // Set Target to null
     {
-        Target[0] = null;
+        Target = null;
     }
 
-    void CalculatePosition() // This method is for calculating the camera's position in case there is a target assigned.
+    public void Recenter() // This method is for calculating the camera's position in case there is a target assigned.
     {
         // Check for target
-        if (Target[0] != null)
+        if (Target != null)
         {
-            Position = new(Target[0]!.Position.X + Target[0]!.Size.X / 2, Target[0]!.Position.Y + Target[0]!.Size.Y / 2);
+            Position = new(Target.ActualPosition.X + Target.Size.X / 2, Target.ActualPosition.Y + Target.Size.Y / 2);
         }
     } 
 
