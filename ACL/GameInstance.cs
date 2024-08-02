@@ -89,7 +89,6 @@ public class GameInstance : Game
         base.Update(gameTime);
     }
 
-    /// <summary> Calls the physics engine. </summary>
     protected virtual void FixedUpdate(GameTime gameTime) // Fixed update method
     {
         // This method is for calling the physics engine at a rate independent from the Update/Draw framerate.
@@ -104,21 +103,18 @@ public class GameInstance : Game
         if (PhysicsEngine.DebugMode) PhysicsEngine.Draw();
     }
 
-    /// <summary> Triggers whenever the game window is resized by the user. </summary>
     protected virtual void Window_ClientSizeChanged(object? sender, EventArgs args) // Window resize method
     {
         // Call ComponentManager to rescale components.
         ComponentManager.Resize();
     }
 
-    /// <summary> Triggers whenever the game is closed. </summary>
     protected override void OnExiting(object sender, EventArgs args) // Exiting method
     {
         base.OnExiting(sender, args);
     }
 
     // Screen
-    /// <returns> The width and height of the screen. </returns>
     public int[] GetScreenSize()
     {
         int[] size = new int[2];
@@ -128,7 +124,6 @@ public class GameInstance : Game
     }
     
     // Window
-    /// <returns> The width and height of the game window. </returns>
     public int[] GetWindowSize()
     {
         int[] size = new int[2];
@@ -137,7 +132,6 @@ public class GameInstance : Game
     }
 
     // Buffer
-    /// <summary> Sets the graphics backbuffer. </summary>
     public void SetBufferSize(int width, int height)
     {
         _graphics.PreferredBackBufferWidth= width; _graphics.PreferredBackBufferHeight = height;
@@ -145,7 +139,6 @@ public class GameInstance : Game
 
         ComponentManager.UpdateWindowSize();
     }
-    /// <returns> The width and height of the graphics backbuffer. </returns>
     public int[] GetBufferSize()
     {
         int[] size = new int[2];
@@ -154,7 +147,6 @@ public class GameInstance : Game
     }
 
     // Framerate
-    /// <summary> Sets the target framerate. </summary>
     public void SetFramerate(int framerate)
     {
         TargetElapsedTime = TimeSpan.FromSeconds(1f / framerate);

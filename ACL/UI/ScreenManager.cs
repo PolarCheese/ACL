@@ -14,9 +14,6 @@ public class ScreenManager
         Game = CurrentGame;
     }
 
-    /// <summary> Load a screen into the screen manager. </summary>
-    /// <param name="screen"> The screen that will be loaded. </param>
-    /// <param name="autoactivation"> Autoactivation. If true, the screen manager will set this screen as the active one. </param>
     public void LoadScreen(Screen screen, bool autoactivation = true)
     {
         // Set screen as loaded.
@@ -36,8 +33,6 @@ public class ScreenManager
         }
     }
 
-    /// <summary> Unload a screen from the screen manager. </summary>
-    /// <param name="screen"> The screen that will be unloaded. </param>
     public void UnloadScreen(Screen screen)
     {
         // Check if the screen is loaded.
@@ -57,8 +52,6 @@ public class ScreenManager
         }
     }
 
-    /// <summary> Unload a screen from the screen manager. </summary>
-    /// <param name="screen"> The screen that will be unloaded. </param>
     public void SetActiveScreen(Screen screen)
     {
         // Check if the screen is loaded and isn't already active.

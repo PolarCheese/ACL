@@ -213,7 +213,6 @@ public class ComponentManager
         }
     }
 
-    /// <summary> Resizes every component relative to the new game window size. </summary>
     public void Resize()
     {
         // Get the new Window Size.
