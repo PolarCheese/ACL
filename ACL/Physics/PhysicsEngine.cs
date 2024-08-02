@@ -142,8 +142,8 @@ public class PhysicsEngine
 
     private void BroadCollisionCheck(PhysicsComponent objectA, PhysicsComponent objectB) // AABB
     {
-        Rectangle BoundA = new((int)objectA.Position.X, (int)objectA.Position.Y, (int)objectA.Size.X, (int)objectA.Size.Y);
-        Rectangle BoundB = new((int)objectB.Position.X, (int)objectB.Position.Y, (int)objectB.Size.X, (int)objectB.Size.Y);
+        Rectangle BoundA = new((int)objectA.ActualPosition.X, (int)objectA.ActualPosition.Y, (int)objectA.Size.X, (int)objectA.Size.Y);
+        Rectangle BoundB = new((int)objectB.ActualPosition.X, (int)objectB.ActualPosition.Y, (int)objectB.Size.X, (int)objectB.Size.Y);
 
         if (BoundA.Intersects(BoundB))
         {
@@ -151,9 +151,10 @@ public class PhysicsEngine
             // Debug.WriteLine("AABB at: {0} <A-B> {1}", objectA.ActualPosition, objectB.ActualPosition);
 
             // this is a big mess //
-            ResolveCollision(objectA, objectB);
             GetAABB(objectA); GetAABB(objectB);
-            
+            // check AABB bound results
+
+            ResolveCollision(objectA, objectB);    
 
             /*
             if (!SkipPreciseCollisionStep) {  }
@@ -196,10 +197,12 @@ public class PhysicsEngine
         // Maybe combine this code together.
         // also test this code..
 
-        /*if (Object.ActualRotation != 0)
+        if (Object.ActualRotation != 0)
         {
             System.Diagnostics.Debug.WriteLine("p1-2: {0} {1} \n r1-2: {2} {3} \n p3-4: {4} {5} \n r3-4: {6} {7} \n", Points[0], Points[1], RotatedPoints[0], RotatedPoints[1], Points[2], Points[3], RotatedPoints[2], RotatedPoints[3]);
-        }*/
+        }
+
+        // return
     }
 
     private Vector2 RotatePoint(Vector2 point, Vector2 origin, float rotation) // rotate a point around an origin
