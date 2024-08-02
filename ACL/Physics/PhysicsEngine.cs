@@ -51,11 +51,9 @@ public class PhysicsEngine
     {
         PhysicsObjects.Clear();
     }
-
     #endregion
 
-    #region Physics methods
-
+    #region Hash methods
     int GetPairHash(PhysicsComponent objectA, PhysicsComponent objectB) // Generate a unique hash value for an object pair
     {
         int hashA = objectA.GetHashCode(); int hashB = objectB.GetHashCode();
@@ -75,23 +73,9 @@ public class PhysicsEngine
             CheckedPairs.Add(pairHash);
         }
     }
-
-    private void CheckQuadtreeNode(QuadTree Node)
-    {
-        List<PhysicsComponent> objs = new(); // List used to retrieve objects from node
-        foreach (PhysicsComponent objA in Node.Objects)
-        {
-            Node.Retrieve(objs, objA); // Retrieve all objects that could collide with this one
-            foreach(PhysicsComponent objB in objs)
-            {
-                // Check for collision
-                CheckPair(objA, objB);
-                //Debug.WriteLine($"Checking quadtree pair {GetPairHash(objA, objB)} (depth {Node.Depth} | {Node.Objects.Count} objects )");
-            }
-            objs.Clear();
-        }
-    }
-
+    #endregion
+    
+    #region Logic Methods
     public void FixedUpdate(GameTime gameTime) // Repeats each cycle.
     {
         // Redo quadtree
@@ -141,9 +125,10 @@ public class PhysicsEngine
 
     private void BroadCollisionCheck(PhysicsComponent objectA, PhysicsComponent objectB) // AABB
     {
-        Vector2[] aPoints = GetAABB(objectA); Vector2[] bPoints = GetAABB(objectB); // Fetch corners from both objects
+        Vector2[] aPoints = Collisions.GetRectangleVertices(objectA); Vector2[] bPoints = Collisions.GetRectangleVertices(objectB); // Fetch corners from both objects
         
-        // Implement SAT
+        // SAT
+
 
         ResolveCollision(objectA, objectB);
     }
@@ -154,41 +139,22 @@ public class PhysicsEngine
     }
     #endregion
 
-    #region AABB methods
-
-    public Vector2[] GetAABB(Component Object)
-    {
-        // Get bound points (works if component properties have been correctly implemented)
-        var Points = new Vector2[4]; Vector2 origin = Object.ActualPosition + Object.Size * Object.Origin;
-        Points[0] = new(Object.ActualPosition.X, Object.ActualPosition.Y);  // top-left
-        Points[1] = new(Object.ActualPosition.X + Object.Size.X, Object.ActualPosition.Y);  // top-right
-        Points[2] = new(Object.ActualPosition.X, Object.ActualPosition.Y + Object.Size.Y);  // bottom-left
-        Points[3] = new(Object.ActualPosition.X + Object.Size.X, Object.ActualPosition.Y + Object.Size.Y);  // bottom-right
-
-        // Check if points are rotated by a number indivisible by 90 degrees
-        if (Object.ActualRotation % 90 == 0)
-        {
-            // Rotate points round object origin (so it's actually OBB and not AABB)
-            var RotatedPoints = new Vector2[4];
-            RotatedPoints[0] = RotatePoint(Points[0], origin, Object.ActualRotation);
-            RotatedPoints[1] = RotatePoint(Points[1], origin, Object.ActualRotation);
-            RotatedPoints[2] = RotatePoint(Points[2], origin, Object.ActualRotation);
-            RotatedPoints[3] = RotatePoint(Points[3], origin, Object.ActualRotation);
-            return RotatedPoints;
-        }
-
-        return Points;
-    }
-
-    private Vector2 RotatePoint(Vector2 point, Vector2 origin, float rotation) // rotate a point around an origin
-    {
-        Vector2 rotatedPoint = new(origin.X + (point.X - origin.X) * MathF.Cos(rotation) - (point.Y - origin.Y) * MathF.Sin(rotation), origin.Y + (point.X - origin.X) * MathF.Sin(rotation) + (point.Y - origin.Y) * MathF.Cos(rotation));
-        return rotatedPoint;
-    }
-
-    #endregion
-
     #region Quadtree methods
+    private void CheckQuadtreeNode(QuadTree Node)
+    {
+        List<PhysicsComponent> objs = new(); // List used to retrieve objects from node
+        foreach (PhysicsComponent objA in Node.Objects)
+        {
+            Node.Retrieve(objs, objA); // Retrieve all objects that could collide with this one
+            foreach(PhysicsComponent objB in objs)
+            {
+                // Check for collision
+                CheckPair(objA, objB);
+                //Debug.WriteLine($"Checking quadtree pair {GetPairHash(objA, objB)} (depth {Node.Depth} | {Node.Objects.Count} objects )");
+            }
+            objs.Clear();
+        }
+    }
 
     private Rectangle CreateQuadtreeBounds(int size)
     {
