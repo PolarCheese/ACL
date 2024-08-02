@@ -141,33 +141,12 @@ public class PhysicsEngine
 
     private void BroadCollisionCheck(PhysicsComponent objectA, PhysicsComponent objectB) // AABB
     {
-        Rectangle BoundA = new((int)objectA.ActualPosition.X, (int)objectA.ActualPosition.Y, (int)objectA.Size.X, (int)objectA.Size.Y);
-        Rectangle BoundB = new((int)objectB.ActualPosition.X, (int)objectB.ActualPosition.Y, (int)objectB.Size.X, (int)objectB.Size.Y);
+        Vector2[] aPoints = GetAABB(objectA); Vector2[] bPoints = GetAABB(objectB); // Fetch corners from both objects
+        
+        // Implement SAT
 
-        if (BoundA.Intersects(BoundB))
-        {
-            // AABB Collsion !!
-            // Debug.WriteLine("AABB at: {0} <A-B> {1}", objectA.ActualPosition, objectB.ActualPosition);
-
-            // this is a big mess //
-            GetAABB(objectA); GetAABB(objectB);
-            // check AABB bound results
-
-            ResolveCollision(objectA, objectB);    
-
-            /*
-            if (!SkipPreciseCollisionStep) {  }
-            else
-            {
-                // Do a precise collision check
-                bool Collision = PreciseCollisionCheck(objectA, objectB);
-                if (Collision) { ResolveCollision(); }
-            }
-            */
-        }
+        ResolveCollision(objectA, objectB);
     }
-
-    //private bool PreciseCollisionCheck(PhysicsComponent objectA, PhysicsComponent objectB) { return false; }
 
     private void ResolveCollision(PhysicsComponent objectA, PhysicsComponent objectB)
     {
@@ -177,7 +156,7 @@ public class PhysicsEngine
 
     #region AABB methods
 
-    private void GetAABB(Component Object)
+    public Vector2[] GetAABB(Component Object)
     {
         // Get bound points (works if component properties have been correctly implemented)
         var Points = new Vector2[4]; Vector2 origin = Object.ActualPosition + Object.Size * Object.Origin;
@@ -186,22 +165,19 @@ public class PhysicsEngine
         Points[2] = new(Object.ActualPosition.X, Object.ActualPosition.Y + Object.Size.Y);  // bottom-left
         Points[3] = new(Object.ActualPosition.X + Object.Size.X, Object.ActualPosition.Y + Object.Size.Y);  // bottom-right
 
-        // Rotate points round object origin (so it's actually OBB and not AABB)
-        var RotatedPoints = new Vector2[4];
-        RotatedPoints[0] = RotatePoint(Points[0], origin, Object.ActualRotation);
-        RotatedPoints[1] = RotatePoint(Points[1], origin, Object.ActualRotation);
-        RotatedPoints[2] = RotatePoint(Points[2], origin, Object.ActualRotation);
-        RotatedPoints[3] = RotatePoint(Points[3], origin, Object.ActualRotation);
-
-        // Maybe combine this code together.
-        // also test this code..
-
-        if (Object.ActualRotation != 0)
+        // Check if points are rotated by a number indivisible by 90 degrees
+        if (Object.ActualRotation % 90 == 0)
         {
-            System.Diagnostics.Debug.WriteLine("p1-2: {0} {1} \n r1-2: {2} {3} \n p3-4: {4} {5} \n r3-4: {6} {7} \n", Points[0], Points[1], RotatedPoints[0], RotatedPoints[1], Points[2], Points[3], RotatedPoints[2], RotatedPoints[3]);
+            // Rotate points round object origin (so it's actually OBB and not AABB)
+            var RotatedPoints = new Vector2[4];
+            RotatedPoints[0] = RotatePoint(Points[0], origin, Object.ActualRotation);
+            RotatedPoints[1] = RotatePoint(Points[1], origin, Object.ActualRotation);
+            RotatedPoints[2] = RotatePoint(Points[2], origin, Object.ActualRotation);
+            RotatedPoints[3] = RotatePoint(Points[3], origin, Object.ActualRotation);
+            return RotatedPoints;
         }
 
-        // return
+        return Points;
     }
 
     private Vector2 RotatePoint(Vector2 point, Vector2 origin, float rotation) // rotate a point around an origin
