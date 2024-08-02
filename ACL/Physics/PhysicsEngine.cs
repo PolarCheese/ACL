@@ -129,6 +129,8 @@ public class PhysicsEngine
         if(Collisions.IntersectPolygons(aPoints, bPoints))
         {
             System.Diagnostics.Debug.WriteLine("Polygons intersected.");
+            objectA.OnTouched(new TouchEventArgs(objectB));
+	        objectB.OnTouched(new TouchEventArgs(objectA));
             ResolveCollision(objectA, objectB);
         }
     }

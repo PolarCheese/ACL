@@ -59,6 +59,11 @@ public abstract class PhysicsComponent : Component
 
         return Sum/Mass; // This is the acceleration.
     }
+
+    public virtual void OnTouched(TouchEventArgs e) // Triggered by the physics engine when this is touched by another object.
+	{
+	    Touched?.Invoke(this, e);
+	}
 }
 
 public enum ShapeType
