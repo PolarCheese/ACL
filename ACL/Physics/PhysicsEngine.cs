@@ -180,7 +180,7 @@ public class PhysicsEngine
     private void GetAABB(Component Object)
     {
         // Get bound points (works if component properties have been correctly implemented)
-        var Points = new Vector2[4]; Vector2 pivot = Object.ActualPosition + Object.Size * Object.Origin;
+        var Points = new Vector2[4]; Vector2 origin = Object.ActualPosition + Object.Size * Object.Origin;
         Points[0] = new(Object.ActualPosition.X, Object.ActualPosition.Y);  // top-left
         Points[1] = new(Object.ActualPosition.X + Object.Size.X, Object.ActualPosition.Y);  // top-right
         Points[2] = new(Object.ActualPosition.X, Object.ActualPosition.Y + Object.Size.Y);  // bottom-left
@@ -188,24 +188,24 @@ public class PhysicsEngine
 
         // Rotate points round object origin (so it's actually OBB and not AABB)
         var RotatedPoints = new Vector2[4];
-        RotatedPoints[0] = RotatePoint(Points[0], pivot, Object.ActualRotation);
-        RotatedPoints[1] = RotatePoint(Points[1], pivot, Object.ActualRotation);
-        RotatedPoints[2] = RotatePoint(Points[2], pivot, Object.ActualRotation);
-        RotatedPoints[3] = RotatePoint(Points[3], pivot, Object.ActualRotation);
+        RotatedPoints[0] = RotatePoint(Points[0], origin, Object.ActualRotation);
+        RotatedPoints[1] = RotatePoint(Points[1], origin, Object.ActualRotation);
+        RotatedPoints[2] = RotatePoint(Points[2], origin, Object.ActualRotation);
+        RotatedPoints[3] = RotatePoint(Points[3], origin, Object.ActualRotation);
 
         // Maybe combine this code together.
         // also test this code..
 
         /*if (Object.ActualRotation != 0)
         {
-            System.Diagnostics.Debug.WriteLine("{0} {1} {2} {3} \n", Points[0], Points[1], RotatedPoints[0], RotatedPoints[1]);
+            System.Diagnostics.Debug.WriteLine("p1-2: {0} {1} \n r1-2: {2} {3} \n p3-4: {4} {5} \n r3-4: {6} {7} \n", Points[0], Points[1], RotatedPoints[0], RotatedPoints[1], Points[2], Points[3], RotatedPoints[2], RotatedPoints[3]);
         }*/
     }
 
-    private Vector2 RotatePoint(Vector2 point, Vector2 pivot, float angle)
+    private Vector2 RotatePoint(Vector2 point, Vector2 origin, float rotation) // rotate a point around an origin
     {
-        point -= pivot; point = Vector2.Transform(point, Matrix.CreateRotationZ(angle)); point += pivot;
-        return point;
+        Vector2 rotatedPoint = new(origin.X + (point.X - origin.X) * MathF.Cos(rotation) - (point.Y - origin.Y) * MathF.Sin(rotation), origin.Y + (point.X - origin.X) * MathF.Sin(rotation) + (point.Y - origin.Y) * MathF.Cos(rotation));
+        return rotatedPoint;
     }
 
     #endregion
