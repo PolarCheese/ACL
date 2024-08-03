@@ -11,13 +11,14 @@ public class Slider : Component
 
     #region Properties
     public event EventHandler? Click;
-    public bool Locked {get; set;} = false;
 
     // Functionality
-    public float MinimumValue { get; set; } = 0;
-    public float MaximumValue { get; set; } = 100;
-    public float Value { get; set; }
-    public float RoundByNumber { get; set; } = 0;
+    public bool Locked {get; set;} = false;
+    public float MinimumValue {get; set;} = 0;
+    public float MaximumValue {get; set;} = 100;
+    public float Value {get; set;}
+    public float RoundByNumber {get; set;} = 0;
+    public bool AllowBarClickDetection {get; set;} = true; // If true, you will be able to slide the thumb by clicking on the slider's bar
 
     // Appearence
     public Texture2D SliderTexture {get; set;} = GameInstance.PlainTexture;
@@ -82,8 +83,9 @@ public class Slider : Component
 
         _previousCursor = Cursor;
         Cursor = Bound == null ? Game.Cursor : Bound.Cursor;
+        bool BarDetection = AllowBarClickDetection && Cursor.Intersects(SliderBar);
 
-        if (Cursor.Intersects(ThumbRectangle) || Cursor.Intersects(SliderBar))
+        if (Cursor.Intersects(ThumbRectangle) || BarDetection)
         {
             IsHovering = true;
 
