@@ -1,9 +1,9 @@
 ![ACL Logo](ACL.svg)
 
 # ACL
-ACL (Almond's Class Library) is a Monogame class library made with the purpose of simplyfing the creation of a new DesktopGL project by providing a simple base for 2D user interfaces, physics and more.
+ACL (Almond's Class Library) is a Monogame class library made with the purpose of simplyfing the creation of a new DesktopGL project by providing a simple base for 2D user interfaces, physics, graphics and more.
 
-# Roadmap :
+# Roadmap for first stable release:
 - Component Management System [✓]
   - Component [✓]
   - Component Manager [✓]
@@ -21,9 +21,11 @@ ACL (Almond's Class Library) is a Monogame class library made with the purpose o
 - IO Support [✓]
   - IO Manager [✓]
   - JSON Serialization/Deserialization [✓]
+- Graphics [X]
+  - DrawBatch [X]
 - 2D Physics Engine [~]
-  - Physics Component [~]
-  - Collision Checking [~]
+  - Physics Component [/]
+  - Collision Checking [/]
   - Collision Resolving [X]
 - Animations/Tweening [X]
 - Documentation [X]
