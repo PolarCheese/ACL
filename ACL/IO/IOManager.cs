@@ -25,7 +25,7 @@ public static class IOManager
     public static bool CheckFile(string path)
     {
         // Check for a file.
-        if (File.Exists(GetGamePath(path))) { return true; }
+        if (File.Exists(GetGamePath(path))) return true;
         return false;
     }
 
@@ -66,12 +66,12 @@ public static class IOManager
     public static void RemoveDirectory(string path)
     {
         // Delete a directory. Only works on empty directories.
-        if (CheckDirectory(path)) { Directory.Delete(path); }
+        if (CheckDirectory(path)) Directory.Delete(path);
     }
     public static bool CheckDirectory(string path)
     {
         // Check for a directory.
-        if (Directory.Exists(GetGamePath(path))) { return true; }
+        if (Directory.Exists(GetGamePath(path))) return true;
         return false;
     }
     public static string ListDirectories(string path) // Returns a string listing every directory in a given path.
