@@ -4,7 +4,28 @@ namespace ACL.IO;
 
 public static class IOManager
 {   
-    public static string GetGamePath(string name) => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, name);
+    public static string GetGamePath(string name)
+    {
+        // File name checks
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("File name cannot be empty.", nameof(name));
+        if (VerifyFileName(name)) throw new ArgumentException("File name cannot include invalid characters.", nameof(name));
+
+        // Path checks
+        string gamePath = AppDomain.CurrentDomain.BaseDirectory;
+        string fullPath = Path.Combine(gamePath, name);
+        string fullPathNormalized = Path.GetFullPath(fullPath);
+        if (!fullPathNormalized.StartsWith(gamePath, StringComparison.OrdinalIgnoreCase))
+            throw new UnauthorizedAccessException("Access to the specified path is denied.");
+
+        return fullPath;
+    }
+
+    public static bool VerifyFileName(string name)
+    {
+        // Checks if name contains any invalid characters
+        char[] invalidFileNameChars = Path.GetInvalidFileNameChars();
+        return !name.Any(c => invalidFileNameChars.Contains(c));
+    }
 
     #region Files
     public static void SaveFile(string path, string content)
