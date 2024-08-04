@@ -8,7 +8,7 @@ public static class IOManager
     {
         // File name checks
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("File name cannot be empty.", nameof(name));
-        if (VerifyFileName(name)) throw new ArgumentException("File name cannot include invalid characters.", nameof(name));
+        if (!VerifyFileName(name)) throw new ArgumentException("File name cannot include invalid characters.", nameof(name));
 
         // Path checks
         string gamePath = AppDomain.CurrentDomain.BaseDirectory;
