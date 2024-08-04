@@ -140,4 +140,21 @@ public class DrawBatch : IDisposable
         vertices[vertexCount++] = new VertexPositionColor(new(vertex2, 0f), color);
         vertices[vertexCount++] = new VertexPositionColor(new(vertex3, 0f), color);
     }
+    public void DrawTriangle(Vector2 p0, Vector2 p1, Vector2 p2, Color color)
+    {
+        // Check for conditions
+        StartCheck();
+        const uint rectVertexCount = 3;
+        const uint rectIndexCount = 3;
+        CheckCapacity(rectVertexCount, rectIndexCount);
+
+        // Indices
+        indices[indexCount++] = 0 + vertexCount;
+        indices[indexCount++] = 1 + vertexCount;
+        indices[indexCount++] = 2 + vertexCount;
+
+        vertices[vertexCount++] = new VertexPositionColor(new(p0, 0f), color);
+        vertices[vertexCount++] = new VertexPositionColor(new(p1, 0f), color);
+        vertices[vertexCount++] = new VertexPositionColor(new(p2, 0f), color);
+    }
 }
