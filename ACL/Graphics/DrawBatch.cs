@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ACL.Graphics;
 
-public class DrawBatch : IDisposable
+public class DrawBatch
 {
     readonly GameInstance Game;
     private BasicEffect basicEffect;
@@ -16,11 +16,9 @@ public class DrawBatch : IDisposable
     private int vertexCount;
     private int indexCount;
     bool isStarted;
-    bool isDisposed;
 
     public DrawBatch(GameInstance game)
     {
-        isDisposed = false;
         Game = game;
 
         basicEffect = new(game.GraphicsDevice)
@@ -48,20 +46,24 @@ public class DrawBatch : IDisposable
         isStarted = false;
     }
 
-    public void Dispose()
-    {
-        if(isDisposed) return;
-
-        basicEffect?.Dispose();
-        isDisposed = true;
-    }
-
-    public void Begin()
+    public void Begin(Matrix? WorldMatrix = null, Matrix? ViewMatrix = null, Matrix? ProjectionMatrix = null)
     {
         if (isStarted) throw new Exception("Batching already started.");
 
-        Viewport viewport = Game.GraphicsDevice.Viewport;
-        basicEffect.Projection = Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, 1);
+        // Set world matrix
+        basicEffect.World = WorldMatrix ?? Matrix.Identity;
+
+        // Set projection matrix
+        if (ProjectionMatrix.HasValue) basicEffect.Projection = ProjectionMatrix.Value;
+        else
+        {
+            Viewport viewport = Game.GraphicsDevice.Viewport;
+            basicEffect.Projection = Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, 1);
+        }
+
+        // Set view matrix
+        basicEffect.View = ViewMatrix ?? Matrix.Identity;
+
 
         isStarted = true;
     }
