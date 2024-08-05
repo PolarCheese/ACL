@@ -8,7 +8,6 @@ public static class IOManager
     {
         // File name checks
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("File name cannot be empty.", nameof(name));
-        if (!VerifyFileName(name)) throw new ArgumentException("File name cannot include invalid characters.", nameof(name));
 
         // Path checks
         string gamePath = AppDomain.CurrentDomain.BaseDirectory;
@@ -18,13 +17,6 @@ public static class IOManager
             throw new UnauthorizedAccessException("Access to the specified path is denied.");
 
         return fullPath;
-    }
-
-    public static bool VerifyFileName(string name)
-    {
-        // Checks if name contains any invalid characters
-        char[] invalidFileNameChars = Path.GetInvalidFileNameChars();
-        return !name.Any(c => invalidFileNameChars.Contains(c));
     }
 
     #region Files
