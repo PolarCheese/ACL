@@ -13,6 +13,7 @@ public class LinearTween : Tween
 
     public override float GetValue()
     {
+        if (currentTime >= duration) return endValue;
         return currentValue;
     }
 }

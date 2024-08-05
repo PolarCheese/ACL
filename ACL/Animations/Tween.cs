@@ -4,9 +4,9 @@ public abstract class Tween
 {
     protected float startValue;
     protected float endValue;
-    protected float duration;
-    protected float currentTime;
-    protected float currentValue;
+    public float duration { get; protected set; }
+    public float currentTime { get; protected set; }
+    public float currentValue { get; protected set; }
 
     public Tween(float StartValue, float EndValue, float Duration)
     {
