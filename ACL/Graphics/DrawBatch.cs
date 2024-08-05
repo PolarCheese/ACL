@@ -1,5 +1,3 @@
-// this needs a rewrite
-
 using ACL;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

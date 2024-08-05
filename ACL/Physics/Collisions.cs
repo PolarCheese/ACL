@@ -79,6 +79,5 @@ public class Collisions
     }
 
     // to be implemented
-    //public bool IntersectPolygons()
     //public bool IntersectCircles()
 }
