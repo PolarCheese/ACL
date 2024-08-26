@@ -73,10 +73,7 @@ public class ScreenManager
 
     public void Update(GameTime gameTime)
     {
-        if (ActiveScreen != null)
-        {
-            ActiveScreen.Update(gameTime);
-        }
+        ActiveScreen?.Update(gameTime);
     }
     public void Draw(GameTime gameTime)
     {
