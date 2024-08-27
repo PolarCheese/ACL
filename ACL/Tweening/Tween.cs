@@ -32,6 +32,7 @@ public abstract class Tween
     public bool IsActive { get; private set; }
     public bool IsPaused { get; set; }
     public bool IsComplete { get; private set; }
+    public Func<float, float> EasingFunction { get; set; } = EasingFunctions.Linear;
 
     // Repetition (to be implemented soon)
     public bool Repeating => RepeatCycles > 0 || RepeatForever;
@@ -57,6 +58,7 @@ public abstract class Tween
 
         ElapsedTime += deltaTime;
         var n = ElapsedTime / Duration;
+        if (EasingFunction != null) n = EasingFunction(n);
 
         if (ElapsedTime >= Duration)
         {
