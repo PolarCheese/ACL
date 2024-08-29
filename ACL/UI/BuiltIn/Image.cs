@@ -20,15 +20,17 @@ public class Image : Component
     // Texturing
     Rectangle TextureSourceRectangle {get; set;}
     public Vector2 TextureSourcePosition {get; set;} = Vector2.Zero;
-    public Vector2 TextureSourceSize {get; set;} = Vector2.One;
+    public Vector2 TextureSourceSize {get; set;}
     #endregion
 
     public Rectangle ImageBounds {get; set;}
 
-    public Image(GameInstance game) : base(game)
+    public Image(GameInstance game, Texture2D image) : base(game)
     {
         ImageBounds = new();
         TextureSourceRectangle = new();
+        ImageTexture = image;
+        TextureSourceSize = new(ImageTexture.Width, ImageTexture.Height);
     }
 
     #region Methods
