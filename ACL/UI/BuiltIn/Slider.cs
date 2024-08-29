@@ -59,10 +59,11 @@ public class Slider : Component
     public Rectangle SliderBar {get; set;}
     public Rectangle ThumbRectangle {get; set;}
         
-    public Slider(GameInstance game) : base(game)
+    public Slider(GameInstance game, Texture2D image) : base(game)
     {
         SliderBar = new();
         ThumbRectangle = new();
+        SliderTexture = image;
     }
 
     #region Methods

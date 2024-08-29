@@ -39,10 +39,11 @@ public class Checkbox : Component
 
     public Rectangle CheckboxRectangle {get; set;}
         
-    public Checkbox(GameInstance game) : base(game)
+    public Checkbox(GameInstance game, Texture2D image) : base(game)
     {
         CheckboxRectangle = new();
         TextureSourceRectangle = new();
+        CheckboxTexture = image;
     }
 
     #region Methods

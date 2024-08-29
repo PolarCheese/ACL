@@ -34,10 +34,12 @@ public class Button : Component
 
     public Rectangle ButtonRectangle {get; set;}
         
-    public Button(GameInstance game) : base(game)
+    public Button(GameInstance game, Texture2D image) : base(game)
     {
         ButtonRectangle = new();
         TextureSourceRectangle = new();
+        ButtonTexture = image;
+        TextureSourceSize = new(ButtonTexture.Width, ButtonTexture.Height);
     }
 
     #region Methods
