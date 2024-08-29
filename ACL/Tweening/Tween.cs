@@ -27,23 +27,27 @@ public abstract class Tween<T> : Tween where T : struct
 }
 public abstract class Tween
 {
+    // Time & Delay
     public float Duration;
     public float ElapsedTime { get; private set; } = 0;
+    public float DelayTime = 0;
+
+    // Status
     public bool IsActive { get; private set; }
     public bool IsPaused { get; set; }
     public bool IsComplete { get; private set; }
-    public Func<float, float> EasingFunction { get; set; } = EasingFunctions.Linear;
 
-    // Repetition (to be implemented soon)
+    // Repetition
     public bool Repeating => RepeatCycles > 0 || RepeatForever;
-    public float RepeatCycles = 0;
+    public uint RepeatCycles = 0;
     public bool RepeatForever = false;
     public bool AutoSwap = false; // if false, when repeated it goes back to the initial start instead of swapping both ends.
+
+    public Func<float, float> EasingFunction { get; set; } = EasingFunctions.Linear;
 
     internal Tween(float duration)
     {
         Duration = duration;
-
         IsActive = true;
     }
 
@@ -53,8 +57,28 @@ public abstract class Tween
 
     public void Update(float deltaTime)
     {
-        if (IsComplete && !Repeating) IsActive = false; // finish off the tween
         if (IsPaused || !IsActive) return;
+
+        if (IsComplete) 
+        {
+            if (Repeating)
+            {
+                // Repeat the tween
+                IsComplete = false;
+                ElapsedTime = 0;
+                if (AutoSwap) Swap();
+                RepeatCycles = RepeatCycles > 0 ? RepeatCycles - 1 : 0;
+            }
+            else IsActive = false; // finish off the tween
+        }
+
+        // Apply delay
+        if (DelayTime > 0)
+        {
+            DelayTime -= deltaTime;
+            return;
+        }
+        else DelayTime = 0;
 
         ElapsedTime += deltaTime;
         var n = ElapsedTime / Duration;
@@ -68,4 +92,9 @@ public abstract class Tween
 
         Interpolate(n);
     }
+
+    public void Delay(float Time) { DelayTime += Time; }
+    public void Repeat(int Times) { RepeatCycles += (uint)Times; }
+    public void Pause() { IsPaused = true; }
+    public void Unpause() { IsPaused = false; } 
 }
